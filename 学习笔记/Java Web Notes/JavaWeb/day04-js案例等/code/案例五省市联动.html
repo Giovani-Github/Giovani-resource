@@ -1,0 +1,59 @@
+<html>
+	<head>
+		<title>Document</title>
+		<style type="text/css">
+
+		</style>
+	</head>
+	<body>
+		<select id="select1" onchange="add1(this.value);">
+			<option value="0">--请选择--</option>
+			<option value="中国">中国</option>
+			<option value="日本">日本</option>
+		</select>
+
+		<select id="select2">
+		</select>
+	</body>
+	<script type="text/javascript">
+		//创建二维数组存储国籍和城市
+		var arr1 = new Array(2);
+		arr1[0] = ["中国","北京","深圳"];
+		arr1[1] = ["日本","东京","北海道"];
+		//add()
+		function add1(val) {
+			/*
+				因为在选择一个国家后，添加的城市在select2中还存在，所以要删除掉
+			*/
+			//获取select2
+			var select2 = document.getElementById("select2");
+			//获取select2中的option
+			var option = select2.getElementsByTagName("option");
+			//把option一个个删除掉
+			for(var i=0; i<option.length; i++) {
+				select2.removeChild(option[i]);
+				i--;
+			}
+
+			//遍历二维数组
+			for(var i=0; i<arr1.length; i++) {
+				var arr2 = arr1[i];
+				//判断选择框的value值是否与数组种第一个值相同
+				if(val == arr2[0]) {					
+					//遍历二维数组中的数组
+					for(var j=1; j<arr2.length; j++) {
+						//创建option标签
+						var option = document.createElement("option");
+						//创建文本
+						var optionText = document.createTextNode(arr2[j]);
+						//把文本添加到option标签里面
+						option.appendChild(optionText);
+
+						//把option节点添加到slelct里面
+						select2.appendChild(option);
+					}
+				}
+			}	
+		}
+	</script>
+</html>

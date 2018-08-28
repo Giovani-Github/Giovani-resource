@@ -1,0 +1,12 @@
+Object:是java中所有对象的直接或者间接的父类。
+	它里面的方法都所有对象都具备的。
+	常见方法：
+	boolean equals(Object obj):用于比较两个对象是否相同。
+	String toString(): 获取对象的字符串表现形式 类名@哈希值  
+		getClass().getName()+"@"+Integer.toHexString(hashCode());
+	Class getClass():获取正在运行的对象所属的字节码文件的对象。也就是说如果Demo d = new Demo();
+				d.getClass():获取的就是d执行的对象所属的字节码文件Demo.class对象。
+	
+	通常在自定义对象时，因为对象中都有自己特有的描述，
+	所以都会建立对象自身的特有比较方法，或者字符串表现形式。
+	也就是说，会覆盖Object中的方法。

@@ -1,0 +1,11 @@
+
+/**
+ * 配置文件操作类
+ * @author 李庆旺
+ *
+ */
+public class PropertiesMgr {
+	public String getProperty(String key) {
+		
+	}
+}

@@ -1,0 +1,26 @@
+import java.io.IOException;
+import java.util.*;
+/**
+ * 配置文件操作类
+ * @author 李庆旺
+ *
+ */
+public class PropertiesMgr {
+	private static Properties prop = new Properties();
+	
+	//这个类第一次加载进内存时自动调用
+	static {
+		try {
+			//拿到读取tank.properties的流
+			prop.load(PropertiesMgr.class.getClass().getClassLoader().getResourceAsStream("config/tank.properties"));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	}
+	
+	private PropertiesMgr();
+	
+	public String getProperty(String key) {
+		return key;
+	}
+}

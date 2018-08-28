@@ -1,0 +1,15 @@
+import java.awt.*;
+
+//爆炸类
+public class Explosion {
+	int x, y;//出现的位置
+	private boolean live = true;//生死
+	
+	int[] diameter = {4, 7, 14, 28, 32, 40, 25, 5, 2};//爆炸的直径
+	int pos = 0;
+	
+	public void draw(Graphics g) {
+		if(!live)
+			return;
+	}
+}

@@ -1,0 +1,259 @@
+package wang.qing.li;
+import java.awt.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 子弹类
+ * @author 李庆旺
+ *
+ */
+
+public class Missile {	
+	/**
+	 * 子弹的横坐标
+	 */
+	public static final int XSPEED = 10;
+	/**
+	 * 子弹的纵坐标
+	 */
+	public static final int YSPEED = 10;
+	/**
+	 * 子弹的宽度
+	 */
+	public static final int WIDTH = 10;
+	/**
+	 * 子弹的高度
+	 */
+	public static final int HEIGHT = 10;
+	
+	int x, y;//子弹出现的位置
+	Direction dir;//代表子弹的八个方向
+	
+	private boolean good;//子弹的好坏属性
+	private boolean live = true;//炮弹是否死亡，true活着
+	
+	//持有大管家引用
+	private TankClient tc;
+	
+	//操作系统数据的工具类
+	private static Toolkit tk = Toolkit.getDefaultToolkit();
+		
+	//图片数组
+	private static Image[] tankImgs = null;
+		
+	//键值对集合，用于存储坦克方向图片索引
+	private static Map<String, Image> imgs = new HashMap<String, Image>();
+		
+	//静态代码块，最先执行
+	static {
+		tankImgs = new Image[] {
+				tk.getImage(Tank.class.getClassLoader().getResource("imgs/missileR.png")),
+				tk.getImage(Tank.class.getClassLoader().getResource("imgs/missileL.png")),
+				tk.getImage(Tank.class.getClassLoader().getResource("imgs/missileLD.png")),
+				tk.getImage(Tank.class.getClassLoader().getResource("imgs/missileLU.png")),
+				tk.getImage(Tank.class.getClassLoader().getResource("imgs/missileD.png")),
+				tk.getImage(Tank.class.getClassLoader().getResource("imgs/missileRD.png")),
+				tk.getImage(Tank.class.getClassLoader().getResource("imgs/missileRU.png")),
+				tk.getImage(Tank.class.getClassLoader().getResource("imgs/missileU.png")),
+				
+		};
+			
+		imgs.put("D", tankImgs[0]);
+		imgs.put("L", tankImgs[1]);
+		imgs.put("LD", tankImgs[2]);
+		imgs.put("LU", tankImgs[3]);
+		imgs.put("R", tankImgs[4]);
+		imgs.put("RD", tankImgs[5]);
+		imgs.put("RU", tankImgs[6]);
+		imgs.put("U", tankImgs[7]);
+	}
+	
+	/**
+	 * 根据坐标x，y， 和方向构造一个子弹
+	 * @param x 子弹的横坐标
+	 * @param y 子弹的纵坐标
+	 * @param dir 方向
+	 */
+	public Missile(int x, int y, Direction dir) {
+		this.x = x;
+		this.y = y;
+		this.dir = dir;
+	}
+	
+	/**
+	 * 根据坐标x， y，好坏，方向，和大管家引用构造一个子弹
+	 * @param x 横坐标
+	 * @param y 纵坐标
+	 * @param good 好坏值
+	 * @param dir 方向
+	 * @param tc 大管家引用
+	 */
+	public Missile(int x, int y, boolean good, Direction dir ,TankClient tc) {
+		this(x ,y, dir);
+		this.good = good;
+		this.tc = tc;
+	}
+	
+	/**
+	 * 画出子弹的方法
+	 * @param g 大管家传递过来的画笔
+	 */
+	public void draw(Graphics g) {
+		//如果子弹没活着
+		if(!live) {
+			//直接从装子弹的集合中去除
+			tc.missiles.remove(this);
+			return;
+		}
+		
+		switch(dir) {
+		case L:
+			g.drawImage(imgs.get("L"), x, y, null);
+			break;
+		case LU:
+			g.drawImage(imgs.get("LU"), x, y, null);
+			break;
+		case U:
+			g.drawImage(imgs.get("D"), x, y, null);
+			break;
+		case RU:
+			g.drawImage(imgs.get("RU"), x, y, null);
+			break;
+		case R:
+			g.drawImage(imgs.get("R"), x, y, null);
+			break;
+		case RD:
+			g.drawImage(imgs.get("RD"), x, y, null);
+			break;
+		case D:
+			g.drawImage(imgs.get("U"), x, y, null);
+			break;
+		case LD:
+			g.drawImage(imgs.get("LD"), x, y, null);
+			break;
+		}
+		
+		move();
+	}
+
+	/**
+	 * 根据dir方向移动子弹位置， 通过改变x，y坐标实现移动
+	 */
+	private void move() {
+		switch(dir) {
+		case L:
+			x -= XSPEED;
+			break;
+		case LU:
+			x -= XSPEED;
+			y -= YSPEED;
+			break;
+		case U:
+			y -= YSPEED;
+			break;
+		case RU:
+			x += XSPEED;
+			y -= YSPEED;
+			break;
+		case R:
+			x += XSPEED;
+			break;
+		case RD:
+			x += XSPEED;
+			y += YSPEED;
+			break;
+		case D:
+			y += YSPEED;
+			break;
+		case LD:
+			x -= XSPEED;
+			y += YSPEED;
+			break;
+
+		}
+		
+		//子弹是否出界
+		if(x < 0 || y < 0 || x > TankClient.GAME_WIDTH || y > TankClient.GAME_HEIGHT) {
+			//出界了子弹就死亡
+			live = false;
+		}
+	}
+
+	/**
+	 * 炮弹是否存活
+	 * @return 活着返回true，死了返回false
+	 */
+	public boolean isLive() {
+		return live;
+	}
+	
+	/**
+	 * 拿到子弹所在区域的区域对象
+	 * @return 区域对象
+	 */
+	public Rectangle getRect() {
+		return new Rectangle(x, y, WIDTH, HEIGHT);
+	}
+	
+	/**
+	 * 子弹是否坦克和这个坦克碰撞
+	 * @param t 要碰撞的坦克
+	 * @return 撞上返回true， 没撞上返回false
+	 */
+	public boolean hitTank(Tank t) {
+		//子弹自身活着,要碰撞的坦克活着， 并且两者撞上，并且子弹的好坏和坦克的好坏不能相同
+		if(this.live && t.isLive() && this.getRect().intersects(t.getRect()) && t.isLive() && this.good != t.isGood()) {
+			//如果是用户坦克
+			if(t.isGood()) {
+				//碰撞一次，生命值减20
+				t.setLife(t.getLife()-20);
+				//生命值小于0，用户坦克死亡
+				if(t.getLife() <= 0) t.setLive(false);
+			} else {
+				//如果是敌人坦克，直接死亡
+				t.setLive(false);
+			}
+			//子弹死亡
+			this.live = false;
+			//产生一个爆炸对象
+			Explosion e = new Explosion(x, y, tc);
+			//添加到爆炸集合中等待画出
+			tc.explosions.add(e);
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * 子弹是否打中这一集合中的一个坦克
+	 * @param tanks 坦克集合
+	 * @return 打中返回true，否则返回false
+	 */
+	public boolean hitTanks(List<Tank> tanks) {
+		//取出坦克
+		for(int i=0; i<tanks.size(); i++) {
+			//逐个进行碰撞检测
+			if(hitTank(tanks.get(i))) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * 子弹是否撞上墙
+	 * @param w 墙对象
+	 * @return 撞上返回true，否则返回fale
+	 */
+	public boolean hitWall(Wall w) {
+		//子弹自身要活着，并且两者碰撞
+		if(this.live && this.getRect().intersects(w.getRect())) {
+			live = false;//子弹死亡
+			return true;
+		}
+		return false;
+	}
+	
+}

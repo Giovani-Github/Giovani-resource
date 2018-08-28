@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename local variable &apos;udpport&apos; in &apos;TankNewMsg.send(...)&apos; to &apos;udpPort&apos;&#x0D;&#x0A;- Original project: &apos;TankWar1.9.5&apos;&#x0D;&#x0A;- Original element: &apos;TankNewMsg.send(DatagramSocket, String, int).udpport&apos;&#x0D;&#x0A;- Renamed element: &apos;udpport&apos;&#x0D;&#x0A;- Update references to refactored element" description="Rename local variable &apos;udpport&apos;" id="org.eclipse.jdt.ui.rename.local.variable" input="/src&lt;{TankNewMsg.java[TankNewMsg~send~QDatagramSocket;~QString;~I@udpport!533!543!537!543!I!0!true" name="udpPort" references="true" stamp="1436535461122" version="1.0"/>
+</session>

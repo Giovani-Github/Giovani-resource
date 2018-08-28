@@ -1,0 +1,1007 @@
+本次预讲知识点：
+	1、数据表的创建及管理
+	2、表约束的创建及管理
+	3、利用DDL、DML完成一套完整的操作案例
+	4、序列的使用
+	5、数据的集合操作
+	6、PL SQL Developer工具的使用
+
+具体内容：
+	表的创建及管理（重点）：
+		对于数据库而言，实际上每一张表都表示的是一个数据库的对象，而数据库对象指的是DDL定义的所有操作，
+		例如：表、视图、索引、序列、约束等等，都属于对象的操作，所以标的建立就是对象的建立，而对象的操作
+		主要分为以下三类语法：
+			·创建对象：CREATE 对象名称....;
+			·删除对象：DROP  对象名称....;
+			·修改对象：ALTER 对象名称....;
+
+			常用的数据字段：
+				每一张数据表实际上都是若干个字段所组成的，而每一个字段都会有其对应的数据类型，
+				而在oracle之中，常用的数据类型有如下几种：
+
+				NO.		数据类型	关键字				描述
+				1		字符串		VARCHAR2(n)		其中n表示的是字符串所能保存的最大长度，基本上保存200个左右的内容
+				2		整数		NUMBER(n)			表示最多能为n位的整数，有时候也可以使用INT代替
+				3		小数		NUMBER(n, m)		其中m为小数位，n减m为整数为，有时候也可以使用FLOAT代替
+				4		日期		DATE				存放日期-时间
+				5		大文本		CLOB				可以存储海量文字（4g），例如存储《三国演义》、《红楼梦》
+				6		大对象		BLOB				存放二进制数据，例如：电影、mp3、图片、文字
+
+				一般在开发之中使用最多的：VARCHAR2()、NUMBER、DATE、CLOB，而对于BLOB字段一般使用较少，
+				首先BLOB可以存放4g的二进制数据，但是存放进去之后，一是数据库过于庞大，而是读取不方便
+			
+			表的创建：
+				如果现在想要进行表的创建，可以使用如下的操作语法
+
+				CREATE TABLE 表名称 (
+					字段1	数据类型	[DEFAULT 默认值],
+					字段2	数据类型	[DEFAULT 默认值],
+						........
+					字段2	数据类型	[DEFAULT 默认值]
+				);
+
+				下面创建一张成员表（member）,有如下保存的信息：姓名，年龄，生日，个人简介
+				
+				CREATE TABLE member (
+					name	VARCHAR2(50)	DEFAULT '无名氏',
+					age		NUMBER(3),
+					birthday		DATE	DEFAULT SYSDATE,
+					content		CLOB
+				);
+			
+				创建成功之后，下面开始向表中增加数据
+
+				INSERT INTO member(name,age,birthday,content) VALUES ('张三', 20, TO_DATE('1990-08-12', 'yyyy-mm-dd'), '一个好人');
+
+				
+				INSERT INTO member(age,content) VALUES ( 20, '一个好人');
+
+				一定要记住，表的创建是属于数据库对象的创建，所以使用的是CREATE语法
+
+			表的复制（了解）：
+				在之前学习过表的复制操作，下面给出其完整的操作语法：
+				
+				CREATE TABLE 复制表名称 AS 子查询;
+
+				范例：复制一张只包含20部门雇员信息的表
+
+				CREATE TABLE emp20 AS SELECT * FROM emp WHERE deptno=20;
+
+				范例：现在要求将emp表的表结构复制出来，不要数据--写一个永远满足不了的条件即可
+
+				CREATE TABLE empnull AS SELECT * FROM emp WHERE 1=2;
+
+					但是以上的语法只是oracle数据库所支持的操作，其他的数据库语法上会有一些区别
+				在oracle数据库之中，所有的数据实际上都是通过数据字典保存的，例如，在之前曾经使用过如下的一种查询：
+				
+				SELECT * FROM tab;
+
+				以上就是一个数据字典，而在oracle之中，提供了三种类型的数据字典，最长用的是：dba、user_，所以下面查询yige
+				user_tables数据字典
+
+				SELECT * FROM user_tables;
+		
+				也就是说oracle中的所有数据都是按照文件保存的，那么所有的内容都会在数据字典中注册，
+				既然这样所谓的修改表名称实际上对于oracle而言就相当于修改一条数据而已，而修改表名称的方法如下：
+
+				RENAME 旧的表名称 TO 新的表名称;
+
+				范例：将member表更名person表
+
+				RENAME member TO person;
+
+				但是这种操作由于是oracle数据库所独有的一种特性，所以了解即可，不用做深入的掌握
+
+			截断表（了解）：
+				在之前曾经讲解过一个删除表数据的操作，使用的是DELETE操作，
+				但是这种删除操作本身有一个特点，即：可以进行事务的回滚，
+				也就是说删除之后并不会立刻释放数据的资源，如果现在希望彻底释放掉一张表所占用
+				的全部资源（表空间、索引等等）就可以使用截断表的语法，此语法如下：
+
+				TRUNCATE TABLE 表名称;
+
+				范例：截断person表
+
+				TRUNCATE TABLE person;
+					
+				但是这种语法本身只是oracle所有的，所以只做了解即可。
+
+			表的删除：
+				表的删除操作指的是数据库对象的删除，既然是删除则使用DROP语句，
+				删除表的语法如下：
+
+				DROP TABLE 表名称;
+
+				范例：删除person表
+
+				DROP TABLE person;
+
+			oracle 10g新特性（闪回技术）：
+				在oracle 10g之后，为了预防用户的误删除表操作，专门提供了回收站功能，用户所删除的表默认情况下会在一个回收站之中保存，
+				而用户也可以通过回收站，进行表的回复，所以此技术称为闪回（FLASHBACK）;
+
+				范例：查看回收站
+
+				SHOW RECYCLEBIN;
+
+				这个时候发现所有已经删除的表都在回收站之中保存，那么下面就可以使用如下的语法回复表：
+
+				FLASHBACK TABLE 表名称 TO BEFORE DROP;
+
+				范例：回复myemp表
+
+				FLASHBACK TABLE myemp TO BEFORE DROP;
+				
+				当然，现在也可以直接删除掉回收站中的一些数据表，语法如下：
+
+				PURGE TABLE 表名称;
+
+				范例：删除回收站中的person表
+
+				PURGE TABLE person;
+
+				范例：清空回收站（重点）：
+
+				PURGE RECYCLEBIN;
+
+				如果现在希望删除一张表，而又不希望其进入到回收站之中，则可以在删除的时候增加PURGE
+
+				DROP TABLE myemp PURGE;
+
+				这种技术是在oracle 10g之后才有的，而oracle 11g也是存在的
+
+				问题：现在在回收站之中存在了一张tab表，而后有建立了一张tab表，那么如果从回收站中恢复的话，可以吗？
+				答：无法恢复，但是一般人也真不出这问题
+
+			修改表结构（了解）：	
+				如果一张建立号的数据表，发现其初期的结构已经不满足与后期的使用要求，则可以进行表的修改操作，
+				而表的修改操作实际上就是数据库对象的修改操作，使用ALTER指令完成，例如，有如下一张表：
+
+				CREATE TABLE meember (
+					mid		NUMBER ,
+					name	VARCHAR2(50)
+				);
+			
+				现在希望可以向表中增加字段，所以此时可以使用如下的语法完成：
+				
+				ALTER TABLE 表名称 ADD (列名称 数据类型 [DEFAULT 默认值],
+					列名称 数据类型 [DEFAULT 默认值],......
+				);
+
+				范例：为meember表增加字段		
+
+				ALTER TABLE meember ADD (age NUMBER(3), birthday DATE DEFAULT SYSDATE);
+
+				如果增加的数据列没有默认值，则所有已有数据的列的内容都是null，而如果增加的列指定了
+				DEFAULT默认值的话，则所有已有的数据列都是设置的默认值。
+				现在也可以修改已有的表结构，此时语法如下：
+
+				ALTER TABLE 表名称 MODIFY (列名称 数据类型 [DEFAULT 默认值],
+					列名称 数据类型 [DEFAULT 默认值],......
+				);
+
+				范例：将name字段的默认值定义为无名氏
+				
+				ALTER TABLE meember MODIFY (name VARCHAR2(100) DEFAULT '无名氏');
+				
+				虽然在SQL语法之中以及oracle数据库之中，都给出了修改表结构的操作，但是这种操作能不用就不用，
+				从大型数据库来讲，世界上性能最高的数据库是IBM DB2, 但是IBM DB2本身有一个平台的限制问题，
+				所以如果说是跨平台数据库则是oracle数据库的性能最高。
+				在IBM DB2数据库之中是不允许修改表结构的，即：表建立完成之后就不能修改了，
+				所以以后在开发之中也尽可能的不要去修改表结构
+
+				额外补充：关于软件项目的开发基本流程
+					1、获取需求——>软件销售
+					2、需求分析——>根据客户方的提示，作出需求分析
+					3、业务分析，数据库设计及接口设计 ——>数据表设计
+					4、编码实现——>业务梳理
+					5、软件测试——>理论上应该有专门的测试人员
+					6、软件培训以及项目维护
+
+					数据表建立前提=软件的业务分析
+
+			思考题（面试题）：
+				现在要求建立一张nation表，表中有一个name字段，里面保存四条记录：中国、美国、巴西、荷兰，要求通过查询实现如下的操作结果：
+
+				中国	美国
+				中国	巴西
+				中国	荷兰
+				美国	巴西
+				美国	中国
+				美国	荷兰
+
+				剩下的一次类推，现在要求建立新的表并完成此查询的操作。
+				本题目的主要目的并不是在于查询的编写上 ，而是在于规范化数据库创建脚本的格式，
+				以后只要是碰到了类似的要求，首先必须要编写一个数据库创建脚本，这个脚本的要求如下：
+					1、本文见的文件名称后缀必须是“*.sql”
+					2、先删除相应的数据表
+					3、编写创建表的语句
+					4、增加测试数据
+					5、提交事务
+
+					--1、删除表
+					DROP TABLE nation PURGE;
+					--2、创建表
+					CREATE TABLE nation (
+						name	VARCHAR2(50)	
+					);
+					--3、测试数据
+					INSERT INTO nation (name) VALUES('中国');
+					INSERT INTO nation (name) VALUES('美国');
+					INSERT INTO nation (name) VALUES('巴西');
+					INSERT INTO nation (name) VALUES('荷兰');
+					--4、事务提交
+					COMMIT;
+
+					本程序如果要想完成依靠笛卡尔积完成，属于表的自身关联
+
+					SELECT n1.name, n2.name
+					FROM nation n1, nation n2
+					WHERE n1.name<>n2.name;
+
+					以后如果面试之中，出现了一些复杂的查询，建议吧脚本写全了
+
+	表的约束（重点）：
+		表虽然建立完成了，但是表中的数据是否合法并不能有所检查，而如果要想针对于表中的数据做一些过滤的话，
+		则可以通过约束完成，约束的主要功能是保证表中的数据合法性，按照约束的分类，一共有五种约束：
+		非空约束、唯一约束、主键约束、检查约束、外键约束
+
+		非空约束（NOT NULL）: NK
+			当数据表中的某个字段上的内容不希望设置为null的话，则可以使用NOT NULL进行指定。
+
+			范例：定义一张数据表
+
+			DROP TABLE member PURGE;
+			CREATE TABLE member (
+				mid		NUMBER,
+				name	VARCHAR2(50)	NOT NULL	
+			);
+
+			因为此时存在了“NOT NULL”约束，所以下面插入两组数据
+
+			范例：正确的数据
+
+			INSERT INTO member(mid, name) VALUES(1,'张三');
+			INSERT INTO member(mid, name) VALUES(null,'李四');
+			INSERT INTO member(name) VALUES('王五');
+
+			范例：插入错误数据
+
+			INSERT INTO member(mid, name) VALUES(9,null);
+			INSERT INTO member(mid) VALUES(10);
+
+			此时出现错误提示：
+				无法将 NULL 插入 ("SCOTT"."MEMBER"."NAME")
+
+			本程序之中，直接表示出了“用户.表名称.字段”，出现了错误
+	
+		唯一约束（UNIQUE）:UK
+			唯一约束指的是每一个列上的数据是不允许重复的，例如：email地址每个用户肯定是不重复的，
+			那么就使用唯一约束完成
+
+			DROP TABLE member PURGE;
+			CREATE TABLE member (
+				
+				mid		NUMBER,
+				name	VARCHAR2(50)	NOT NULL,
+				email	VARCHAR2(50)	UNIQUE
+			);
+			
+			范例：插入正确的数据
+
+			INSERT INTO member(mid,name,email) VALUES (1,'张三','mldnqa@163.com');
+			INSERT INTO member(mid,name,email) VALUES (2,'李四',null);
+
+			范例：插入错误的数据--重复数据
+
+			INSERT INTO member(mid,name,email) VALUES (3,'王五','mldnqa@163.com');
+			
+			此时会出现如下的错误提示:
+				违反唯一约束条件 (SCOTT.SYS_C005529)
+			
+			可是这个时候的错误提示与之前的非空约束相比并不完善，因为现在只是给出了一个代号而已，
+			这是因为在定义约束的时候没有为约束指定一个名字，所以有系统默认分配了，
+			而且约束的名字建议的格式“约束类型_字段”，例如：“UK_email”，
+			指定约束名称使用CONSTRAINT完成
+
+			DROP TABLE member PURGE;
+			CREATE TABLE member (
+				mid		NUMBER,
+				name	VARCHAR2(50)	NOT NULL,
+				email	VARCHAR2(50),
+				CONSTRAINT UK_email UNIQUE(email)
+			);
+
+			以后再次增加错误数据时，提示如下：
+				违反唯一约束条件 (SCOTT.UK_EMAIL)
+
+			已经可以很明确的提示用户错误的位置
+
+		主键约束（Primary Key）：PK
+			主键约束=非空约束+唯一约束，在之前设置唯一约束的时候发现可以设置为null，而如果现在使用了主键约束之后，
+			则不能为空，而且主键一般作为数据的唯一的一个标记出现，例如：人员的ID
+			
+			范例：建立主键约束
+			
+			DROP TABLE member PURGE;
+			CREATE TABLE member (
+				mid		NUMBER		PRIMARY KEY,
+				name	VARCHAR2(50)	NOT NULL
+			);
+
+			范例：增加正确的数据
+
+			INSERT INTO member (mid, name) VALUES (1,'张三');
+
+			范例：错误数据--主键设置为null
+
+			INSERT INTO member(mid,name) VALUES (null,'张三');
+
+			错误信息，与之前的非空约束的错误信息提示是一样的
+				ORA-01400: 无法将 NULL 插入 ("SCOTT"."MEMBER"."MID")
+
+			范例：错误数据--主键重复
+
+			INSERT INTO member(mid, name) VALUES(1,'张三');
+
+			错误信息，这个错误信息就是唯一约束的错误信息，但是信息不明确，因为煤气名字
+				0001: 违反唯一约束条件 (SCOTT.SYS_C005535)
+
+			所以为了约束的使用方便，下面为主键约束起一个名字
+
+			DROP TABLE member PURGE;
+			CREATE TABLE member (
+				mid		NUMBER,
+				name	VARCHAR2(50)	NOT NULL,
+				CONSTRAINT pk_mid PRIMARY KEY(mid)
+			);
+
+			此时，重复插入数据，则错误信息如下:
+				违反唯一约束条件 (SCOTT.PK_MID)
+
+			从正常的开发角度而言，一张表一般只设置一个主键，但是从SQL语法规定而言，一张表可以设置多个主键，
+			而此种做法称为复合主键，例如：参考如下代码：
+
+			DROP TABLE member PURGE;
+			CREATE TABLE member (
+				mid		NUMBER,
+				name	VARCHAR2(50)	NOT NULL,
+				CONSTRAINT pk_mid_name PRIMARY KEY(mid,name)
+			);
+
+			在符合主键的使用之中，只有两个字段的内容都一样的情况下，才被称为重复数据。
+
+			范例：插入正确的数据
+			
+			INSERT INTO member(mid, name) VALUES(1,'张三');
+			INSERT INTO member(mid, name) VALUES(1,'李四');
+			INSERT INTO member(mid, name) VALUES(2,'张三');
+
+			范例：插入错误的数据
+			INSERT INTO member(mid, name) VALUES(1,'张三');
+
+			错误信息：
+				ORA-00001: 违反唯一约束条件 (SCOTT.PK_MID_NAME)
+
+			但是从开发的实际角度而言，正常人都不使复合主键，所以这个知识只是作为其相关的内容做了一个介绍，记住了，
+			只要是数据表，永远都只设置一个主键
+	
+		检查约束（Check）:CK
+			检查约束指的是为表中的数据增加一些过滤条件，例如：
+				·设置年龄的时候范围是：0-250
+				·设置性别的时候应该是：男、女
+
+			范例：设置检查约束
+
+			DROP TABLE member PURGE;
+			CREATE TABLE member (
+				mid		NUMBER,
+				name	VARCHAR2(50)	NOT NULL,
+				sex		VARCHAR2(10)	NOT NULL,
+				age		NUMBER(3),
+				CONSTRAINT pk_min PRIMARY KEY(mid),
+				CONSTRAINT ck_sex CHECK (sex IN('男','女','中')),
+				CONSTRAINT ck_age CHECK (age BETWEEN 0 AND 250)
+			);
+		
+			范例：增加正确的数据
+			INSERT INTO member(mid, name,sex,age) VALUES(1,'张三','中',200);
+
+			范例：增加错误的性别--ORA-02290: 违反检查约束条件 (SCOTT.CK_SEX)
+
+			INSERT INTO member(mid, name,sex,age) VALUES(2,'刘四','人妖',200);
+
+			范例：增加错误的年龄---ORA-02290: 违反检查约束条件 (SCOTT.CK_AGE)
+
+			INSERT INTO member(mid, name,sex,age) VALUES(2,'刘四','女',500);
+
+			检查的操作就是对输入的数据进行一个过滤
+
+		主外键约束（核心难点）：
+			之前四中约束都是在单张表中进行的，而主-外间约束是在两张表中进行的，
+			这两张表是存在父子关系的，即：字表中某个字段的取值范围由父表所决定。
+			例如：现在要求表示出一种关系，每一个人有多本书，应该定义两张数据表：
+			member、book
+			
+			DROP TABLE member PURGE;
+			DROP TABLE book PURGE;
+			CREATE TABLE member (
+				mid		NUMBER,
+				name	VARCHAR2(50)	NOT NULL,
+				CONSTRAINT pk_mid PRIMARY KEY(mid)
+			);
+			CREATE TABLE book (
+				bid		NUMBER,
+				title		VARCHAR2(50) NOT NULL,
+				mid		NUMBER,
+				CONSTRAINT pk_bid PRIMARY KEY(bid)
+			);
+
+			此时只是根据要求建立了两张独立的数据表，那么下面插入几条数据
+
+			INSERT INTO member(mid,name) VALUES (1,'张三');
+			INSERT INTO member(mid,name) VALUES (2,'李四');
+			INSERT INTO book(bid,title,mid) VALUES (101,'JAVA开发',1);
+			SERT INTO book(bid,title,mid) VALUES (102,'JAVA web开发',2);
+			INSERT INTO book(bid,title,mid) VALUES (103,'EJB开发',2);
+			INSERT INTO book(bid,title,mid) VALUES (105,'Android开发',1);
+			INSERT INTO book(bid,title,mid) VALUES (10,'AJAX开发',1);
+
+			要想验证这个数据是否有意义，最简单的做法，就是写两个查询
+
+			范例：统计每个人员拥有书的数量
+
+			SELECT m.mid, m.name, COUNT(b.bid)
+			FROM member m, book b
+			WHERE m.mid=b.mid
+			GROUP BY m.mid, m.name;
+
+			范例：查询出每个人员的编号，姓名，拥有书的名称
+			
+			SELECT m.mid, m.name,b.title
+			FROM member m, book b
+			WHERE m.mid=b.mid;
+
+			即：现在book.mid字段应该是与member.mid字段相关联的，但是由于本程序没有设置约束，所以以下的数据也是可以关联的：
+
+			INSERT INTO book(bid,title,mid) VALUES (108,'PhotoShop开发',3);
+			INSERT INTO book(bid,title,mid) VALUES (109,'FLEX开发手册',8);
+
+			现在增加了两条新的记录，而且记录可以保存在数据之中，但是这两条记录没有意义，因为member.mid字段的内容
+			没有3和8，而要想解决这个问题就必须依靠外键约束解决。
+			让book.mid的字段取值有member.mid所决定，如果member.mid的数据真实存在， 则表示可以更新
+
+			DROP TABLE member PURGE;
+			DROP TABLE book PURGE;
+			CREATE TABLE member (
+				mid		NUMBER,
+				name	VARCHAR2(50)	NOT NULL,
+				CONSTRAINT pk_mid PRIMARY KEY(mid)
+			);
+			CREATE TABLE book (
+				bid		NUMBER,
+				title		VARCHAR2(50) NOT NULL,
+				mid		NUMBER,
+				CONSTRAINT pk_bid PRIMARY KEY(bid),
+				CONSTRAINT fk_mid FOREIGN KEY(mid) REFERENCES member(mid)
+			);
+
+			此时只是增加了一个约束，这样一来如果输入的数据有错误，就会出现如下的提示
+				 违反完整约束条件 (SCOTT.FK_MID) - 未找到父项关键字
+			因为member没有指定的数据，所以book.mid如果数据有错误，则无法执行更新操作。
+			使用外键的最大好处是控制了子表中某些数据的取值范围，但是同样带来了不少的问题。
+
+			1、删除数据的时候，如果主表中的数据有对应的子表数据，则无法删除
+			
+				范例：删除member.mid为1的数据
+
+				DELETE FROM member WHERE mid=1;
+					
+				错误信息：
+					违反完整约束条件 (SCOTT.FK_MID) - 未找到父项关键字
+
+				此时只能先删除子表记录，之后再删除父表记录
+
+				DELETE FROM book WHERE mid=1;
+				DELETE FROM member WHERE mid=1;
+					
+				但是这种操作明显不方便，如果说现在希望主表数据删除之后，子表中对应的数据也可以删除的话，
+				则可以在建立外键约束的时候指定一个级联删除的功能，修改数据库创建脚本：
+
+				DROP TABLE book PURGE;
+				DROP TABLE member PURGE;
+				CREATE TABLE member (
+					mid		NUMBER,
+					name	VARCHAR2(50)	NOT NULL,
+					CONSTRAINT pk_mid PRIMARY KEY(mid)
+				);
+				CREATE TABLE book (
+					bid		NUMBER,
+					title		VARCHAR2(50) NOT NULL,
+					mid		NUMBER,
+					CONSTRAINT pk_bid PRIMARY KEY(bid),
+					CONSTRAINT fk_mid FOREIGN KEY(mid) REFERENCES member(mid) ON DELETE CASCADE
+				);
+					
+				此时由于存在级联删除的操作，所以主表中的数据删除之后，对应的字表中的数据也都会被同时删除掉
+
+			2、删除数据的时候，让子表中对应的数据设置为null
+				当主表中的数据删除之后，对应的子表中的数据相关项也希望将其设置为null，而不是删除，此时，
+				可以继续修改数据表的创建脚本
+
+				DROP TABLE book PURGE;
+				DROP TABLE member PURGE;
+				CREATE TABLE member (
+					mid		NUMBER,
+					name	VARCHAR2(50)	NOT NULL,
+					CONSTRAINT pk_mid PRIMARY KEY(mid)
+				);
+				CREATE TABLE book (
+					bid		NUMBER,
+					title		VARCHAR2(50) NOT NULL,
+					mid		NUMBER,
+					CONSTRAINT pk_bid PRIMARY KEY(bid),
+					CONSTRAINT fk_mid FOREIGN KEY(mid) REFERENCES member(mid) ON DELETE SET NULL
+				);
+				INSERT INTO member(mid,name) VALUES (1,'张三');
+				INSERT INTO member(mid,name) VALUES (2,'李四');
+				INSERT INTO book(bid,title,mid) VALUES (101,'JAVA开发',1);
+				INSERT INTO book(bid,title,mid) VALUES (102,'JAVA web开发',2);
+				INSERT INTO book(bid,title,mid) VALUES (103,'EJB开发',2);
+				INSERT INTO book(bid,title,mid) VALUES (105,'Android开发',1);
+				INSERT INTO book(bid,title,mid) VALUES (10,'AJAX开发',1);
+
+			3、删除父表之前必须首先先删除对应的子表，否则无法删除
+				DROP TABLE book PURGE;
+				DROP TABLE member PURGE;
+
+				但是这样做明显很麻烦，因为对于一个未知的数据库，如果要按照此类方式进行，则必须首先知道其父子关系，
+				所以在Oracle之中专门提供了一个强制性删除表的操作，即：不再关心约束，在删除的时候写上一句“CASCADE CONSTRAINT”。
+
+				DROP TABLE book CASCADE CONSTRAINT PURGE;
+				DROP TABLE member CASCADE CONSTRAINT PURGE;
+
+				此时，不关心子表是否存在，直接强制性的删除父表。
+				合理做法：在以后进行数据表删除的时候，最好是先删除子表，之后在删除父表
+			
+		修改约束（了解）：
+			约束本身也属于数据库对象，那么也肯定可以进行修改操作，
+			而且只要是修改都是用ALTER指令，约束的修改主要值得是以下两种操作：
+				·为表增加约束
+			ALTER TABLE 表名称 ADD CONSTRAINT 约束名称 约束类型(字段);
+
+				·删除表中的约束
+			ALTER TABLE 表名称 DROP CONSTRAINT 约束名称;
+
+			可以发现，如果要维护约束，肯定需要一个正确的名字才可以，可是在这五种约束之中，
+			非空约束作为一个特殊的约束无法操作，现在有如下一张表数据：
+			
+			DROP TABLE member CASCADE CONSTRAINT PURGE;
+			CREATE TABLE member (
+				mid		NUMBER,
+				name	VARCHAR2(50)	NOT NULL,
+				age		NUMBER(3)
+			);
+
+			范例：为表中增加主键约束
+			
+			ALTER TABLE member ADD CONSTRAINT pk_mid PRIMARY KEY(mid);
+				
+			增加数据：
+			
+			INSERT INTO member(mid, name, age) VALUES(1,'张三',30);
+			INSERT INTO member(mid, name, age) VALUES(2,'李四',300);
+
+			现在在member表中已经存在了年龄上的非法数据，所以下面为member表增加检查约束：
+
+			ALTER TABLE member ADD CONSTRAINT ck_age CHECK(age BETWEEN 0 AND 250);
+
+			这个时候在表中已经存在了违反约束的数据，所以肯定无法增加
+
+			范例：删除member表中的mid上的主键约束
+
+			ALTER TABLE member DROP CONSTRAINT pk_mid;
+
+			可是，跟表结构一样，约束最好也不要修改，而且记住，表建立的同时一定要将约束定义好，
+			以后的使用之中建议就不要去改变了。
+
+		查询约束（了解）：
+			在oracle之中所有的对象都会在数据字典之中保存，而约束也是一样的，所以如果要想知道有那些约束，
+			可以直接查询“user_constraints”数据字典：
+
+			SELECT owner,constraint_name,table_name FROM user_constraints;
+
+			但是这个查询出来的月数只是告诉了你名字，而并没有告诉在哪个字段上有此约束，
+			所以此时可以查看另外一张数据字典表“user_cons_columns”
+
+			COL owner FOR A15;
+			COL constraint_name FOR A15;
+			COL table_name FOR A15;
+			COL column_name FOR A15;
+			SELECT owner,constraint_name,table_name,column_name FROM user_cons_columns;
+
+			但是这些维护的工作大部分应该由专门的DBA负责，而不是作为程序开发的我们。
+
+	建表、更新、查询综合练习（重点）：
+		1、有某个学生运动会比赛信息的数据库，保存了如下的表：
+			·运动员sporter（运动员编号sporterid，运动员姓名name，运动员性别sex，所属系号department）
+			·项目item（项目编号itemid，项目名称itemname，项目比赛地点location）
+			·乘积grade（运动员编号id，项目编号itemid，积分mark）
+		2、请用SQL语句完成如下功能：
+			1、建表，并在相应字段上增加约束
+				|-定义各个表的主键和外键约束
+				|-运动员的姓名和所属系别不能为空
+				|-积分要么为空值，要么为6,4,2,0,分别代表一，二，三名和其他名次的积分，注意名词可以有并列名次，
+					后面的排名不往前提升，例如：如果有两个并列第一，则没有第二名。
+
+		运动员（
+			1001，李明，男，计算机系
+			1002，张三，男，数学系
+			1003，李四，男，计算机系
+			1004，王二，男，物理系
+			1005，李娜，女，信息系
+			1006，孙丽，女，数学系）
+		项目（
+			x001，男子五千米，一操场
+			x002，男子标枪，一操场
+			x003，男子跳高，二操场
+			x004，女子跳高，二操场
+			x005，女子三千米，三操场）
+		积分（
+			1001，x001，6
+			1002，x001，4
+			1003，x001，2
+			1004，x001，0
+			1001，x003，4
+			1002，x003，6
+			1004，x003，2
+			1005，x004，6
+			1006，x004，4
+			1003，x002，6
+			1005，x002，4
+			1006，x002，2
+			1001，x002，0
+		）
+		
+		3、完成如下的查询要求：
+			A、求出目前总积分最高的系名，及其积分。
+			B、找出以操场进行比赛的个项目名称及其冠军的姓名
+			C、找出参加了张三所参加的所有项目的其他同学的姓名
+			D、经差张三因为使用了违禁药品，其成绩都记0分，请在数据库中作出相应修改。
+			E、经组委会协商，需要删除女子跳高比赛项目
+		
+		建表操作：
+			编写数据库创建脚本
+				DROP TABLE sporter PURGE;
+				DROP TABLE item PURGE;
+				CREATE TABLE sporter (
+					sporterid		NUMBER(4)		PRIMARY KEY,
+					name		VARCHAR2(20)	NOT NULL,
+					sex			VARCHAR2(10)	CHECK (sex IN ('男','女')),
+					department	VARCHAR2(20)	NOT NULL
+				);
+				CREATE TABLE item (
+					itemid		VARCHAR2(4)		PRIMARY KEY,
+					itemname		VARCHAR2(20)	NOT NULL,
+					location		VARCHAR2(20)	NOT NULL
+				);
+				CREATE TABLE grade (
+					sporterid			NUMBER(4)		REFERENCES sporter (sporterid) ON DELETE CASCADE,
+					itemid			VARCHAR2(4)		REFERENCES item(itemid) ON DELETE CASCADE,
+					mark				NUMBER(1)		CHECK (mark IN (0,2,4,6))
+				);
+				
+				而且在oracle之中要考虑到回收站的问题
+
+		增加数据：
+			增加运动员数据
+					INSERT INTO sporter (sporterid,name,sex,department) VALUES (1001,'李明','男','计算机系');
+					INSERT INTO sporter (sporterid,name,sex,department) VALUES (1002,'张三','男','数学系');
+					INSERT INTO sporter (sporterid,name,sex,department) VALUES (1003,'李四','男','计算机系');
+					INSERT INTO sporter (sporterid,name,sex,department) VALUES (1004,'王二','男','物理系');
+					INSERT INTO sporter (sporterid,name,sex,department) VALUES (1005,'李娜','女','信息系');
+					INSERT INTO sporter (sporterid,name,sex,department) VALUES (1006,'孙丽','女','数学系');
+			增加项目数据
+					INSERT INTO item(itemid,itemname,location) VALUES ('x001','男子五千米','一操场');
+					INSERT INTO item(itemid,itemname,location) VALUES ('x002','男子标枪','一操场');
+					INSERT INTO item(itemid,itemname,location) VALUES ('x003','男子跳高','一操场');
+					INSERT INTO item(itemid,itemname,location) VALUES ('x004','女子跳高','二操场');
+					INSERT INTO item(itemid,itemname,location) VALUES ('x001','女子三千米','三操场');
+			增加项目成绩（积分）
+					INSERT INTO grade(sporterid,itemid,mark) VALUES(1001,'x001',6);
+					INSERT INTO grade(sporterid,itemid,mark) VALUES(1002,'x001',4);
+					INSERT INTO grade(sporterid,itemid,mark) VALUES(1003,'x001',2);
+					INSERT INTO grade(sporterid,itemid,mark) VALUES(1004,'x001',0);
+					INSERT INTO grade(sporterid,itemid,mark) VALUES(1001,'x003',4);
+					INSERT INTO grade(sporterid,itemid,mark) VALUES(1002,'x003',6);
+					INSERT INTO grade(sporterid,itemid,mark) VALUES(1004,'x003',2);
+					INSERT INTO grade(sporterid,itemid,mark) VALUES(1005,'x004',6);
+					INSERT INTO grade(sporterid,itemid,mark) VALUES(1006,'x004',4);
+					INSERT INTO grade(sporterid,itemid,mark) VALUES(1003,'x002',6);
+					INSERT INTO grade(sporterid,itemid,mark) VALUES(1005,'x002',4);
+					INSERT INTO grade(sporterid,itemid,mark) VALUES(1006,'x002',2);
+					INSERT INTO grade(sporterid,itemid,mark) VALUES(1001,'x002',0);
+		
+		数据操作：
+			1、求出目前总积分最高的系名，及其积分
+				·确定所使用的数据表：
+					|-sporter表：求出系名称
+					|-grade表：找到积分
+				·确定已知关联字段：sporter.sporterid=grade.sporterid
+
+				第一步：将sporter表和grade表关联
+
+					SELECT s.department,g.mark
+					FROM sporter s, grade g
+					WHERE s.sporterid=g.sporterid;
+
+				第二步：以上是求出每个系针对于项目获得的积分，那么下面将以上的查询分组，按照系名称分组
+
+					SELECT s.department,SUM(g.mark)
+					FROM sporter s, grade g
+					WHERE s.sporterid=g.sporterid
+					GROUP BY s.department;
+					
+					此时已经知道各个系的乘积了，那么对于求出总积分最高的信息，有两种做法：
+						·做法一：不考虑相同积分的问题，所有的数据由高到底降序排序，取第一个数据
+							SELECT * 
+							FROM (	
+								SELECT s.department,SUM(g.mark) sum
+								FROM sporter s, grade g
+								WHERE s.sporterid=g.sporterid
+								GROUP BY s.department
+								ORDER BY sum DESC)
+							WHERE ROWNUM=1;
+
+						·做法二：考虑相同积分的问题，则必须首先进行分组函数的嵌套，求出最高的积分是多少，而后在用此内容与之前的分组进行过滤
+							SELECT s.department, SUM(g.mark) sum
+							FROM sporter s, grade g
+							WHERE s.sporterid=g.sporterid
+							GROUP BY s.department
+							HAVING SUM(g.mark)=(
+								SELECT MAX(SUM(g.mark)) sum
+								FROM sporter s, grade g
+								WHERE s.sporterid=g.sporterid
+								GROUP BY s.department);
+				
+			2、找出在一操场进行比赛的各项目名称及其冠军的姓名
+				·确定所使用的数据表：
+					|-sporter：运动员的姓名
+					|-item表：项目名称
+					|-grade表：冠军的信息依靠成绩计算
+				·确定已知关联字段：
+					|-运动员和成绩：sporter.sporterid=grade.sporter
+					|-项目和成绩：item.itemid=grade.itemid
+
+				第一步：确定一操场进行的项目的ID
+					SELECT itemid FROM item WHERE location='一操场';
+				
+				第二步：找出冠军的成绩，因为各个项目有各个项目的冠军分数
+					SELECT i.itemid, MAX(g.mark) max
+					FROM item i, grade g
+					WHERE i.location='一操场' AND i.itemid=g.itemid
+					GROUP BY i.itemid;
+				
+				第三步：要根据这个成绩，找到对应的运动员姓名
+					SELECT s.name, g.itemid,temp.max
+					FROM sporter s, grade g ,(
+						SELECT i.itemid iid, MAX(g.mark) max
+						FROM item i, grade g
+						WHERE i.location='一操场' AND i.itemid=g.itemid
+						GROUP BY i.itemid) temp
+					WHERE s.sporterid=g.sporterid 
+					AND temp.iid=g.itemid 
+					AND g.mark=temp.max ;
+			
+				第四步：找到项目名称，引入item表
+					SELECT s.name, g.itemid,temp.max,i.itemname
+					FROM sporter s, grade g ,(
+							SELECT i.itemid iid, MAX(g.mark) max
+							FROM item i, grade g
+							WHERE i.location='一操场' AND i.itemid=g.itemid
+							GROUP BY i.itemid) temp, item i
+					WHERE s.sporterid=g.sporterid 
+					AND temp.iid=g.itemid 
+					AND g.mark=temp.max 
+					AND g.itemid=i.itemid
+					AND temp.iid=i.itemid;
+
+			3、找出参加了张三所参加的所有项目的其他同学姓名
+				·确定所使用的数据表：
+					|-sporter表：张三的运动员ID
+					|-grade表：根据它找到项目ID
+					|-sporterid：根据grade表和之前的sporter表确定出的项目ID，找到运动员的编号及姓名
+				·确定已知关联字段：sporter.sporterid=grade.sporterid;
+
+				第一步：确定张三的运动员编号
+					SELECT s. sporterid
+					FROM sporter s
+					WHERE s.name='张三';
+		
+				第二步：根据运动员编号，找到参加的项目的编号
+					SELECT g.itemid
+					FROM grade g
+					WHERE g.sporterid=(
+						SELECT s. sporterid
+						FROM sporter s
+						WHERE s.name='张三');
+
+				第三步：修改以上的查询，找到所有的运动员的编号
+					SELECT g.sporterid
+					FROM grade g
+					WHERE g.itemid IN (
+							SELECT g.itemid
+							FROM grade g
+							WHERE g.sporterid=(
+								SELECT s. sporterid
+								FROM sporter s
+								WHERE s.name='张三'));
+
+				第四步：根据运动员的编号找到运动员的姓名
+					SELECT name
+					FROM sporter
+					WHERE sporterid IN(
+						SELECT g.sporterid
+						FROM grade g
+						WHERE g.itemid IN (
+								SELECT g.itemid
+								FROM grade g
+								WHERE g.sporterid=(
+									SELECT s. sporterid
+									FROM sporter s
+									WHERE s.name='张三')))
+					AND name<>'张三';
+
+			4、经差张三因为使用了违禁药品，其成绩都记0分，请在数据库中作出相应修改。
+				现在只是知道了张三的姓名，却不知道运动员的编号，而成绩需要在grade表中通过运动员编号更新
+
+				UPDATE grade SET mark=0 WHERE sporterid=(
+					SELECT sporterid FROM sporter WHERE name='张三');
+
+			5、经组委会协商，需要删除女子跳高比赛项目
+				项目删除之后对应的成绩也应该消失，而在之前已经配置了级联删除了，所以直接删除父表即可
+
+				DELETE FORM item WHERE itemname='女子跳高';
+
+	集合操作（理解）：
+		在数学的操作之中存在交、差、并、补的概念，而在数据的查询找那个也存在此概念，有如下几个连接符号：
+			·UNION：连接两个查询，相同的部分不显示
+			·UNION ALL：连接两个查询，相同的部分显示
+			·INTERSECT：返回两个查询中的相同部分
+			·MINUS：返回两个查询中的不同部分
+		为了验证以上的操作，下面创建一张只包含20部门雇员信息的表：
+			CREATE TABLE emp20 AS SELECT * FROM emp WHERE deptno=20;
+
+		范例：验证 UNION
+			SELECT * FROM emp
+				UNION
+			SELECT  * FROM emp20;
+
+		范例：验证UNION ALL
+			SELECT * FROM emp
+				UNION ALL
+			SELECT * FROM emp20;
+
+		范例：验证INTERSECT
+			SELECT * FROM emp
+				INTERSECT
+			SELECT * FROM emp20;
+
+		范例：验证MINUS
+			SELECT * FROM emp
+				MINUS
+			SELECT * FROM emp20;
+				
+		在之前境界分组的时候曾经留过一道未完成的题目：所有领取奖金的人求出平均工资，所有不领取奖金的人求出平均工资，
+		当时的实现代码如下：
+			SELECT comm, AVG(sal)
+			FROM emp
+			GROUP BY comm;
+		这种问题相爱只能依靠查询的连接操作，准备两个查询：
+			·第一个查询负责查询出所有领取奖金的雇员平均工资
+			·第二个查询负责查询出所有不领取奖金的雇员平均工资
+
+			SELECT 'UNCOMM', AVG(sal) FROM emp WHERE comm IS NULL
+				UNION
+			SELECT 'COMM', AVG(sal) FROM emp WHERE comm IS NOT NULL;
+
+			对于这种连接查询，只需要清楚其概念即可，而以后在实际的工资之中，如果遇到了太复杂的SQL，
+			也不是程序员的工作，照DBA帮忙
+
+	序列（核心重点）：
+		在许多的数据表之中，都存在一种称为自动增长列的操作，但是在oracle之中，这种自动增长列并不是自动控制的，
+		而是需要用户手工控制，这样做主要是为了开发方便，而创建序列的语法如下：
+
+		CREATE SEQUENCE sequence
+		[INCREMENT BY n] [START WITH n]
+		[{MAXVALUE n | NOMAXVALUE}]
+		[{MINVALUE n | NOMINVALUE}]
+		[{CYCLE | NOCYCLE}]
+		[{CACHE n | NOCACHE}];
+
+		范例：创建序列
+			CREATE SEQUENCE mvseq;
+			
+			当一个序列创建完成之后，可以通过以下两种方式访问序列：
+				·序列名称.nextval:让序列增长到下一个内容
+				·序列名称.currval:取得当前序列的内容
+
+		范例：验证序列的操作
+			SELECT mvseq.currval FROM dual;
+			
+			可是直接执行上面的程序会发出如下的错误提示：“序列 MVSEQ.CURRVAL 尚未在此会话中定义”
+			在oracle之中，如果想要操作currval，则首先必须先使用nextval;
+
+			SELECT mvseq.nextval FROM dual;
+			SELECT mvseq.currval FROM dual;
+
+			序列一般都作为主键使用，例如，下面定义一张表;
+
+			DROP TABLE mytab PURGE;
+			CREATE TABLE mytab (
+				id		NUMBER,
+				name	VARCHAR2(20)		NOT NULL
+			);
+
+			现在向mytab表中增加数据
+
+			INSERT INTO mytab(id.name) VALUES(myseq.nextval,'姓名');	
+
+			记住，这个过程都是由用户自己手工进行的，不能自动完成。
+			在默认情况下，序列从0开始，每次增长1，那么现在可以修改
+
+		范例：创建序列，从10开始，每次增长2
+			DROP SEQUENCE myseq;
+			CREATE SEQUENCE myseq INCREMENT BY 2 START WITH 10;
+
+		范例：希望定义一个序列，这个序列可以在1.3.5.7.9之间循环出现
+			DROP SEQUENCE myseq;
+			CREATE SEQUENCE myseq INCREMENT BY 2 START WITH 1 MAXVALUE 10 MINVALUE 1 CYCLE NOCACHE;
+
+		关于序列中CACHE解释：
+			在oracle数据库之中，由于序列被经常使用到，所以oracle为了提升性能，将序列操作形式做了如下的处理。
+			首先，如果在用户每次使用序列的时候序列在增加，则肯定会造成一些性能是上的损耗，所以在oracle中专门为用户
+			准备了一块空间，这个空间之中，为用户准备好了若干个已经生成号的序列，每次操作的时候都是从这块空间之中取出
+			序列的内容，但是这样做有一个问题，如果现在数据库的实例被关闭了，那么保存在这块空间中的内容就有可能消失了，
+			但是虽然消失了，可是数据已经增长好了，这样会出现跳号的事情，而如果要想取消掉这种问题，则最好的方式是将序列设置为不缓存，使用NOCACHE声明
+
+	前台工具：PL SQL Develooper（了解）
+		从oracle开始，李老师是从oracle 8i使用的，印象之中，出现了这么点事：
+			·oracle 8i / oracle 9i:OEM(Oracle企业管理器)、sqlplusw、sqlplus
+			·oracle 10g:EM(WEB)、sqlplusw、sqlplus
+			·oracle 11g:EM(WEB)、sqlplus、SQLDeveloper（会java）
+		但是在这之外oracle中有一个前台工具------PLSQLDeveloper，此工具是一个第三方软件，也是在开发中使用最多的前台工具
+
+总结：
+	1、表的创建及约束的创建语法，必须精通
+	2、自动增长列使用序列完成
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

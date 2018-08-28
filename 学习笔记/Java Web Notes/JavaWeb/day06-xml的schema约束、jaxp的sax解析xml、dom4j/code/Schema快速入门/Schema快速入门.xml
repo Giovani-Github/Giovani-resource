@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<person xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xmlns="http://www.example.org/20151002" 
+xsi:schemaLocation="http://www.example.org/20151002 Schema快速入门.xsd">
+	<name>zhangsan</name>
+	<age>20</age>
+</person>

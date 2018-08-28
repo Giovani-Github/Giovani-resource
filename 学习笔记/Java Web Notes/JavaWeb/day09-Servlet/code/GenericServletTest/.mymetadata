@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="day09-GenericServletTest"
+  id="myeclipse.1445434772926"
+  context-root="/day09-GenericServletTest"
+  j2ee-spec="5.0"
+  archive="day09-GenericServletTest.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+

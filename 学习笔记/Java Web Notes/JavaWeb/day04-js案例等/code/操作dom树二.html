@@ -1,0 +1,32 @@
+<html>
+	<head>
+		<title>Document</title>
+		<style type="text/css">
+
+		</style>
+	</head>
+	<body>
+		<ul id="ul1">
+			<li id="li1">111</li>
+			<li id="li2">222</li>
+			<li id="li3">333</li>
+		</ul>
+
+		<input type="button" value="add" onclick="add();"/>
+	</body>
+	<script type="text/javascript">
+		function add() {
+			//获得旧节点li3
+			var li3 = document.getElementById("li3");
+			//创建新节点
+			var newLi = document.createElement("li");
+			var newText = document.createTextNode("newLi");
+			newLi.appendChild(newText);
+			//获得ul
+			var ul1=document.getElementById("ul1");
+			//在ul1节点里的li3子节点前面，添加一个新的newLi子节点insertBefore
+			ul1.insertBefore(newLi,li3);
+
+		}
+	</script>
+</html>

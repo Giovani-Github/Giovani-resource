@@ -1,0 +1,31 @@
+<html>
+	<head>
+		<title>Document</title>
+		<style type="text/css">
+
+		</style>
+	</head>
+	<body>
+		<ul id="ul1">
+			<li id="li1">111</li>
+			<li id="li2">222</li>
+			<li id="li3">333</li>
+		</ul>
+
+		<input type="button" value="replace" onclick="replace();"/>
+	</body>
+	<script type="text/javascript">
+		function replace() {
+			//获取ul，父节点
+			var ul = document.getElementById("ul1");
+			//获取要替换掉的节点，li2
+			var li2 = document.getElementById("li2");
+			//创建新节点
+			var newLi = document.createElement("li");
+			var newText = document.createTextNode("newText");
+			newLi.appendChild(newText);
+			//通过父节ul点使用新节点newLi替换掉旧节点li2
+			ul.replaceChild(newLi,li2);
+		}
+	</script>
+</html>

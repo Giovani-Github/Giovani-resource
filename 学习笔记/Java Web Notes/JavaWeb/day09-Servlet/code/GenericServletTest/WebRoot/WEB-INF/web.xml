@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" 
+	xmlns="http://java.sun.com/xml/ns/javaee" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+	<servlet>
+		<servlet-name>BServlet</servlet-name>
+		<servlet-class>servlet.genericservlet.test2.BServlet</servlet-class>
+		<init-param>
+			<param-name>p1</param-name>
+			<param-value>v1</param-value>
+		</init-param>
+		<init-param>
+			<param-name>p2</param-name>
+			<param-value>v2</param-value>
+		</init-param>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>CServlet</servlet-name>
+		<servlet-class>servlet.genericservlet.test3.CServlet</servlet-class>
+		<init-param>
+			<param-name>p3</param-name>
+			<param-value>v3</param-value>
+		</init-param>
+		<init-param>
+			<param-name>p4</param-name>
+			<param-value>v4</param-value>
+		</init-param>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>BServlet</servlet-name>
+		<url-pattern>/Generic/BServlet</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>CServlet</servlet-name>
+		<url-pattern>/Generic/CServlet</url-pattern>
+	</servlet-mapping>
+</web-app>

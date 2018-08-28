@@ -1,0 +1,23 @@
+import java.io.DataInputStream;
+import java.net.DatagramSocket;
+
+
+public class MissileNewMsg implements Msg {
+	
+	Missile m;
+	
+	public MissileNewMsg(Missile m) {
+		this.m = m;
+	}
+
+	public void send(DatagramSocket ds, String ip, int udpPort) {
+		
+		
+	}
+
+	public void parse(DataInputStream dis) {
+		
+		
+	}
+
+}

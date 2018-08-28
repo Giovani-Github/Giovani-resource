@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE person [
+	<!ELEMENT person (name,age,haha)>
+	<!ATTLIST person 
+		id1 CDATA #REQUIRED
+	>
+	<!ELEMENT name (#PCDATA)>
+	<!ATTLIST name
+		id2 (aa|bb|cc) #IMPLIED
+	>
+	<!ELEMENT age (#PCDATA)>
+	<!ATTLIST age
+		id3 ID #FIXED "A"
+	>
+	<!ELEMENT haha (#PCDATA)>
+	<!ATTLIST haha
+		id4 CDATA "kkk"
+	>
+]>
+<person id1="字符串">
+	<name id2="aa">zhangsan</name>
+	<age id3="A">20</age>
+	<haha id4="d">ddd</haha>
+</person> 

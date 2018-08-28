@@ -1,0 +1,33 @@
+import java.awt.*;
+
+public class Blood {
+	private int x, y, w, h;
+	private TankClient tc;
+	
+	//出现的位置规律
+	private int[][] pos = {{200, 200}, {250, 250}, {300, 300}, {350, 350}, {400, 400}};
+	private int step = 0;//出现了几次
+	
+	public Blood() {
+		x = pos[0][0];
+		y = pos[0][1];
+		w = h = 15;
+	}
+	
+	public void draw(Graphics g) {
+		Color c = g.getColor();
+		g.setColor(Color.MAGENTA);
+		g.fillRect(x, y, w, h);
+		g.setColor(c);
+		
+	}
+	
+	private void move() {
+		step ++;
+		if(step == pos.length){
+			step = 0;
+		}
+		x = pos[step][0];
+		y = pos[step][1];
+	}
+}

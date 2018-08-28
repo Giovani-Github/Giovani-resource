@@ -1,0 +1,355 @@
+0、表单提交方式
+	* button提交:使用form标签的一个方法，submit();
+	* 超链接提交 :<a href="xxx.html?name的值==数据"></a>
+	* 事件：
+		onclick:鼠标点击事件
+		onchange:改变内容（一般和select一起使用）
+		onfocus:得到焦点(ie5、某些版本ie6可能会不兼容)
+		onblur:失去焦点
+1、xml的应用
+	* 不同系统之间传输数据，例如qq传输
+	* 用来表示生活中有关系的数据
+	* 经常用在文件配置
+2、xml语法：
+	(1) xml的文档声明（重点）
+		- 创建一个xml文件，后缀xml
+		- 写xml第一步必须写一个文档声明，学了声明之后表示这个文件写的是xml内容。
+		- 文档声明必须写在第一行第一列
+		- 写法：<?xml version="1.0" encoding="gbk"?>
+		- 属性：
+			** version:xml版本，有1.0和1.1，都使用1.0
+			** encoding：xml编码 gbk utf-8...
+			** standalone：是否需要依赖其他文件 yes/no (几乎不用的属性)
+	(2) 定义元素（标签）（重点）
+		- 标签定义又开始就必须有结束，也可以在标签内结束：<persoon></person>、<person/>
+		- 可以嵌套，必须要合理：
+			* 合理嵌套：<a><b></b></a>
+			* 不合理：<a><b></a></b>
+		- 一个xml中，只能有一个根标签
+		- xml会把空格和换行当成内容来解析
+		- 命名规范：
+			* xml标签可以是中文
+			* xml代码区分大小写
+			* xml标签不能以数字和下划线开头
+			* xml标签不能以xml、XML、Xml等开头
+			* xml的标签不能包含空格和冒号
+	(3) 定义属性（重点）
+		- 一个标签可以有多个属性，但是属性名不能相同
+		- 属性名和属性值之间用等号隔开，属性值使用引号包起来（可以是单引号或者双引号）
+		- xml属性命名规范和html命名规范相同
+	(4) 注释（重点）
+		- 写法：<!--注释-->
+		- 注意：不能有嵌套：<!--<!--不能嵌套，否者页面会不正常显示-->-->
+	(5) 特殊字符（重点）
+		- 特殊字符需要使用转义字符代替才能正常显示：看图
+	(6) CDATA区（了解）
+		- 可以解决多个字符都需要转义的操作。把这些包含特殊字符的内容放到CDATA区里面就不需要转义
+		- 写法：<![CDATA[内容]]>
+	(7) PI指令（处理指令 ）（了解）
+		- 可以在xml中设置样式
+		- 写法：<?xml-stylesheet type="text/css" href="css的路径"?> (放在第二行)
+		- 只能对英文标签名称起作用 
+3、xml的约束：
+	- 比如现在定义一个person的xml文件，只想保存人的信息。但如果在文件中写了<猫>，发现可以正常显示，因为符合语法规范。
+		但是猫不是人的信息，这时候需要技术来规定xml中只能出现的元素，这个时候需要约束。
+	- xml的约束技术：dtd和schema约束
+4、dtd快速入门
+	- 创建一个文件，后缀名.dtd
+	- 步骤：
+		(1)看xml中有多少个元素，就在dtd文件中写多少个<!ELEMENT>
+		(2)判断元素是复杂元素还是简单元素
+			* 复杂元素：有子元素的元素
+				** <!ELEMENT 元素名称 (子元素,子元素,...)>
+			* 简单元素：没有子元素的元素
+				** <!ELEMENT 元素名称 (#PCDATA)>
+		(3) 需要在xml文件中倒入dtd文件（可以写在xml文件第二行）
+			* <!DOCTYPE 根元素名称 SYSTEM "dtd文件的路径">
+	- xml文件用浏览器打开，浏览器只负责校验xml语法，不校验约束
+	- 校验约束需要使用工具，myeclipse。在工具里面xml引入了dtd约束，myeclipse会自动校验，
+		如果不是dtd里面ELEMENT有声明的元素或子元素，会报错
+5、dtd的三种引入方式
+	(1)引入外部的dtd文件
+		<!DOCTYPE 根元素名称 SYSTEM "dtd路径">
+	(2)是使用内部的dtd文件
+		<!DOCTYPE 根元素名称 [
+			内容
+		]>
+	(3)使用网络dtd文件
+		<!DOCTYPE 根元素名称 PUBLIC "DTD名称" "dtd文档的url">
+6、使用dtd定义元素（对元素进行约束）
+	- 简单元素：
+		* <!ELEMENT name (#PCDATA)>
+		* (#PCDATA):约束name内容是字符串类型
+		* EMPTY:元素没有内容
+		* ANY：元素内容任意
+	- 复杂元素
+		* <!ELEMENT 元素名称 (子元素)>：表示子元素只能且必须出现一次
+		* 子元素后面加符号：
+			+ ：子元素可以出现一次或多次
+			? ：子元素可以出现零次或一次
+			* : 子元素可以出现零次或多次
+		* 隔开子元素的符号：
+			, : 表示子元素要按照顺序出现
+			| ：表示子元素只能出现其中一个
+7、使用dtd定义属性：
+	- 语法：<!ATTLIST 元素名称
+					属性名称 属性类型 属性的约束
+				>
+	- 属性类型：
+		* CDATA:字符串
+		* 枚举：只能出现其中一个值。写法：(aa|bb|xx)
+		* ID:值只能是字母或下划线开头
+	- 属性约束：
+		* #REQUIRED:该属性必须存在
+		* #IMPLIED:该属性可有可无
+		* #FIXED:表示一个固定值。写法：#FIXED "aaa"。表示属性值只能是这个aaa
+		* 直接值：如果不写这个属性，就直接使用这个值。写了这个属性，就用自己写上去的值。
+			写法：直接写："aaaa"
+8、实体的定义（内容定义）
+	* 语法：<!ENTITY 实体名称 "实体的值">
+	* 使用实体：&实体名称;
+	* 注意：实体定义需要写在内部dtd里面。
+			写在外部，会导致某些浏览器取不到值
+9、w3c案例：根据dtd书写xml文件
+10、xml解析的简介
+	- xml解析有两种方式
+		* dom：根据xml的层级结构在内存中分配一个树形结构，把xml的标签，属性和文本封装成对象
+			** 缺点：文件过大时容易造成内存溢出
+			** 优点：很方便实现增删改操作
+		* sax：采用事件驱动，边读边解析。从上到下，一行一行解析，解析某一个对象，返回对象名称
+			** 缺点：不能实现增删改操作
+			** 优点：不会因为文件过大造成内存溢出，方便查询
+	- xml解析器：想要解析xml首先需要解析器
+		* 不同的公司提供了针对dom和sax的解析器，通过api方式提供
+		* sun公司提供了针对dom和sax解析器 jaxp
+		* dom4j组织提供了dom4j
+		* jdom组织提供了jdom
+11、jaxp的api查看(dom)
+	* jaxp是javase的一部分
+	* jaxp解析器在jdk的javax.xml.parsers包里面
+	* 有四个类，分别对应dom和sax
+	* dom：
+		- DocumentBuilder（抽象，javax.xml.parsers包）：解析器类，通过DocumentBuilderFactory.newDocumentBuilder()方法获取
+				** parse(String url):返回的是Document类
+
+		- DocumentBuilderFactory（抽象，javax.xml.parsers包）:解析器工厂，通过自己的
+				**　newInstance()：获取自身对象实例
+				**　newDocumentBuilder()：获取DocumentBuilder对象实例
+
+		- NodeList类（接口，org.w3c.dom）：节点集合类
+			** int getLength()：列表中的节点数。 
+			** Node item(int index) ：返回集合中的第 index 个项。 
+	
+		- Node类（接口,org.w3c.dom包）：节点类
+			*** static short ELEMENT_NODE：该节点为 Element
+			** String getTextContent()：返回节点的文本内容
+			** setTextContent(String textContent):修改节点的文本内容
+			** Node appendChild(Node newChild)：将节点 newChild 添加到此节点的子节点列表的末尾。 
+			** short getNodeType()：获取此节点的类型
+			** NodeList getChildNodes()：包含此节点的所有子节点的 NodeList。如果不存在子节点，则这是不包含节点的 NodeList
+			** String getNodeName():此节点的名称，取决于其类型 
+
+			|- Document（接口，org.w3c.dom包）：表示整个xml文档
+					** NodeList getElementsByTagName(String tagname)：通过名称获取节点
+					** Element createElement(String tagName) ：创建指定类型的元素。 
+					** Text createTextNode(String data)：创建给定指定字符串的 Text 节点。
+					** Node getParentNode()： 返回父节点。 
+					**  Node removeChild(Node oldChild)：从子节点列表中移除 oldChild 所指示的子节点，并将其返回。 
+			|- Element（接口，org.w3c.dom包）：Element 接口表示 HTML 或 XML 文档中的一个元素
+		
+		- Text（接口，org.w3c.dom包）：表示 Element 或 Attr 的文本内容（在 XML 中称为字符数据）
+		
+		- Transformer（抽象,javax.xml.transform包）：此抽象类的实例能够将源树转换为结果树（把内存里的xml写入文件中）
+			* 可以通过 TransformerFactory.newTransformer 方法获取此类的实例
+			** void transform(Source xmlSource, Result outputTarget) ：将 XML Source（源） 转换为 Result（结果）。 （把内存里的xml写入文件）
+		
+		- TransformerFactory（抽象，javax.xml.transform包）：获取Transformer实例的工厂类
+			** newTransformer():返回Transformer对象实例
+			** newInstance()：获取自身对象实例
+
+		- Source（接口，javax.xml.transform包）：实现此接口的对象包含充当源输入（XML 源或转换指令）所需的信息。
+			|- DOMSource（javax.xml.transform.dom包）：（DOM）树的形式充当转换 Source 树的类
+					DOMSource(Node n) : 创建带有 DOM 节点的新输入源。
+		- Result（接口，javax.xml.transform包）：实现此接口的对象包含构建转换结果树所需的信息。
+			|- StreamResult（javax.xml.transform.stream包）：充当转换结果的类
+					StreamResult(String systemId) :从 URL 构造 StreamResult。
+	* sax
+		- SAXParser:解析器类
+		- SAXParserFactory：解析器工厂
+12、使用jaxp的dom查询某个节点名称的所有节点（code/jaxptest_dom/TestJaxp1.java）
+13、使用jaxp的dom查询某个节点名称的节点（code/jaxptest_dom/TestJaxp2.java）
+14、使用jaxp的dom添加节点（code/jaxptest_dom/TestJaxp3.java）
+	* 在第一个p1下面添加一个age节点(TestJaxp1.xml文件)
+	* 步骤：
+		1、创建解析器工厂
+		2、根据解析器工厂创建解析器
+		3、解析xml，返回document 
+		4、得到第一个p1
+			- 得到所有p1，使用item方法下标得到
+		5、创建sex标签 createElement
+		6、创建文本 createTextNode
+		7、把文本添加到sex下面 appendChild
+		8、把sex添加到第一个p1下面 
+		9、回写xml
+			- 通过TransformerFactory类获取Transformer类，使用Transformer的transform()方法，回写xml
+15、使用jaxp的dom修改节点内容（code/jaxptest_dom/TestJaxp4.java）
+		修改sex元素里的值为nan(TestJaxp1.xml文件)
+16、使用jaxp的dom删除节点（code/jaxptest_dom/TestJaxp5.java）
+	步骤：		
+		 1、创建解析器工厂
+		 2、根据解析器工厂创建解析器
+		 3、解析xml，返回document 
+		 4、获取sex元素
+		 5、获取sex的父节点 
+		 6、删除使用父节点删除 removeChild方法
+		 7、回写xml
+17、使用jaxp的dom遍历几点，把所有元素名称打印出来（code/jaxptest_dom/TestJaxp6.java）
+		 1、创建解析器工厂
+		 2、根据解析器工厂创建解析器
+		 3、解析xml，返回document
+		 ====使用递归实现=====
+		 4、得到根节点
+		 5、得到根节点子节点
+		 6、得到根节点子节点的子节点
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

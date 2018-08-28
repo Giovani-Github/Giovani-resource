@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Untitled Document</title>
+		
+		<script type=text/javascript charset=utf-8>
+					
+					
+					// 原型 prototype
+					
+					//构造函数方式
+					/*
+					function Person(name , age){
+						this.name = name ; 
+						this.age  = age ; 
+						this.sayName = function(){alert('我是姓名!')};
+						
+					}
+				
+					//每次创建person实例的时候，person里面的属性和方法都会被再创建一次。浪费资源
+					//所以两个实例的属性和方法一经比较是不相等的
+					var p1 = new Person('z3',20); 
+					var p2 = new Person('z4',21);
+					p1.sayName();
+					p2.sayName();
+					alert(p1.sayName == p2.sayName);     // false 
+					//alert(p1.name == p2.name);		 // false 
+					*/
+					
+					// prototype 创建每一个函数都有一个prototype属性,这个属性其实是一个指针,而这个指针总指向一个对象
+					// 这个对象的用途就是将特定的属性和方法包含在内,起到一个所有实例所共享的作用
+					
+					
+					function Person(){
+						
+					}
+
+					//得到prototype所指向的对象，赋值给obj。
+					//这时obj就是prototype所指向的对象
+					var obj = Person.prototype;
+
+					//在prototype所指向的对象中设置属性和方法
+					//这prototype所执行的对象中的所有属性和方法，被所有Person对象的实例所共享。
+					//即所有的person实例都可调用，且这些属性和方法只被创建一次。节省资源
+					obj.name = 'z3';
+					obj.age  = 20 ; 
+					obj.sayName = function(){alert(this.name);};
+
+					var p1 = new Person();
+					var p2 = new Person();
+					//alert(p1.age);
+					//alert(p2.age);
+					//p1.sayName();
+					//p2.sayName();
+					//alert(p1.sayName == p2.sayName)
+					
+					/*
+						构造函数  原型对象 实例对象 之间的关系
+						
+						够着函数的实例对象 = 原型对象
+						构造函数.prototype =  原型对象
+							var obj = Person.prototype
+							obj = 原型对象
+
+						原型对象的构造函数等于当前对象的构造函数
+						原型对象.constructor = 构造函数
+							obj.constructor = p1.constructor
+
+						实例对象的原型对象 = 构造函数的实例对象
+						p1.prototype = Person.prototype
+
+					*/
+					
+
+			
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

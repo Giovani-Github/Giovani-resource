@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
+    version="2.1">
+    
+  <tlib-version>1.1</tlib-version>
+  <short-name>my</short-name> <!-- 简短的名称，即推荐的前缀 -->
+  <uri>http://java.sun.com/jsp/jstl/core</uri><!-- 这个随便填网址，因为我们现在还没有把tld文件打包成jar包，只能在导入标签库的时候写真实的地址 -->
+
+<!--*****************前面的都是我们向c标签借的模板，下面我们来部署我们的标签***************************-->
+  <tag>
+  	<name>myTag1</name><!-- 指定标签的名称 -->
+  	<tag-class>test.mytag.MyTag1</tag-class><!-- 指定当前标签的标签处理类 -->
+ 	<body-content>empty</body-content><!-- 指定当前标签体的类型，我们这里不打算写标签体，所以为空empty -->
+  </tag>
+  
+  <tag>
+  	<name>myTag2</name><!-- 指定标签的名称 -->
+  	<tag-class>test.mytag.MyTag2</tag-class><!-- 指定当前标签的标签处理类 -->
+ 	<body-content>empty</body-content><!-- 指定当前标签体的类型，我们这里不打算写标签体，所以为空empty -->
+  </tag>
+  
+  <!-- 有标签体的自定义标签 -->
+  <tag>
+  	<name>myTag3</name><!-- 指定标签的名称 -->
+  	<tag-class>test.mytag.MyTag3</tag-class><!-- 指定当前标签的标签处理类 -->
+ 	<body-content>scriptless</body-content><!-- 指定当前标签体的类型，scriptless表示标签体可以是el表达式，或者字符串，或者其他标签 -->
+  </tag>
+  
+  <!-- 执行这个标签之后 ，这个标签后面的内容都不会执行 -->
+  <tag>
+  	<name>myTag4</name>
+  	<tag-class>test.mytag.MyTag4</tag-class>
+ 	<body-content>empty</body-content>
+  </tag>
+  
+  <!-- 有属性的标签 -->
+  <tag>
+  	<name>myTag5</name>
+  	<tag-class>test.mytag.MyTag5</tag-class>
+  	<body-content>scriptless</body-content>
+  	<!-- 部署标签的属性 -->
+  	<attribute>
+  		<name>test</name><!-- 指定属性名，必须与标签处理类里面的test属性同名 -->
+  		<required>true</required><!-- 指定属性是否为必须的 -->
+		<rtexprvalue>true</rtexprvalue> <!-- 指定属性是否可以使用el -->
+	</attribute>
+  </tag>
+
+</taglib>

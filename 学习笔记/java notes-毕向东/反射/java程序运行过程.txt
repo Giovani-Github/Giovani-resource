@@ -1,0 +1,6 @@
+1.虚拟机编译好java源代码，生成javaclass文件
+2.类加载（ClassLoader）器将其加载到内存中的CodeSegment中。
+	站在类加载器的角度来说，这一个个class文件就是一个个对象（yy.class  xx.class）
+3.找到main函数开始执行，main运行过程中，会有很多其他的class被加载进内存中
+
+java.lang包中有描述class和classloader的类

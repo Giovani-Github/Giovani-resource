@@ -1,0 +1,636 @@
+﻿知识点：
+	1.sql语法的基本格式及简单查询，限定查询，分组统计的使用
+	2.scott用户下的主要表的结构，需要记下
+	3.单行函数的使用
+具体内容：
+	scott用户的表结构（重点，背）：
+		在oracle的学习之中，重点使用的是sql语句，而所有的sql语句都要在scott用户下完成，这个用户下一共有四张表，
+		可以使用select * from tab;查看所有的数据表的名称，如果现在要想知道每张表的表结构，则可以采用一下的命令完成：
+		desc 表名称；
+
+		表的结构：
+			一.部门表：dept
+			NO.	名称		类型			描述
+			1.	DEPTNO	NUMBER(2)		表示部门编号，由两位数字所组成
+			2.	DNAME		VARCHAR2(14)	部门名称，最多由14个字符所组成
+			3.	LOC		VARCHAR2(13)	部门所在位置
+			
+			二.雇员表：emp
+			NO.	名称		类型		描述
+			1.	EMPNO		NUMBER(4)	雇员的编号，由四位数字所组成
+			2.	ENAME		VARCHAR2(10)	雇员的姓名，由10位字符所组成
+			3.	JOB			VARCHAR2(9)	雇员的职位
+			4.	MGR		NUMBER(4)	雇员的对应领导编号，领导也是雇员
+			5.	HIREDATE	DATE		雇员的雇佣日期
+			6.	SAL			NUMBER(7,2)	基本工资，其中有两位小数，五位整数，一共是七位
+			7.	COMM		NUMBER(7,2)	奖金，佣金
+			8.	DEPTNO	NUMBER(2)	雇员所在的部门编号，与部门表的loc对应
+
+			三.工资等级表：salgrade
+			NO.	名称		类型		描述
+			1.	GRADE		NUMBER		工资的等级
+			2.	LOSAL		NUMBER		此等级的最低工资
+			3.	HISAL		NUMBER		此等级的最高工资
+
+			四.工资表： bonus（暂时使用不到）
+			NO.	名称		类型		描述
+			1.	ENAME		VARCHAR2(10)	雇员姓名
+			2.	JOB			VARCHAR2(9)	雇员职位
+			3.	SAL			NUMBER		雇员的工资
+			4.	COMM		NUMBER		雇员的奖金
+
+	简单的表查询（重点）：
+		在之前曾经使用过如下的查询语句形式：select * from emp;这种查询语句的结构主要指的是从emp表中查询出所需要的指令，但是这个是属于sql语句的范畴。
+		SQL（Structured Query Language，结构查询语言）是一个功能强大的数据库语言。SQL通常用于与数据库的通讯。
+		ANSI（美国国家标准学会）声称，SQL是关系数据库管理系统的标准语言。
+			Oracle数据库之所以发展的很好，主要也是因为Oracle是全世界最早采用SQL语句的数据库产品。
+		SQL功能强大，概括起来，他可以分成以下几组：
+			DML(Data Manipulation Language, 数据库操语言) -- 用于检索或者修改数据（最难，用的最多）
+			DDL(Data Definition Language, 数据定义语言) -- 用于定义数据库的结构，如创建、修改或者删除数据库对象
+			DCL(Data Control Language, 数据库控制语言) -- 用于定义数据库用户的权限
+		而简单查询指的是查询出一张表中的所有数据，简单查询的语法如下（大写表示固定的语句，小写表示可替换的语句，中括号表示可选）：
+			
+			SELECT [DISTINCT] *| 字段 [别名] [,字段 [别名]]（SELECT后面可以跟*号，也可以不跟*号，“|”就是或者的意思）
+			FROM 表名称 [别名];
+
+			SELECT 语句用于从表中选取数据，结果被存储在一个结果表中（称为结果集）。
+			FROM 子句指定了SELECT语句中字段的来源。
+			星号（*）是选取所有列的快捷方式。
+
+
+			范例：查询dept表的全部记录：
+				SELECT * FROM dept;
+
+			范例：查询出每个雇员的编号、姓名、基本工资(编号、姓名、基本工资就是字段，也就是表结构中的名称)：
+
+				SELECT empno,ename,sal FROM emp;
+
+			范例：查询每个雇员的职位:
+
+				SELECT job FROM emp;
+
+					这个时候发现查询出来的job内容中出现了重复的数据，而之所以数据会有重复，主要的原因是现在没有消除掉重复记录，
+					可以使用DISTINCT消除所有的重复内容：
+
+				SELECT DISTINCT job FROM emp;
+
+					但是，对于重复数据，指的是一行中的每个列的记录都重复，才叫重复数据。
+
+			范例：查询每个雇员的姓名，职位：
+
+				SELECT DISTINCT ename,job FROM emp;
+
+					在进行简单查询操作之中，也可以使用各个数字的四则运算符。
+
+			范例：要求显示每一个雇员的姓名、职位、基本年薪：
+
+				SELECT ename,job,sal*12 FROM emp;
+
+					但是这个时候显示列上出现了一个"SAL*12",这个肯定是显示的查询列，但是这个列名称不方便浏览，所以此时
+					可以起一个别名：
+
+				SELECT ename,job,sal*12 income FROM emp;
+
+					但是对于别名，建议不要使用中文，只要是程序的开发，
+					都要回避中文，这不是中国的“易语言”。
+
+			范例：由于公司的福利很高，每个月都有200元的伙食补助以及100元车费补助，这个时候的年薪：
+
+				SELECT ename,job,(sal+300)*12 income FROM emp;
+			
+			范例：公司每年的年底都会多发一个月的基本工资：
+
+				SELECT ename,job,(sal+300)*12+sal income FROM emp;
+
+					在简单查询之中也可以使用“||”连接查询的字段。
+
+			范例：观察"||"的使用：
+
+				SELECT empno || ',' || ename FROM emp;
+
+					由于“，”属于原样输出的字符串，所以必须使用单引号括起来，既：在SQL语句之中，单引号表示的是字符串。
+
+			范例：要求现在的数据按照如下格式显示：
+					“雇员编号是：7369的雇员姓名是：SMITH,基本工资是：800，职位是：CLERK!”
+					现在相当于查找：enpno、ename、sal、job字段，并且用“||”进行连接：
+
+				SELECT '雇员编号是:' || empno || '的雇员姓名是:' || ename || ',基本工资是:' || sal || '，职位是:'|| job || '!' 雇员信息 FROM emp;
+
+					一定要记住，别名上的内容不要使用单引号括起来，而只有在SELECT子句之中出现的内容使用单引号。（谁谁之后的语句叫子句，SELECT之后的语句叫子句）
+
+ 	限定查询（重点）：
+		在之前的简单查询中，是将所有的记录进行显示，但是现在可以对显示的记录进行过滤的操作，而这就是属于限定查询的工作了，
+		限定查询就是在之前的语法基础上增加了一个WHERE子句，用于指定限定条件，此时语法如下：
+			SELECT [DISTINCT] *|字段 [别名] [,字段 [别名]]
+			FROM 表名称 [别名]
+			[WHERE 条件(S)] ;
+		在WHERE子句之后可以增加多个条件，最常见的条件就是基本的关系运算：>、>=、<、<=、!=(<>)、BETWEEN..AND、LIKE、IN、IS NULL、AND、OR、NOT;
+		
+		1、关系运算：
+			范例：要求查询基本工资高于1500的所有雇员信息：
+				
+				SELECT * FROM emp 
+				WHERE sal>=1500 ;
+
+			范例：查询出所有职位是办事员的雇员信息：
+				
+				SELECT * FROM emp 
+				WHERE job='clerk' ;
+				
+					这个时候没有返回相应的查询结果，主要的原因是oracle的数据库之中，所有数据都是区分大小写的，所以代码修改如下：
+				
+				SELECT * FROM emp WHERE job='CLERK';
+				
+					以上只是操作了一个条件，现在也可以操作多个条件，而这多个条件之间可以使用AND或OR进行连接操作。
+
+			范例：查询工资在1500~300的全部雇员信息：
+				
+				SELECT * FROM emp
+				WHERE sal>=1500 AND sal<=3000 ;
+				
+			范例：查询出职位是办事员或者是销售员的全部雇员信息：
+				
+				SELECT * FROM emp 
+				WHERE job='CLERK' OR job='SALESMAN' ;
+
+			范例：查询出职位是办事员或者是销售员的全部雇员信息，并且要求这些雇员的工资大于1200：
+				
+				SELECT * FROM emp 
+				WHERE (job='CLERK' OR job='SALESMAN') AND sal>1200 ;
+
+			范例：查询所有不是办事员的雇员信息：(三种写法)
+				
+				1、SELECT * FROM emp WHERE job<>'CLERK' ;
+				2、SELECT * FROM emp WHERE job!='CLERK' ;
+				3、SELECT * FROM emp WHERE NOT job='CLERK' ;
+
+		2、范围判断：BETWEEN...AND...
+			"BETWEEN 最大值 AND 最小值"，表示的是一个范围间的判断过程。
+				
+			范例:要求查询出基本工资在1500~3000的雇员信息：
+				SELECT * FROM emp
+				WHERE sal BETWEEN 1500 AND 3000 ;
+
+			范例：现在也可以对 BETWEEN..AND 操作进行求反：
+				SELECT * FROM emp
+				WHERE NOT sal BETWEEN 1500 AND 3000 ;
+					可是 BETWEEN..AND 操作符不光只是针对于数字有用，对于日期也同样有用。
+
+			范例：要求查询出在1981年雇佣的全部雇员信息：
+					·时间范围：1981-01-01 ~ 1981-12-31 使用hiredata字段表示雇佣日期
+					·hiredata字段上的内容可以使用字符串表示 '01-1月-1981' ~ '31-12月-81'
+				SELECT * FROM emp
+				WHERE hiredate BETWEEN '01-1月-1981' AND '31-12月-81';
+
+		3、判断是否为空：IS(NOT)NULL
+			使用此语法可以判断某一个字段上内容是否是"null",但是null和数字0以及空字符串是另个概念。
+			
+			范例：查询出所有领取奖金的雇员信息：
+				SELECT * FROM emp
+				WHERE comm IS NOT NULL ;
+				或者：
+				select * FROM emp
+				WHERE NOT comm IS NULL ;
+
+			范例：查询所有不领取奖金的雇员：
+				SELECT * FROM emp
+				WHERE comm IS NULL ;
+
+		4、指定范围的判断：IN操作符
+			IN操作符表示的是指定一个查询的范围，例如，现有如下一个查询要求：
+
+			范例：查询出雇员编号是7369、7566、7799的雇员信息
+					·如果按照最早的做法，使用OR操作完成：
+				SELECT * FROM emp
+				WHERE empno=7369 OR empno=7566 OR empno=7799 ;
+					·如果现在使用的新的操作符IN的话，则代码简单了：
+				SELECT * FROM emp
+				WHERE empno IN (7369,7566,7799) ;
+					而如果现在使用的是NOT IN，则表示不在指定的范围之中。
+
+			范例：查询所有不领取奖金的雇员：
+				SELECT * FROM emp
+				WHERE empno NOT IN (7369,7566,7799) ;
+					注意点:关于NOT IN的问题
+						·如果现在使用了IN操作符，查询的范围之中存在了null，不影响查询；
+					SELECT * FROM emp
+					WHERE empno IN (7369,7566,null) ;
+						·如果现在使用的是 NOT IN操作符，如果查询范围之中有了null，则不会有任何查询结果返回
+					SELECT * FROM emp
+					WHERE empno NOT IN (7369,7566,null) ;
+						对于这个限制现在先作为特点记住，以后会讲解为什么NOT IN之中不能出现null，而且记住了，如果NOT IN 中出现了null，
+						则表示的就是查询全部数据。
+		5、模糊查询：LIKE子句
+			LIKE子句的功能提供了模糊查找的操作，例如：某些程序上出现的搜索操作，都是属于LIKE子句的实现，但是必须提醒的是，搜索引擎上的查询可不是LIKE。
+			但是要想使用LIKE子句必须认识两个匹配符号：
+				·匹配单个字符：“_”—> 1个
+				·匹配任意多个字符："%" —> 0个、1个、多个
+
+			范例：要求查询雇员姓名中，有字母A开头的雇员信息
+				SELECT * FROM emp WHERE ename LIKE 'A%' ;
+			
+			范例：要求查询出雇员姓名中第二个字母是A的全部雇员信息：
+				SELECT * FROM emp WHERE ename LIKE '_A%' ;
+
+			范例：要求查询出雇员姓名中带有字母A的雇员：
+				SELECT * FROM emp WHERE ename LIKE '%A%' ;
+					现在也可以使用NOT操作，对操作进行求反的功能：
+				SELECT * FROM emp WHERE ename NOT LIKE '%A%' ;
+					但是对于LIKE子句，不一定只能在字符串数据上表示，可以在任意的数据上表示：
+				SELECT * FROM emp WHERE ename LIKE '%1%' OR hiredate LIKE '%1%' OR sal LIKE '%1%' ;
+					说明：关于LIKE子句的使用
+						在开发中，数据库的模糊查询肯定使用LIKE子句，但是在使用LIKE子句的时候有一个最大的注意点：
+						如果在模糊查询上不设置任何的查询关键字的话（'%%'）则表示查询全部记录：
+					SELECT * FROM emp WHERE ename LIKE '%%' OR hiredate LIKE '%%' OR sal LIKE '%%' ;
+						这一个特点可以帮助用户节约很多的代码，所以一定要记住
+
+	数据库的排序(重点)：
+		当数据返回查询结果之后，所有的数据默认情况下是按照雇员编号排序的 ，当然，现在也可以使用“ORDER BY” 子句指定所需要的排序的操作列，而这个时候的SQL语法如下：
+			SELECT [DISTINCT] *|字段 [别名] [,字段 [别名]]
+			FROM 表名称 [别名]
+			[WHERE 条件(S)] 
+			[ORDER BY 排序字段 [ASC|DESC] [,字段 [ASC|DESC],...]] ;
+		"ORDER BY" 子句是写在所有SQL语句最后的内容，而且对于排序有以下几点说明：
+			·排序的时候可以指定多个排序的字段
+			·排序方式有两种：
+				|-升序（ASC）：默认，不写也是升序。
+				|-降序（DESC）：用户需要指定，由大到小排序。
+		范例：查询所有雇员信息，要求按照工资排序：
+			SELECT * FROM emp ORDER BY sal ;
+		
+		范例：进行降序排列：
+			SELECT * FROM emp ORDER BY sal DESC ;
+
+		范例：查询出所有的雇员信息，按照工资由高到低排序，如果工资相同，则按照雇佣日期又早到晚排序：
+				·此时肯定需要两个字段排序：工资（DESC）,雇佣日期（ASC）
+			SELECT * FROM emp ORDER BY sal DESC, hiredate ASC ;
+
+		对于排序操作，一般只在需要的地方上使用，而且一定要记住的是，ORDER BY子句是写在所有的SQL语句最后的部分
+
+	单行函数（重点）：
+		虽然各个数据库都是支持SQL语句的，但是每一个数据库也有每一个数据库自己所支持的操作函数，这些就是单行函数，
+		而如果要想尽心数据库开发的话，除了要会使用SQL之外，就是多学习函数。
+		单行函数主要分为一下五类：字符函数、数字函数、日期函数、转换函数、通用函数。
+		其中转换函数、通用函数在oracle中是最麻烦的最重要的函数。
+
+		字符函数：
+			字符函数的功能主要是进行字符串数据的操作，下面给出几个字符函数：
+				·UPPER(字符串|列)：将输入的字符串变为大写返回
+				·LOWER(字符串|列): 将输入的字符串变为小写返回
+				·INITCAP(字符串|列): 开头首字母大写
+				·LENGTH(字符串|列): 求出字符串的长度
+				·REPLACE(字符串|列,被替换字符串，替换的字符串): 进行替换
+				·SUBSTR(字符串|列,开始点 [结束点])：字符串截取
+				列就是字段，对字段那一列进行操作
+			oracle之中有一点比较麻烦，即使要验证字符串，也必须编写完整的SQL语句。
+			所以在oracle数据库之中为了用户的查询方便，专门提供了一个“dual”的虚拟表。
+			范例：观察转大写的函数：
+				SELECT UPPER('hello') FROM dual ;
+					大写转换的用处：在一般的使用之中，用户输入数据的时候会去关心数据本身存放的是大写还是小写吗？
+						SELECT * FROM emp WHERE ename='&str' ;
+					此时如果输入的是小写，则肯定无法查询出数据，所以这个时候不能要求用户这么多，这个时候只能由程序自己去适应，加入一个函数：
+						SELECT * FROM emp WHERE ename=UPPER('&str') ;
+					当然以上的“&”的操作属于替代变量的内容，此部分内容不做重点。
+
+			范例：观察转小写的操作，将所有雇员姓名按照小写字母返回：
+				SELECT LOWER(ename) FROM emp ;
+
+			范例：将每一个雇员姓名的开头首字母大写
+				SELECT INITCAP(ename) FROM emp ;
+
+			范例：查询出每个雇员姓名的长度：
+				SELECT ename,LENGTH(ename) FROM emp ;
+			
+			范例：要求查询出姓名长度正好是5的雇员信息：
+				SELECT ename,LENGTH(ename) FROM emp 
+				WHERE LENGTH(ename)=5 ;
+
+			范例：使用字母“_”替换掉姓名中的所有字母“A”：
+				SELECT REPLACE(ename,'A','_') FROM emp ;
+
+			字符串的截取操作有两种语法：
+				·语法一：SUBSTR(字符串|列,开始点)：表示从开始点一直姐渠道结尾；
+					SELECT ename,SUBSTR(ename,3) FROM emp ;
+				·语法二：SUBSTR(字符串|列,开始点,结束点)：表示从开始点截取到结束点，截取部分内容
+					SELECT ename,SUBSTR(ename,0,3) FROM emp ;
+					SELECT ename,SUBSTR(ename,1,3) FROM emp ;
+
+			范例：要求截取每个雇员姓名的后三个字母：
+					·正常思路：通过长度-2确定开始点：
+				SELECT ename,SUBSTR(ename,LENGTH(ename)-2) FROM emp ;
+					·新思路：设置负数：表示从后指定截取位置
+				SELECT ename,SUBSTR(ename,-3) FROM emp ;
+			
+			面试题：请问SUBSTR()函数截取的时候下标是从0还是从1开始？
+				·在oracle数据库之中，SUBSTR()函数从0或1开始都是一样的
+				·SUBSTR()也可以设置为负数，表示由后指定截取的开始点
+			
+		数字函数：
+			·ROUND(数字|列 [保留小数的位数])：四舍五入的操作
+			·TRUNC(数字|列 [保留小数的位数])：舍弃指定位置的内容
+			·MOD(数字1，数字2):取模，取余数
+
+			范例：验证ROUND（）函数：
+				SELECT ROUND(903.5211),ROUND(-903.53256),ROUND(903.556,2),ROUND(903.554521,-1) FROM dual ;
+					-1表示从整数后面开始运算
+
+			范例：验证TRUNC（）函数：
+				SELECT TRUNC(903.5211),TRUNC(-903.53256),TRUNC(903.556,2),TRUNC(903.554521,-1) FROM dual ;
+					没有指定保留多少位，直接舍弃小数点后的内容
+
+			范例：验证MOD()函数：
+				SELECT MOD(10,3) FROM dual ;
+
+			以上的三个主要的数学函数，在以后学习java中也会有相匹配的内容。
+
+		日期函数：
+			如果现在要想进行日期的操作，则首先有一个必须咬解决的问题，就是如何取得当前的日期，这个当前日期可以使用“SYSDATE”取得，
+			代码如下：
+			
+			SELECT SYSDATE FROM dual;
+
+			除了以上的当前日期之外，在日期中也可以进行若干计算：
+				·日期 + 数字 = 日期，表示若干天之后的日期
+			SELECT SYSDATE+30,SYSDATE+300 FROM dual;
+
+				·日期 - 数字 = 日期，表示若干天之前的日期
+			SELECT SYSDATE-30,SYSDATE-300 FROM dual;
+			
+				·日期 - 日期 = 数字，表示的是两个日期间的天数，但是肯定是大日期 - 小日期
+			
+				范例：求出每个雇员到今天位置的雇佣天数：
+			SELECT ename,hiredate,SYSDATE-hiredate FROM emp;
+
+			而且很多的编程语言之中，也都会提出一种概念，日期可以通过数字表示出来。
+			除了以上的三个公式之外，也提供了如下的四个操作函数：
+				·LAST_DAY(日期)：求出指定日期的最后一天
+				·NEXT_DAY(日期,星期数)：求出下一个指定星期x的日期
+				·ADD_MONTHS(日期,数字)：求出若干月之后的日期
+				·MONTHS_BETWEEN(日期1,日期2):求出两个日期之间所经历的月份
+			
+				范例：求出本月的最后一天日期：
+			SELECT LAST_DAY(SYSDATE) FROM dual;
+
+				范例：求出下一个星期一：
+			SELECT NEXT_DAY(SYSDATE,'星期一') FROM dual;
+
+				范例：求出你们学习的最晚毕业时间（即：找到工作的最晚时间）：
+			SELECT ADD_MONTHS(SYSDATE,4) FROM dual;
+
+				范例：求出每个雇员到今天为止的雇佣月份：
+			SELECT ename,hiredate,TRUNC(MONTHS_BETWEEN(SYSDATE,hiredate)) FROM emp;
+
+			在所有的开发之中，如果是日期的操作，建议使用以上的函数，因为这些函数可以避免闰年的问题。
+
+		转换函数（核心）：
+			现在已经接触到了Oracle数据库之中的三种数据：数字（NUMBER）、字符串(VARCHAR2)、日期(DATE),
+			转换函数的主要功能是完成这几种数据间的互相转换的操作，一共有三种转换函数;
+				·TO_CHAR(字符串|列,格式字符串):将日期或者是数字变为字符串显示
+				·TO_DATE(字符串，格式字符串)：将字符串变为DATE数据显示
+				·TO_NUMBER(字符串)：将字符串变为数字显示
+
+			1、TO——CHAR()函数：
+				之前查询过当前系统日期时间
+			
+			SELECT SYSDATE FROM dual;
+				
+				这个时候是按照“日-月-年”的格式显示，很明显这种格式不符合于正常思路，正常是“年-月-日”，
+				所以这种情况下可以使用TO_CHAR()函数，但是使用此函数的话需要一些格式字符串：年（yyyy），月（mm），日（dd）。
+			
+			SELECT TO_CHAR(SYSDATE,'yyyy-mm-dd'),TO_CHAR(SYSDATE,'yyyy') year ,TO_CHAR(SYSDATE,'mm') months ,TO_CHAR(SYSDATE,'dd') day FROM dual;
+				
+				但是这个时候的显示数据之中可以发现会存在前导0，如果想要消除这个0，可以加入一个“fm”。
+
+			SELECT TO_CHAR(SYSDATE,'fmyyyy-mm-dd') FROM dual;
+
+				正常人都加0，所以这个标记知道就可以，可是在oracle之中，DATE里面是包含了时间的，但是之前的代码没有显示时间，
+				要想显示时间则需要增加标记，时（hh），分（mi），秒（ss）：
+			
+			SELECT TO_CHAR(SYSDATE,'yyyy-mm-dd hh:mi:ss') day FROM dual;
+
+			SELECT TO_CHAR(SYSDATE,'yyyy-mm-dd hh24:mi:ss') day FROM dual;
+			
+				一定要注意，使用TO_CHAR()函数之后，所有的内容都是字符串，不再是之前的DATE型数据，TO_CHAR()函数也可以用在数字的格式化上，
+				这个时候每一个“9”表示一位数字的概念，而不是数字9的概念。
+				
+			SELECT TO_CHAR(654548943212484,'L999,999,999,999,999,999') FROM dual;
+				
+				其中字母“L”，表示的是“locale”的含义，即：当前的所在的语言环境下的货币符号。
+
+			2、TO_DATE()函数：
+				此函数的主要功能是将一个字符串变为DATE型数据。
+
+			SELECT TO_DATE('1989-09-12','yyyy-mm-dd') FROM dual;
+				
+				一般此函数在更新数据库的时候使用较多。
+
+			3、TO_NUMBER()函数：
+				基本不用，TO_NUMBER()函数一看就知道是将字符串变数字的
+
+			SELECT TO_NUMBER('1')+TO_NUMBER('2') FROM dual;
+
+				但是在oracle之中真的很智能，所以以上的功能不适用TO_NUMBER()也可以完成
+			
+			SELECT '1'+'2' FROM dual;
+				
+				所以现在的TO_NUMBER()函数基本上已经是不考虑了，重点的函数在TO_CHAR()上，其次是TO_DATE()函数。
+				
+		通用函数（核心）:
+			通用函数主要有两个：NVL()、DECODE(),这两个算是oracle自己的特色函数了。
+
+			1、NVL()函数，处理null：
+				范例：要求查询出每个雇员的全部年薪
+
+			SELECT ename,sal,comm,(sal+comm)*12 FROM emp;
+
+				这个时候有雇员的年薪就变成了null，而造成这种问题的关键是在于comm字段上位null，
+				那么要想解决这个问题，就必须做一种处理，将null变为0，而这个就是女了()函数的作用。
+
+			SELECT ename,sal,comm,(sal+NVL(comm,0))*12,NVL(comm,0) FROM emp;
+
+			2、DECODE()函数:多数值判断
+					DECODE()函数非常类似于程序中的if...else语句，唯一不同的是DECODE()函数判断的是数值，而不是逻辑条件了。
+					例如：现在要求显示全部雇员的职位，但是这些职位要求替换为中文显示：
+					·CLERK：办事员
+					·SALESMAN：销售
+					·MANAGER：经理
+					·ANALYST：分析员
+					·PRESIDENT：总裁
+					这种判断肯定是逐行进行判断，所以这个时候就必须采用DECODE()，而此函数的语法如下：
+				
+				DECODE(数值|列,判断值1,显示值1判断值2,显示值2,判断值3,显示值3,....)
+
+					范例：实现显示的操作功能
+			
+				SELECT empno,ename,job,
+					DECODE(job,'CLERK','办事员','SALESMAN','销售','MANAGER','经理','ANALYST','分析员','PRESIDENT','总裁')
+				FROM emp;
+
+					DECODE()函数是整个oracle之中最具有特点的函数，一定要将其掌握。
+
+
+总结：
+	1、SQL语句的基本格式，此处给出的只是最基本的语法：SELECT、FROM、WHERE、ORDER BY的关系
+	2、记下SOTT用户中所有的数据表信息，包括列的名称， 作用及类型
+	3、oracle中的几个单行函数，一定要记下来，所有的函数都要求使用。
+
+练习题：
+	1、选择部门30中的所有员工：
+	
+	SELECT * FROM emp 
+	WHERE  deptno=30;
+
+	2、列出所有办事员（CLERK）的姓名，编号和部门编号：
+
+	SELECT ename,empno,deptno,job FROM emp
+	WHERE job='CLERK';
+
+	3、找出佣金高于薪金的员工：
+
+	SELECT * FROM emp
+	WHERE comm>sal;
+
+	4、找出佣金高于薪金60%的员工：
+
+	SELECT * FROM emp
+	WHERE comm>sal*0.6;
+
+	5、找出部门10中所有经理（MANAGER）和部门20中所有办事员（CLERK）的详细资料：
+
+	SELECT * FROM emp
+	WHERE (deptno=10 AND job='MANAGER') OR (deptno=20 AND job='CLERK');
+
+	6、找出部门10中所有经理（MANAGER）和部门20中所有办事员（CLERK），既不是经理又不是办事员但其薪金大于
+	或等于2000的所有员工的详细资料：
+	
+	SELECT * FROM emp
+	WHERE (deptno=10 AND job='MANAGER') OR (deptno=20 AND job='CLERK') OR (job NOT IN('MANAGER','CLERK') AND sal>=2000);
+
+	7、找出收取佣金的员工的不同工作：
+
+	 SELECT DISTINCT job FROM emp
+	 WHERE comm IS NOT NULL;
+
+	8、找出不收取佣金或收取的佣金低于100的员工：
+
+	 SELECT * FROM emp
+	 WHERE comm IS NULL OR comm < 100;
+
+	9、找出各月倒数第3天受雇的所有员工：
+			每一个雇员的雇佣日期肯定是不一样的，所以现在必须找到每一个雇员雇佣所在月的最后一天，之后按
+			照”日期-数字“的方式求出前三天的日期，这个日期必须和雇佣日期相符合才满足条件。
+
+		SELECT * FROM emp
+		WHERE LAST_DAY(hiredate)-2=hiredate;
+
+	10、找出早于12年前受雇的员工;
+			如果要求年份，最准确的做法是使用总月数/12
+
+		SELECT * FROM emp
+		WHERE MONTHS_BETWEEN(SYSDATE,hiredate)/12>12;
+
+	11、以首字母大写的方式显示所有员工的姓名：
+
+	SELECT INITCAP(ename) FROM emp;
+
+	12、显示正好为5个字符的员工姓名：
+
+	SELECT ename FROM emp
+	WHERE LENGTH(ename)=5;
+
+	13、显示不带有“R”的员工姓名：
+
+	SELECT * FROM emp
+	WHERE ename NOT LIKE '%R%';
+
+	14、显示所有员工姓名的前三个字符：
+
+	SELECT SUBSTR(ename,0,3) FROM emp;
+
+	15、显示所有员工的姓名，用“a”替换所有“A”：
+
+	SELECT REPLACE(ename,'A','a') FROM emp;
+
+	16、显示满10年服务年限的员工的姓名和受雇日期：
+
+	SELECT ename,hiredate FROM emp
+	WHERE MONTHS_BETWEEN(SYSDATE,hiredate)/12>=10;
+
+	17、显示员工的详细资料，按姓名排序：
+
+	SELECT * FROM emp 
+	ORDER BY ename;
+
+	18、显示员工的姓名和受雇日期，根据其服务年限，将最老的员工排在最前面：
+
+	SELECT ename,hiredate FROM emp 
+	ORDER BY hiredate;
+
+	19、显示所有员工的姓名，工作和薪金，按工作的降序排序，若工作相同则按薪金排序。
+
+	SELECT ename,job,sal FROM emp
+	ORDER BY job DESC,sal;
+
+	20、显示所有员工姓名，加入公司的年份和月份，按受雇日期所在月排序，若月份相同则将最早年份的员工排在最前面：
+		本程序需要从日期之中取出年份和月份，用TO_CHAR函数完成
+
+	1、SELECT ename,TO_CHAR(hiredate,'yyyy-mm') FROM emp
+		ORDER BY TO_CHAR(hiredate,'mm'),hiredate;
+
+	2、SELECT ename,TO_CHAR(hiredate,'yyyy') year, TO_CHAR(hiredate,'mm') months FROM emp
+		ORDER BY months,year;
+
+	21、显示在一个月为30天的情况所有员工的日薪金，忽略余数;
+	
+	SELECT ename,sal,TRUNC(sal/30) FROM emp;
+
+	22、找出在（任何年份的）2月受聘的所有员工：
+
+	SELECT * FROM emp
+	WHERE TO_CHAR(hiredate,'mm')=2;
+
+	*字符串和数字间，oracle会自动转换
+
+	23、对于每个员工，显示其加入公司的天数：
+
+	SELECT ename,SYSDATE-hiredate FROM emp;
+
+	24、显示姓名字段的任何位置包含“A”的所有员工姓名：
+
+	SELECT ename FROM emp
+	WHERE ename LIKE '%A%';
+
+	25、以年月日的方式显示所有员工的服务年限：
+			第一步：求出每个雇员的雇佣年数：被雇佣的总月数/12 = 年数
+
+		SELECT ename,hiredate,
+		TRUNC(MONTHS_BETWEEN(SYSDATE,hiredate)/12) year 
+		FROM emp;
+
+			第二步：求出月数，以上计算之中被忽略的小数点实际上都是月份，所以直接取余即可
+
+		SELECT ename,hiredate,
+		TRUNC(MONTHS_BETWEEN(SYSDATE,hiredate)/12) year,
+		TRUNC(MOD(MONTHS_BETWEEN(SYSDATE,hiredate),12)) months
+		FROM emp;
+
+			第三步：求出天数，最准确的做法是在不超过30天的范围之内求
+					现在已经知道当前的时间使用SYSDATE取出，而雇佣的日期使用hiredate取出，可是hiredate和SYSDATE之间的差距太大了，
+					所以肯定会有误差，那么就必须想办法将hiredate的日期提升到于SYSDATE差距在30天的范围之内。
+					在之前学习过两个函数：
+						·MONTHS_BETWEEN():求出两个日期间的月数，如果是：MONTHS_BETWEEN(SYSDATE,hiredate)求出的是雇佣日期
+							到今天为止的雇佣月数
+						·ADD_MONTHS():若干月之后的日期，如果是hiredate+于今天相距的月数=一个新的日期，而且
+							这个新的日期肯定和SYSDATE相距不超过30天。
+		
+		SELECT ename,hiredate,
+		TRUNC(MONTHS_BETWEEN(SYSDATE,hiredate)/12) year,
+		TRUNC(MOD(MONTHS_BETWEEN(SYSDATE,hiredate),12)) months,
+		TRUNC(SYSDATE-ADD_MONTHS(hiredate,MONTHS_BETWEEN(SYSDATE,hiredate))) day		
+		FROM emp;
+
+		以上的这道程序，属于日期函数的综合应用，本身已经超过了SQL的掌握程度，知道就行了，如果真遇到了这种问题，也轮不到你解决。
+
+		
+
+		

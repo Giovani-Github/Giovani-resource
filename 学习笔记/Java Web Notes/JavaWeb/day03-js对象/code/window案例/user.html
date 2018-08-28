@@ -1,0 +1,42 @@
+<html>
+	<head>
+		<title>Document</title>
+		<style type="text/css">
+
+		</style>
+	</head> 
+	<body>
+		<table border="1" bordercolor="blue">
+			<tr>
+				<td>操作</td>
+				<td>编号</td>
+				<td>姓名</td>
+			</tr>
+			<tr>
+				<td><input type="button" value="选择" onclick="s1('01','哈哈');"/></td>
+				<td>01</td>
+				<td>哈哈</td>
+			</tr>
+			<tr>
+				<td><input type="button" value="选择" onclick="s1('02','呵呵');"/></td>
+				<td>02</td>
+				<td>呵呵</td>
+			</tr>
+			<tr>
+				<td><input type="button" value="选择" onclick="s1('03','嘿嘿');"/></td>
+				<td>03</td>
+				<td>嘿嘿</td>
+			</tr>
+		</table>
+	</body>
+	<script type="text/javascript">
+		//使用window的opener属性进行页面操作
+		function s1(num1,name1) {
+			var win = window.opener;
+			win.document.getElementById("numid").value=num1;
+			win.document.getElementById("nameid").value=name1;
+
+			window.close();
+		}
+	</script>
+</html>

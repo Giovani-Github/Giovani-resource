@@ -1,0 +1,330 @@
+0、JS中创建对象（Object的实例）
+		var a1 = new Object();//也是创建一个对象
+		var a2 = new Object;//这样也行
+		var a = {};//创建一个空的对象
+
+		** 给对象创建属性和方法
+			a.name = "zs";
+			a.age = "23";
+			a["sex"] = "男";//也可以这样创建属性。使用单引号也可
+			a.say = function() {
+				alert(a.age);
+			}
+
+		** 使用方法和对象
+			a.say();
+			alert(a.name);
+
+		** 删除对象的属性或方法
+			delete a.age;
+			delete a.say;
+
+		** 遍历对象的属性和方法
+			//会把a中的属性和方法，一个一个取出来，放进attribute变量中
+			for(var attribute in a) {
+				alert(attribute);//得到属性或方法名
+				alert(a.attribute);//得到该名称的属性或方法的值
+			}
+
+		** 所有对象都会具有下列属性和方法：
+				Constructor: 保存着用于创建当前对象的函数。（构造函数）
+				hasOwnProperty(propertyName):用于检测给定的属性或方法在当前对象实例中(而不是原型中)是否存在。
+					 - alert(a.hasOwnProperty("fun"));
+				isPrototypeOf(Object): 用于检查传入的对象是否是另外一个对象的原型。
+				propertyIsEnumerable(propertyName):用于检查给定的属性是否能够使用for-in语句来枚举。
+				toLocaleString()：返回对象的字符串表示。该字符串与执行环境的地区对应.
+				toString():返回对象的字符串表示。
+				valueOf():返回对象的字符串、数值或布尔表示。
+
+		** js对象的特性 : 在js对象中 key 是永远不会重复的，因为只有最后一个key是有效的
+			var obj = new Object();
+			obj.name = 'z3';
+			obj.age = 20 ;
+			alert(obj.name);
+			obj.name = 'w5';
+			alert(obj.name);//w5
+		
+		** js中有个约定俗成的规范：function Obj() {}， 如果函数名称首字母大写。即可认为这个函数就是自定义的一个对象
+		
+		** 创建对象实例的方式：
+			function Person(name) {
+				this.name = name;
+			}
+
+			第一种：new
+				var per = new Person("zs");
+				alert(per.name);
+			
+			第二种：作为普通函数调用
+				Person("ls"); //相当于window.Person
+				alert(name);//相当于alert(window.name)
+			
+			第三种：在另一个对象的作用域中调用
+				var o = new Object();
+				//call apply
+				Person.call(o, "zl");//把Person当做函数绑定在o对象中
+				alert(o.name);
+
+00、类的概念：
+	js中没有类，但是可以模拟
+	查看：js创建对象.txt
+
+1、JavaScript的String对象
+	** 创建String对象
+		- var str = "abc";
+			
+	** 方法和属性
+		- 属性：length，字符串的长度
+			*用法：stringObject.length
+		- 与html相关的方法：
+			(1)bold():加粗
+				* 用法：stringObject.bold()
+			(2)fontcolor():设置字符串的颜色
+				* 用法;stringObject.fontcolor(color)
+			(3)fontsize():设置是字体的大小
+				* 用法：stringObject.fontsize(size)
+				* size 参数必须是从 1 至 7 的数字
+			(4)link():将字符串显示成超链接
+				* 用法：stringObject.link(url)
+			(5)sub()、sup():上标和下标
+				* 用法：stringObject.sub()、stringObject.sup()
+
+		- 与java相似的方法
+			(1)concat():连接字符串
+				用法：stringObject.concat(stringX,stringX,...,stringX)
+			(2)charAt()：返回指定位置的字符串
+				用法：stringObject.charAt(index)
+			(3)indexOf():返回字符串位置
+			(4)split():切分字符串成数组
+			(5)replace():替换字符串
+				用法：stringObject.replace(regexp,replacement)
+				参数：regexp，原始字符。replacement，要替换成的字符
+			(6)substr():从第几位开始，向后截取几位
+			(7)sunstring():从第几位开始，到第几位结束，不包括最后一位
+
+2、JavaScript的Array对象
+	* 创建数组：
+		- var arr1 = [1,2,3];
+		- var arr2 = new Array(3);//length是3
+		- var arr3 = new Array(1,2,3);//数组种的元素是1，2，3
+		- var arr = [];//创建一个空数组
+	* 属性：length：查看数组的长度
+
+	* 方法
+		- concat()方法：数组的连接
+			用法：arrayObject.concat(arrayX,arrayX,......,arrayX)
+			* 不会改变原来的数组，会返回一个新的数组
+		- join():根据指定的字符分割数组
+			用法：arrayObject.join(separator)
+			参数：separator 可选。指定要使用的分隔符。如果省略该参数，则使用逗号作为分隔符。 、
+			* 不会改变原来的数组，会返回一个新的数组
+		- push():向数组末尾添加元素，返回数组的新的长度
+			* 如果添加的是一个数组，这个时候把数组当做一个整体字符串添加进去
+			* 用法：arrayObject.push(newelement1,newelement2,....,newelementX)
+		- pop():表示删除最后一个元素，返回删除的那个元素
+		- reverse():颠倒数组中的元素的顺序
+			* 该方法会改变原来的数组，而不会创建新的数组。
+		
+		- ECMA5新特性：
+			indexOf(a)：查找数组中，a出现的第一个位置的索引。它们查找数组比较的时候‘===’
+			indexOf(index, a)： 从第几个索引开始查找，查找到a的索引（索引是：查找到的第一个a）。它们查找数组比较的时候‘===’
+			lastIndexOf(a): 从后面开始查找，a出现的第一个位置的索引
+
+3、JavaScript的Data对象
+	获取当前时间：var date = new date();
+	方法：
+		- toLocaleString()：中国格式的当前时间：2016/1/2 下午3:12:34 
+		- getFullYear():得到当前的年
+		- getMonth():取得当前的月
+			* 返回的是0-11月，如果想要得到准确的值，加1
+		- getDay:获取当前星期几
+			* 返回的是0-6，把星期日是0，星期一到星期六是1-6
+		- getDate():获取当前的日，返回1-31
+		- getHours():获取当时小时
+		- getMinutes():获取当前分钟
+		- getSeconds()：获取当前秒
+		- getMilliseconds()：获取当前时间的毫秒：时分秒毫秒，中的毫秒
+		- getTime(): 获取当前时间毫秒数：时分秒转换成毫秒形式
+
+4、JavaScript的Math对象
+	* 数学的运算
+	* 里面都是静态的方法，直接Math.方法();
+	方法：
+		- ceil(x):向上舍入,不管后面小数是多少，直接进一
+		- floor(x):向下舍入，不管后面小数多少，后面都舍弃
+		- round(x):四舍五入
+		- random():得到随机数（伪随机数），0.0-1.0之间
+			** 得到0-9的随机数
+				Math.floor(Math.random()*10)
+
+5、JavaScript的全局函数(属于Global对象，这是一个最底层的对象。但是这个对象是不存在的)
+	* 由于不属于任何一个对象，直接写名称使用
+	方法：
+		- eval("(" + 字符串 + ")"):执行js代码（如果字符串是一个JavaScript对象代码，使用此方法直接执行解释成对象）
+			例子：
+				var text = "{name:'zs', age=20}";
+				var sum = eval("(" + text + ")");
+				alert(sum.name);
+			* 如果不是一个js对象，是一段js代码，也可以执行
+				var str = "var a=10; var b=20";
+				eval(str);
+				alert(a);
+
+		- encodeURI():对字符进行编码
+		- decodeURI()：对字符进行解码
+		- encodeRUIComponent()和decodeURIComponent()：和上面两个一样，只是不解码的字符数量比上面少
+		- isNaN()：判断当前字符串是否是数字
+			** 如果是数字，返回false
+			** 如果不是数字，返回true
+		- parseInt():转换成整数
+				有个特点：如果第一个字符是数字，
+				就会从第一个字符开始截取，直到不是数字为止。
+				把截取到的数字赋值给变量
+				var a9 = parseInt("12abc");//不报错，a9的值为12。
+				var a10 = parseInt("a12bc");//报错：NaN
+
+7、JavaScript的bom类型对象
+	* 浏览器对象模型
+	* 对象：
+		- navigator:获取客户机信息（浏览器信息）
+			** navigator.appName:获取浏览器名称
+		- screen:获取屏幕的信息
+			** screen.width:屏幕宽度
+			** screen.height:屏幕高度
+		- location:请求的url地址
+			** location.href:获取请求的url地址或设置URL地址（跳转）
+			** 鼠标点击事件:<input type="button" value="a" onclick="js方法"/>
+				创建一个js方法设置url地址
+		- history：请求的URL的历史记录（网页的前进后退）
+			** 后退：
+				history.back();
+				history.go(-1);
+			** 前进
+				history.forward();
+				history.go(1);
+		- window（重点）
+			** 窗口对象，顶层对象
+			** 方法：
+				- window.alert():页面弹出一个框，显示内容
+					* 简写alert()
+				- confirm():确认框
+					* confirm("显示的内容")
+					* 会有返回值，确定true，取消false
+				- prompt()：输入的对话框
+					* prompt("显示的内容","输入框里面的默认值");
+				- open():打开一个新的窗口
+					* open("打开的新窗口的url地址","窗口的名字，默认为空","窗口的特征，比如窗口宽度和高度")
+					* open("hello.html","","width=200,height=100");
+				- close():关闭窗口（浏览器兼容性差）
+				- 做定时器
+					* setInterval("js代码","毫秒"):每隔x毫秒，执行一次js代码，会返回一个id
+					* setTimeout("js代码","毫秒")：x毫秒之后，执行一次js代码，只执行一次，会返回一个id
+				- 消除定时器
+					* clearInterval("定时器id"):消除setInterval设置的定时器
+					* clearTimeout("定时器id"):消除setInterval设置的定时器
+
+8、JavaScript的dom类型对象
+	* 文档对象模型
+	* 使用js里面的dom部分里提供的对象，对标记型文档进行操作
+	* 想要对标记型文档进行操作，首先需对标记型文档里面的所有内容封装成对象
+		- 需要把html里面的标签，属性，文本内容都封装成对象
+	* DHTML： 是很多技术的简称
+		** html:封装数据
+		** css：使用属性和属性值设置样式
+		** dom：操作html文档（标记型文档）
+		** JavaScript：专门指的是js的语法语句（ECMAScript）
+
+	- document对像：表示整个的标记型文档
+		* wirte()：向页面输出文字或者html代码
+		* getElementById():通过id得到元素（标签）
+			** 会返回一个标签对象
+			** var html = document.getElementById("标签里面的id值");
+			** 得到标签里面的属性值：标签对象.属性名称
+			** 设置标签里面的属性值： 标签对象.属性名称 = "值";
+		
+		* getElementsByName():通过name得到元素，返回的是一个标签对象数组
+			** document.getElementsByName("标签name属性值");
+		* getElementsByTagName():通过标签名称得到元素，返回的是一个标签对象数组
+			** document.getElementsByTagName("标签名称");
+		* createElement("标签名称")：创建标签，返回一个标签对象
+			** document.createElement("li");
+		* createTextNode("文本内容")：创建文本，返回一个文本对象
+		属性：opener:获取创建此窗口的窗口
+
+9、window弹窗案例
+	(1)创建一个页面
+		- 有两个输入项和一个按钮
+		- 按钮上面有一个事件：弹出一个新窗口 open()方法
+	(2)创建弹出页面
+		- 表格
+		- 每一行有一个按钮和编号和姓名 4*3
+		- 按钮上有一个事件，把当前的编号和姓名赋值到第一个页面相应的位置
+
+10、原型
+	** 原型是一个关键字：prototype(可以直接理解为这是一个prototype对象)
+	** 创建每一个函数都有一个prototype属性，这个属性是一个指针，这个指针指向一个对象。
+			这个对象的用途就是将特定（公共的，不想每次创建对象都被创建一次的方法，属性）的属性和方法包含在内，
+			起到一个被所有实例共享的作用
+	
+
+11、原型对象常用方法：
+	* Object.getPrototypeOf("实力对象"):根据实例对象，获得原型对象
+	* 所有对象都具有的方法：
+		** 判断一个对象那个属性，是属于原型的还是实例对象的：hasOwnProperty(propertyName)：
+					用于检测给定的属性或方法在当前对象实例中(而不是原型中)是否存在。
+					在对象实例中不存在，那么就是在原型对象中存在	
+
+		** isPrototypeOf(Object): 用于检查传入的对象是否是另外一个对象的原型。
+
+	* in 操作符：判断属性或方法是否存在于实例对象和原型对象中
+		function A() {}
+		car a = new A();
+		alert("name" in a);//name属性是否在实例对象和原型对象中
+
+	* 就是判断一个属性 是否存在原型中
+			//在原型对象中 是否存在这个属性 第一个参数:当前对象 ，第二个参数:要判断的属性
+			function hasPrototypeProperty(object , name){
+				return !object.hasOwnProperty(name) && name in object ;
+			}
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

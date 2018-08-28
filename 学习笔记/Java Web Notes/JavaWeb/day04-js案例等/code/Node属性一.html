@@ -1,0 +1,31 @@
+<html>
+	<head>
+		<title>Document</title>
+		<style type="text/css">
+
+		</style>
+	</head>
+	<body>
+		<h1 id="id1">dfdf</h1>
+	</body>
+	<script type="text/javascript">
+		//标签节点对应的值
+		var h11=document.getElementById("id1");
+		document.write(h11.nodeType + "<br/>");
+		document.write(h11.nodeName + "<br/>");
+		document.write(h11.nodeValue + "<hr/>");
+		
+		//属性节点对应的值
+		var id1=h11.getAttributeNode("id");//获取属性对象
+		document.write(id1.nodeType + "<br/>");
+		document.write(id1.nodeName + "<br/>");
+		document.write(id1.nodeValue + "<hr/>");
+
+		//文本节点对应的值
+		var text=h11.firstChild;//获取文本对象
+		document.write(text.nodeType + "<br/>");
+		document.write(text.nodeName + "<br/>");
+		document.write(text.nodeValue + "<hr/>");
+
+	</script>
+</html>

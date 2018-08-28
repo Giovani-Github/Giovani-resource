@@ -1,0 +1,46 @@
+<html>
+	<head>
+		<title>Document</title>
+		<style type="text/css">
+
+		</style>
+	</head>
+	<body>
+		<!--button提交-->
+		<form id="form1">
+			<input type="text" name="uname"/>
+			<input type="button" value="提交" onclick="form1();"/>
+		</form>
+
+		<!--超链接提交-->
+		<a href="hello.html?uname=123">超链接提交方式</a> <hr/>
+
+		<!--得到/失去焦点事件-->
+		<input type="text" id="text1" onfocus="focus1();" onblur="blur1();" value="失去焦点">
+	</body>
+	<script type="text/javascript">
+		//button提交
+		function form1() {
+			//获取form
+			var form1 = document.getElementById("form1");
+			//设置action
+			form1.action = "hello.html";
+			//提交form表单
+			form1.submit();
+		}
+		
+		//focus1()
+		function focus1() {
+			//得到text1
+			var text1 = document.getElementById("text1");
+			text1.value = "得到焦点";
+		}
+
+		//blur1()
+		function blur1() {
+			//得到text1
+			var text1 = document.getElementById("text1");
+			text1.value = "失去焦点";
+		}
+	</script>
+</html>

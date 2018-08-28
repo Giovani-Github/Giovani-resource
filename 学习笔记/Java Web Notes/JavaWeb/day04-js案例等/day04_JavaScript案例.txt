@@ -1,0 +1,173 @@
+1、案例一：在末尾添加节点
+2、元素对象（element对象）
+	* 要操作element对象，首先必须要获取到element，使用document对象的方法得到
+	* 方法：
+		- getAttribute("属性名称")：获取属性里面的值
+		- setAttribute("属性名称","要设置进去的值")：设置属性值
+		- removeAttribute("属性名称")：删除属性
+			* 不能删除value属性
+		- getElementsByTagName("标签名称")：获取标签名相同的标签对象，返回一个数组，是获取标签下面全部子标签的唯一有效方法
+	* 属性
+		childNodes:标签下面子标签的纪录，是个数组。可以用来获取标签下面的全部子标签，但是兼容性差
+3、Node对象属性一
+	* nodeName
+	* nodeType
+	* nodeValue
+	- 标签节点对应的值
+		nodeName:1
+		nodeType:大写标签名称
+		nodeValue：null
+	- 属性节点对应的值
+		nodeName:2
+		nodeType:属性名称
+		nodeValue：属性的值
+	- 文本节点对应的值
+		nodeName:3
+		nodeType:#text
+		nodeValue：文本内容
+4、Node对象属性二
+	<ul>
+		<li></li>
+		<li></li>
+		<li></li>
+	</ul>
+
+	* 父节点：ul是li的父节点，用parentNode属性表示
+	* 子节点：li是ul的子节点
+		- childNodes:获得所有子节点，兼容性差
+		- firstChild：获得第一个子节点
+		- lastChild：获得最后一个子节点
+	* 同辈节点（兄弟姐妹节点）：li之间的关系是同辈节点
+		- nextSibling:返回一个给定节点的下一个同辈节点
+		- previousSibling：返回一个给定节点的上一个同辈节点
+5、操作dom树（node方法）：
+	- appendChild(): 添加子节点到末尾
+		* 特点：类似于剪切的效果
+	- insertBefore(newNode,oldNode)：在某个子节点之前插入一个新的子节点
+		* newNode：要插入的新节点
+		* oldNode：在这个节点前面插入新节点
+		** 创建节点：
+			(1)创建标签
+			(2)创建文本
+			(3)把文本添加到标签下面
+			
+	- removeChild(Node):删除节点
+		* 通过父节点删除，不能自己删除自己
+	- replaceChild(newNode,oldNode):替换节点
+		* 通过父节点删除，不能自己替换自己
+	- cloneNode(boolean):复制节点
+		boolean:是否复制子节点，true表示包括子节点一起复制，false反之
+6、innerHTML属性：
+	* 这个属性不是dom的组成部分，但是大多浏览器都支持的属性
+	第一个作用：获取文本内容
+	第二个作用：向标签里面设置内容（可以是html代码）
+	练习：向div里面添加一个表格
+7、案例二：动态显示时间
+	(1) 获取当前时间 date对象
+	(2) 时间显示到页面上，显示到div里面，可以通过innerHTML属性写入
+	(3) 每一秒显示一次，把前面的步骤写到方法里，再用setInterval()方法，每隔一秒调用一次
+8、案例三：复选框全选操作
+	页面：
+		复选框：四个复选框表示爱好。一个复选框操作全选/全不选，有一个事件
+	按钮：有三个按钮，三个事件。全选，全不选，反选
+	通过复选框的checked判断复选框是否选中，boolean类型
+9、案例四：下拉列表左右选择
+	使用select标签的multiple属性，显示下拉选择框的全部内容\
+	通过selected判断选项是否被选中，值是true或false
+	页面：
+		（1）两个下拉选择框，一左一右
+		（2）选择框下面对应：添加选择到右边/左边，全部删除到右边/左边
+10、案例五：省市联动效果
+	改变事件：onchange事件
+	this.value：表示当前选择框选择的value值
+11、案例六：动态生成表格
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

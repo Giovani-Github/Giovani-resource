@@ -1,0 +1,5 @@
+首先：这不是继承，所有的ClassLoader都是从Object继承过来的
+
+可以通过ClassLoader中的getParent()方法拿到这个ClassLoader的上级是谁，就是加载它的ClassLoader是谁，
+除了bootstrapClassLoader，其他的ClassLoader里面都有一个上级的ClassLoader引用(bootstrapClassLoader的引用不能拥有，他不是java写的)，
+所以，可以通过getParent()来拿到ClassLoader之间的层次关系

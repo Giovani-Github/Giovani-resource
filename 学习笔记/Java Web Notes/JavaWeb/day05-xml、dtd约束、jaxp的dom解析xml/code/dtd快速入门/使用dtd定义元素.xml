@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE person [
+	<!ELEMENT person (name+,age?,school*)>
+	<!ELEMENT name (#PCDATA)>
+	<!ELEMENT age EMPTY>
+	<!ELEMENT school ANY>
+]>
+<person>
+	<name>zhangsan</name>
+	<name>zhangsan</name>
+	<school>DFD</school>
+	<school>DFD</school>
+</person> 

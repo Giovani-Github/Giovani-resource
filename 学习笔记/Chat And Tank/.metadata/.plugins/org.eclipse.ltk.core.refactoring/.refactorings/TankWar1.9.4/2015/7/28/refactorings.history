@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename field &apos;ID&apos; in &apos;Tank&apos; to &apos;id&apos;&#x0D;&#x0A;- Original project: &apos;TankWar1.9.4&apos;&#x0D;&#x0A;- Original element: &apos;Tank.ID&apos;&#x0D;&#x0A;- Renamed element: &apos;Tank.id&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" delegate="false" deprecate="true" description="Rename field &apos;ID&apos;" flags="589830" getter="false" id="org.eclipse.jdt.ui.rename.field" input="/src&lt;{Tank.java[Tank^ID" name="id" references="true" setter="false" stamp="1436531530304" textual="false" version="1.0"/>
+</session>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" 
+	xmlns="http://java.sun.com/xml/ns/javaee" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+	<!-- 在浏览器中访问xxx这个servlet：http://localhost:8080/day09-ServletInterfaceTest/MyServlet1/Test -->
+
+	<servlet>
+		<!-- 为servlet.test.MyServlet起名为xxx -->
+		<servlet-name>xxx</servlet-name>
+		<servlet-class>servlet.test.MyServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<!-- 对xxx这个servlet设置一个路径，路径名随便起，但要在前面加/, 路径名为：/MyServlet1/Test -->
+		<servlet-name>xxx</servlet-name>
+		<url-pattern>/MyServlet1/Test</url-pattern>
+	</servlet-mapping>
+</web-app>

@@ -1,0 +1,9 @@
+import java.awt.*;
+
+//爆炸类
+public class Explosion {
+	int x, y;//出现的位置
+	private boolean live = true;//生死
+	
+	public void draw()
+}

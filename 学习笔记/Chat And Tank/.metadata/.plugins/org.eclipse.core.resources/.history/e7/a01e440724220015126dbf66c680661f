@@ -1,0 +1,12 @@
+import java.awt.*;
+
+public class Blood {
+	private int x, y, w, h;
+	private TankClient tc;
+	
+	public void draw(Graphics g) {
+		Color c = g.getColor();
+		g.setColor(Color.MAGENTA);
+		g.setColor(c);
+	}
+}

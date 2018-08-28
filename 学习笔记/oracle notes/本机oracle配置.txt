@@ -1,0 +1,6 @@
+全局数据库名：mldn
+用户管理：
+超级管理员：sys / change_on_install
+普通管理员：system / manager
+普通用户: scott / tiger
+大数据用户：sh / sh

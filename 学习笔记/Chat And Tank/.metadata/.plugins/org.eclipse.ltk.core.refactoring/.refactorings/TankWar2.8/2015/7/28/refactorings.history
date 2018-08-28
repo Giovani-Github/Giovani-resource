@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename field &apos;map&apos; in &apos;wang.qing.li.Tank&apos; to &apos;imgs&apos;&#x0D;&#x0A;- Original project: &apos;TankWar2.8&apos;&#x0D;&#x0A;- Original element: &apos;wang.qing.li.Tank.map&apos;&#x0D;&#x0A;- Renamed element: &apos;wang.qing.li.Tank.imgs&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" delegate="false" deprecate="true" description="Rename field &apos;map&apos;" flags="589826" getter="false" id="org.eclipse.jdt.ui.rename.field" input="/src&lt;wang.qing.li{Tank.java[Tank^map" name="imgs" references="true" setter="false" stamp="1436231448686" textual="false" version="1.0"/>
+</session>

@@ -1,0 +1,363 @@
+本次知识点：
+	1、掌握视图的作用及使用
+	2、理解索引的操作
+	3、了解数据库备份的操作
+	4、了解同义词的操作
+	5、掌握数据库三个设计范式以及PowerDesigner设计工具的使用
+
+具体内容：
+	视图（重点）：
+		在之前所学习过的所有的SQL语法之中，查询操作事最麻烦的，如果程序开发人员将大量的精力都浪费在了查询语句的编写上，
+		则肯定会影响代码的工作进度，所以一个好的数据设计人员，除了根据业务的操作设计出数据表之外，还需要为用户提供若干个视图，
+		而每一个视图包装了一条条复杂的SQL语句，视图的创建语法如下：
+			
+			CREATE [OR REPLACE] VIEW 视图名称
+				AS 子查询;
+
+		范例：创建一张视图：
+			CREATE VIEW myview AS
+				SELECT d.deptno, d.dname, d.loc,COUNT(e.empno) count, AVG(e.sal) avg
+				FROM emp e, dept d
+				WHERE e.deptno(+)=d.deptno
+				GROUP BY d.deptno, d.dname, d.loc;
+
+			现在已经创建好了一张视图，名为myview，所以现在查询myview：
+				SELECT * FROM myview;
+			此时通过一个简单的视图查询操作，就可以完成之前负责SQL语句的功能，所以视图就是包装了SQL查询操作。
+
+		范例：创建一张包含简单查询语句的视图
+			DROP VIEW myview;
+			CREATE VIEW myview AS
+				SELECT * FROM emp WHERE deptno=20;
+
+			可是以上的操作实际上事属于一个视图的替换操作，所以此时也可以使用另外一中语法：
+				CREATE OR REPLACE VIEW myview AS
+					SELECT * FROM emp WHERE deptno=20;
+
+			此时表示的是，如果视图存在则替换，不存在则创建一张新的视图，视图的概念虽然好理解， 但是在创建视图的时候存在两个选项
+				·选项一：WITH CHECK OPTION
+					上面所创建的视图，事存在一个创建条件的"WHERE deptno=20"，那么如果现在更新视图中的这个条件呢?
+
+					UPDATE myview SET deprno=30 WHERE empno=7369;
+
+					此时更新的是一张视图，但是视图本身并不是一个具体的数据，而且现在更新的操作又是视图的创建条件，
+					很明显这样的做法不可取，所以此时为了解决这个问题，可以加入WITH CHECK OPTION
+
+					CREATE OR REPLACE VIEW myview AS
+						SELECT * FROM emp WHERE deptno=20
+						WITH CHECK OPTION;
+
+					此时再次执行视图的更新操作，出现以下错误提示：
+						视图WITH CHECK OPTIDN wher 子句违规
+
+					意味着现在根本就不能去更新视图的创建条件
+				
+				·选项二：WITH READ ONLY
+					虽然使用WITH CHECK OPTION 可以保证视图创建条件不被更新，但是其他的字段却允许更新
+						UPDATE myview SET sal=9000 WHERE empno=7369;
+					
+					与之前的问题一样，视图本身不是具体的真实数据，而是一些查询语句，所以这样更新并不合理，
+					那么在创建视图的时候建议将其设置为只读视图：
+						UPDATE OR REPLACE VIEW myview AS
+							SELECT * FROM emp WHERE deptno=20
+							WITH READ ONLY;
+
+					此时再次发更新的操作，则直接提示如下错误：
+						此处不允许虚拟列
+
+					而且一定要注意的是，以上给出的是一个简单的操作语句视图，如果现在视图中的查询语句是统计操作，则根本就不能更新。
+					
+					CREATE OR REPLACE VIEW myview AS
+					SELECT d.deptno, d.dname, d.loc,COUNT(e.empno) count, AVG(e.sal) avg
+					FROM emp e, dept d
+					WHERE e.deptno(+)=d.deptno
+					GROUP BY d.deptno, d.dname, d.loc;
+
+					现在的信息事统计而来的，根本就不可能更新。
+					在一个项目之中，视图的数量有可能超过表的数量，因为查询语句会很多的。
+
+	同义词（了解）：	
+		同义词就是意思相近的一组词语，例如：能说会道，喷，唠叨，
+		实际上对与同义词的操作之前一直在使用，例如：
+			SELECT SYSDATE FROM dual;
+
+		在之前说过“dual”是一张虚拟表，但是虚拟表也肯定应该有他的用户，这张表事属于sys用户的，
+		但是这个时候就出现一个问题，在之前讲解过，不同的用户要想访问其他用户的表，则需要写上“用户.表名称”，
+		那么为什么此时scott用户访问的时候直接使用dual即可，而不是用“sys.dual”呢，这个实际上就是同义词的应用，
+		dual表示的是sys.dual的同义词，而同义词在oracle之中称为 SYNONYM,同义词创建语法如下：
+
+		CREATE [PUBLIC] SYNONYM 同义词名称 FRO 用户名.表名称;
+
+		范例：下面创建一个同义词为myemp，此同义词指向scott.emp
+
+		CREATE SYNONYM myemp FRO scott.emp;
+
+		此时创建成功之后，以后在sys用户中就可以使用myemp这个同义词的名称了，但是这个同义词值适合sys用户一个人使用，
+		其他用户无法使用，因为创建的时候没有使用PUBLIC，如果没有使用，则表示创建的不是公共同义词。
+
+		范例：创建公共同义词
+
+		DROP SYNONYM myemp;
+		CREATE PUBLIC SYNONYM myemp FOR scott.emp;
+
+		但是同义词也只是oracle自己的概念，知道就行了，肯定不用。
+
+	索引（理解）：
+		索引的主要功能就是用于提升数据库的操作性能
+		纠正一个误区：性能优化的技术服务。而这些所谓的性能优化大部分指的都是那些不规范的开发项目
+		下面通过代码分析一个最简单的索引操作的问题;
+		例如，在之前曾经写过如下的操作语句：
+
+		SELECT * FROM emp WHERE sal>1500;
+
+		此时由于sal上没有设置索引，所以他的查询过程是采用组航判断的方式，这种操作随着数据量的上升，
+		则性能会出现越来越多的问题，但是如果说将数据排列以下呢？
+		例如：现在将工作内存之中形成这样的一种数据结构：如图1-8
+		如果现在假设所有的数据都排列成以上的属性结构的话，同样的查询，现在还会查询全部记录吗？
+		只会查询部分。在oracle之中创建索引有以下两种方式：
+			·主键约束：如果一张表中的列上存在了主键约束的话自动创建索引
+			·手工创建：在某一个操作列上指定一个索引
+
+		范例：在emp.sal字段上创建索引
+		CREATE INIDEX emp_sal_ind ON emp(sal);
+
+		虽然索引创建完成了，但是想要观察出其特点基本上是不可能的了。
+		但是这种索引有一个最大的问题，即：如果要想实现性能的提高，则必须始终维持以上的一棵树，
+		那么如果说现在这棵树上的数据需要频繁修改的话，则代码的性能肯定会有所降低
+		所以一把索引只使用在不会频繁修改的表中，而如果一张表上频繁修改数据且有使用了索引的话，性能肯定会严重降低，
+		所以性能的提升永远都是相对的。
+		以上的索引只是Oracle十几种索引中的一种，也就是最简单的一种，称为b树索引，还有位图索引，反向索引，函数索引等等。
+		
+	用户管理（了解，轮不到你用）：
+		SQL语句分为三类：DML、DDL、DCL，之前已经讲解完了DML和DDL，现在就差DCL操作的，
+		DCL主要表示的是数据库的控制语句，控制就是操作权限，而在DCL之中，主要有两个语法：GRTANT、REVOKE
+		权限的操作基础是需要有用户，而这个时候就需要通过一个新的用户进行演示，而要想创建新用户则首先必须是具备管理员权限的sys、system两个用户操作
+
+		范例：创建一个dog的用户，密码为wangwang
+
+		CONN sys/change_on)install AS SYSDBA;
+		CREATE USER dogIDENTIFIED BY wangwang;
+
+		此时一个新的用户就创建完成了，但是这个用户并不能登录，会提示如下的错误信息：
+			user DOG lacks CREATE SESSION privilege;logon denide
+
+		提示用户现在没有创建SESSION的权限，在之前曾经解释过，对于sqlplusw而言，每一个用户都表示一个SESSION，
+		如果没有创建SESSION的权限就意味着不能登录，所以下面要授权
+
+		范例：将CREATE SESSION 的权限给dog用户
+		GRANT CREATE SESSION TO dog;
+
+		现在新用户登录曾工之后，下面就可以执行表的创建操作
+
+		CREATE SEQUENCE myseq;
+		CREATE TABLE mytab(
+			id		NUMBER		PRIMARY KEY,
+			name	VARCHAR2(50)
+		);
+		
+		解释：关于数据表的保存问题
+			在oracle之中所有的数据表都是保存在硬盘上的，但是不是每一张数据表都保存在硬盘上，而是表空间保存在硬盘上，
+			而数据表在表空间之中。
+			如果吧硬盘表示成整个一个图书馆的话，那么表空间就表示每一个书柜，每一张表就表示柜子上的一本书。
+
+			范例：将创建表的权限给dog用户
+			GRANT CREATE TABLE TO dog;
+
+			此时只是将数据表创建权限给了dog用户，但是并没有把表空间的操作权限给dog用户，所以用户依然无法创建表，因为表没有地方可以保存。
+			为了解决用户的授权操作，在oracle之中为用户提供了许多的角色，每一个角色会包含多个权限，而角色主要有两个：CONINECT、RESOURCE
+
+			范例：将CONNECT和RESOURCE角色给dog用户
+			GRANT CONNECT , RESOURCE TO dog;
+
+			但是现在一旦存在了用户的操作，那么就需要有用户管理操作，最简单的一个功能，用户有可能丢掉自己的密码。
+
+			范例：修改密码
+			ALTER USER dog IDENTIFIED BY miaomiao;
+
+			但是当管理员为一个用户重置了一个密码之后，往往会希望用户在第一次登录的时候可以修改密码，所以此时可以通过如下的命令让密码失效：
+			ALTER USER dog PASSWORD EXPIRE;
+
+			也可以控制一个用户的锁定操作：
+			ALTER USER dog ACCOUNT LOCK;
+			ALTER USER dog ACCOUNT UNLOCK;
+
+			以上是针对于一个基本的用户操作，但是在之前也学习过，不同的用户可以访问其他用户的数据表，此时只需要家上完整的“用户名.表名称”即可
+
+			范例：使用dog用户查询scott.emp表
+			SELECT * FROM scott.emp;
+
+			但是现在却无法查找，此时需要将scott用户的权限授予dog用户才可以让dog用户访问scott用户的资源，主要的权限有四个：INSERT 、DELETE 、UPDATE、 SELECT
+			
+			范例：将scott.emp表的SELECT权限给dog用户
+			GRANT SELECT,INSERT ON scott.emp TO dog;
+
+			既然 现在有授权的功能，那么就可以进行权限的回收，权限的回收使用REVOKE指令
+
+			范例：回收dog用户的权限
+			REVOKE SELECT ,INSERT ON scott.emp FROM dog;
+			REVOKE CONNECT,RESOURCE,CREATE TABLE,CREATE SESSION FROM dog;
+
+			既然用户连权限都没了，那么按照中国的一句话：“卷铺盖走人”
+			DROP USER dog CASCADE;
+
+			在工作之中，以上的所有操作都是由DBA负责进行的，个人基本用不到
+
+	数据库备份（理解）：
+		数据库的备份操作是在整个项目运行中最重要的工作之一
+
+		数据的导出和导入：
+			数据的导出和导入是针对于一个用户的备份操作，可以按照如下的方式完成
+
+			1、数据的导出
+				·在硬盘上建立一个文件夹：d:\backup
+				·输入exp指令
+				·输入用户名和密码
+				·设置导出文件的名称：导出文件：EXPDATDMP
+			2、数据的导入
+				·进入到导出文件所在的文件夹之中：d:\backup
+				·输入imp指令
+				·导入整个导出文件（yes/no）:no>yes
+				但是以上的操作只是作为一个演示，因为这种备份操作本身只适合数据量小的情况，如果数据量较大的话，
+				这种操作事会损耗性能的，而且时间也会很长，要想解决大数据量的问题只能对数据分区操作
+
+		数据的冷备份：
+			在数据操作之中，，有可能有些用户不糊进行事务的提交，那么这种情况下很可能无法进行完整的备份操作，
+			而所谓的冷备份指的就是在关闭数据库实例的情况下进行数据库备份操作的实现
+			如果要进行冷备份，则需要备份出数据库中的一些几个核心内容：
+				·控制文件，值的是控制整个oracle数据库的实例服务的核心文件，直接通过“v$controlfile”找到
+				·重做日子文件，可以进行数据的灾难恢复，直接通过“v$logfile”找到
+				·数据文件，表空间文件，通过“v$datafile”和“v$tablespace”找到
+				·核心操作的配置文件（pfile），通过“SHOW PARAMTER pfile”找到
+				从实际的oracle部署来讲，所有的文件为了达到IO的平衡操作，要分别保存在不同的硬盘上
+				确定了要备份的文件之后，下面按照如下的步骤查找：
+				1、使用超级管理员登陆
+				CONN sys/change_on_install AS SYSDBA;
+				2、查找所有的控制文件目录
+				SELECT * FROM v$controlfile;
+				3、备份重做日志文件
+				SELECT * FROM v$logfile;
+				4、查找表空间文件
+				SELECT * FROM v$tablespace;
+				SELECT * FROM v$datafile;
+				5、找到prile文件
+				SHOW PARAMETER pfile;
+				6、关闭数据库实例
+				SHUTDOWN IMMEDIATE
+				7、将所有查找到的数据备份到磁盘上
+				8、启动数据库实例
+				STARTUP
+
+				一般一个专业的DBA的开发人员，必须熟悉以上的步骤，这样才可能在出现灾难之后进行及时的恢复
+
+	数据库设计范式（理解）：
+		数据库设计范式是一个很重要的概念，但是这个重要程度只是适合于参考，使用数据库设计范式，
+		可以让数据表更好的进行数据保存，因为在合理的设计如果数据量一大也肯定会存在性能上的问题，
+		所以在开发之中，唯一可以称为设计的宝典--设计的时候尽量避免日后的程序出现多表管理查询
+
+		第一范式：
+			所谓的第一范式值的就是数据表中的数据列不可再分
+			例如，现在有如下一张数据表：
+				
+			CREATE TABLE member (
+				mid			NUMBER			PRIMARY KEY,
+				name		VARCHAR2(200)		NOT NULL,
+				contact		VARCHAR2(200)
+			);
+		这个时候设计的就不合理，因为联系方式有多种数据所组成：电话、地址、email、手机。所以这种设计是不符合的
+		现在可以修改设计：
+
+			CREATE TABLE member (
+				mid			NUMBER			PRIMARY KEY,
+				name		VARCHAR2(200)		NOT NULL,
+				address		VARCHAR2(200),
+				zipcode		VARCHAR2(6),
+				mobile		VARCHAR2(20),
+				tel			VARCHAR2(20)
+			);
+		但是这里面哟两点需要说明：
+			·第一点，关于姓名，在国外的表的设计姓名也分为姓和名两类，但是在中国就是姓名保存
+			·第二点，关于生日，生日有专门的数据类型（DATE）,所以不能将其设置为生日年，生日月，生日日
+
+		所谓的不可分割指的是所有的数据类型都使用数据库提供好的各个数据类型
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,42 @@
+PLAIN
+K 10
+GooglePlay
+V 20
+dir 0-1.0.r3/8780965
+K 9
+WebServer
+V 20
+dir k-3.0.r3/8820149
+K 13
+Xutilslibrary
+V 21
+dir 27-3.0.r3/8953960
+K 28
+android-support-v7-appcompat
+V 21
+dir 4y-3.0.r3/9185400
+END
+ENDREP
+PLAIN
+K 10
+svn:ignore
+V 7
+laoshi
+
+END
+ENDREP
+id: 0.0.r4/251
+type: dir
+pred: 0.0.r3/9270131
+count: 4
+text: 4 0 193 0 0fc1f3c16d6e7fdf715cf0e35f99895f
+props: 4 206 32 0 a389c189d165f2c4a81725592a6f442c
+cpath: /
+copyroot: 0 /
+
+0.0.t3-3 modify-dir false true /
+
+80-3.0.r3/9269762 delete-dir false false /laoshi
+
+
+251 430

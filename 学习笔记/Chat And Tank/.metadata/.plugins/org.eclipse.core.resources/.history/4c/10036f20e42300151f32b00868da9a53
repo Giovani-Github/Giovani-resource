@@ -1,0 +1,5 @@
+package wang.qing.li;
+
+public class Direction {
+	L, LU, U, RU, R, RD, D, LD, STOP
+}

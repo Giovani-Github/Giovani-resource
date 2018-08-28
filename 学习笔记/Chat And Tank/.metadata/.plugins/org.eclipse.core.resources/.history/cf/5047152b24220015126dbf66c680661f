@@ -1,0 +1,15 @@
+import java.awt.*;
+
+public class Blood {
+	private int x, y, w, h;
+	private TankClient tc;
+	
+	//出现的位置规律
+	private int[][] pos = {};
+	
+	public void draw(Graphics g) {
+		Color c = g.getColor();
+		g.setColor(Color.MAGENTA);
+		g.setColor(c);
+	}
+}

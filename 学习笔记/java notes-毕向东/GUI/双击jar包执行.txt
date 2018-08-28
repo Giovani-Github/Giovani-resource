@@ -1,0 +1,24 @@
+双击jar包执行
+把class文件放到包里：
+编译时：javac -d 路径 文件 名
+
+使用jar包执行：
+在命令行中输入 jar -cvfm 指定文件名 清单文件名 包名
+-c  创建新档案
+-v  在标准输出中生成详细输出
+-f 指定档案文件名
+-m 包含指定清单中的清单信息
+
+要写一个清单来指定要运行的class
+
+清单格式：
+Main-Class: 包名.类名 最后要回车
+
+winxp：jar文件需要本地注册后才能用
+注册过程：Window中，工具-文件夹选项-文件类型-创建jar文件类型-高级-新建open操作
+
+编辑open用于执行操作的应用程序：jdk或者jae中bin目录的javaw.exe 最后空格-jar
+
+win7：用治理员权限打开regedit.exe，
+1、选择默认程序：右击jar包，打开方式->选择默认程序->浏览，选中jre下bin文件中javaw.exe(比如我的javaw.exe在D:\Program Files\Java\jre6\bin下）。
+2、编辑注册表：HKEY_CLASSES_ROOT\Applications\javaw.exe\shell\open\command,修改数据数值为"D:\Program Files\Java\jdk1.6.0_21\jre\bin\javaw.exe" -jar "%1"（只要在原来的数值下添加-jar即可）。

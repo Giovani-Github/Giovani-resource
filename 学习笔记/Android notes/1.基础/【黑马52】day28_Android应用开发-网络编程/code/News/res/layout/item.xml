@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+    
+	<com.loopj.android.image.SmartImageView 
+	    android:id="@+id/iv"
+	    android:layout_width="90dp"
+	    android:layout_height="80dp"
+	    android:layout_centerVertical="true"
+	    android:src="@drawable/ic_launcher"/>
+	
+	<TextView 
+	    android:id="@+id/tv_title"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:textSize="22sp"
+	    android:singleLine="true"
+	    android:layout_toRightOf="@id/iv"
+	   	android:text="大标题" />
+	
+	<TextView 
+	    android:id="@+id/tv_detail"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_toRightOf="@id/iv"
+	    android:layout_below="@id/tv_title"
+	    android:lines="2"
+	    android:textColor="@android:color/darker_gray"
+	    android:text="正文"/>
+	
+	<TextView 
+	    android:id="@+id/tv_comment"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:textColor="#ffcc0000"
+	    android:layout_alignParentRight="true"
+	    android:layout_below="@id/tv_detail"
+	    android:text="1020条评论"/>
+</RelativeLayout>

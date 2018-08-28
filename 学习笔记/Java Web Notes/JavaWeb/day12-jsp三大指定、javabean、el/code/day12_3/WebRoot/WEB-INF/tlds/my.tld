@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- 这个就是我们自定义的函数库 -->
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+  version="2.0">
+  
+  <tlib-version>1.0</tlib-version><!-- 函数库的版本 -->
+  <short-name>my</short-name><!-- 推荐前缀名称 -->
+  <uri>http://www.itcast.cn/jsp/functions</uri><!-- 这个是导入函数库是用到的地址，现在还没打jar包，导入时得写真实地址 -->
+
+<!-- 对函数进行部署，这里就要用到我们写的类，MyFunction -->
+  <function>
+    <name>fun</name><!-- 函数名字 -->
+    <function-class>test2.function.MyFunction</function-class><!-- 函数所在的类 -->
+    <function-signature>java.lang.String fun(java.lang.String)</function-signature><!-- 函数的签名，就是所调用的函数是哪一个 -->
+  </function>
+  
+   <function>
+    <name>fun2</name><!-- 函数名字 -->
+    <function-class>test2.function.MyFunction</function-class><!-- 函数所在的类 -->
+    <function-signature>boolean fun2()</function-signature><!-- 函数的签名 -->
+  </function>
+  
+  <function>
+    <name>fun3</name><!-- 函数名字 -->
+    <function-class>test2.function.MyFunction</function-class><!-- 函数所在的类 -->
+    <function-signature>java.lang.String fun3(java.lang.String)</function-signature><!-- 函数的签名 -->
+  </function>
+</taglib>

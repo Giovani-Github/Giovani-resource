@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" 
+	xmlns="http://java.sun.com/xml/ns/javaee" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+  <display-name></display-name>
+  <servlet>
+    <servlet-name>AServlet</servlet-name>
+    <servlet-class>AServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>BServlet</servlet-name>
+    <servlet-class>response.test2.BServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>CServlet</servlet-name>
+    <servlet-class>response.test2.CServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>DServlet</servlet-name>
+    <servlet-class>response.test3.DServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>EServlet</servlet-name>
+    <servlet-class>response.test3.EServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>FServlet</servlet-name>
+    <servlet-class>response.test4.FServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>GServlet</servlet-name>
+    <servlet-class>response.test5.GServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>HServlet</servlet-name>
+    <servlet-class>response.test6.HServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>IServlet</servlet-name>
+    <servlet-class>response.test7.IServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>JServlet</servlet-name>
+    <servlet-class>response.test7.JServlet</servlet-class>
+  </servlet>
+
+
+
+
+
+
+
+
+
+
+  <servlet-mapping>
+    <servlet-name>AServlet</servlet-name>
+    <url-pattern>/AServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>BServlet</servlet-name>
+    <url-pattern>/BServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>CServlet</servlet-name>
+    <url-pattern>/CServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DServlet</servlet-name>
+    <url-pattern>/DServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>EServlet</servlet-name>
+    <url-pattern>/EServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>FServlet</servlet-name>
+    <url-pattern>/FServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>GServlet</servlet-name>
+    <url-pattern>/GServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>HServlet</servlet-name>
+    <url-pattern>/HServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>IServlet</servlet-name>
+    <url-pattern>/IServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>JServlet</servlet-name>
+    <url-pattern>/JServlet</url-pattern>
+  </servlet-mapping>	
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+</web-app>

@@ -1,0 +1,260 @@
+进程：是一个正在执行中的程序。
+		每一个进程执行都有一个执行顺序。该顺序是一个执行路径，或者叫一个控制单元。
+
+线程：就是进程中的一个独立的控制单元。
+		线程在控制着进程的执行。
+
+一个进程中至少有一个线程。
+
+
+
+Java VM  启动的时候会有一个进程java.exe.
+
+该进程中至少一个线程负责java程序的执行。
+而且这个线程运行的代码存在于main方法中。
+该线程称之为主线程。
+
+扩展：其实更细节说明jvm，jvm启动不止一个线程，还有负责垃圾回收机制的线程。
+
+
+如何在程序中自定义线程呢？
+
+	Java给我们提供了对象线程这类事物的描述。该类是Thread
+
+	该类中定义了，
+	创建线程对象的方法(构造函数).
+	提供了要被线程执行的代码存储的位置（run()）
+
+	还定义了开启线程运行的方法(start()).
+	同时还有一些其他的方法用于操作线程：
+		static Thread currentThead():
+		String getName():
+		static void sleep(time)throws InterruptedException:
+	要运行的代码都是后期定义的。
+
+	所以创建线程的第一种方式是：
+		继承Thread类。原因：要覆盖run方法，定义线程要运行的代码。
+
+		步骤：
+		1，继承Thread类。
+		2，覆盖run方法。将线程要运行的代码定义其中。
+		3，创建Thread类的子类对象，其实就是在创建线程，调用start方法。
+
+
+
+		如果自定义的类中有多线程要运行的代码。但是该类有自己的父类。
+		那么就不可以在继承Thread。怎么办呢？
+
+		Java给我们提供了一个规则。Runnable接口。
+		如果自定义类不继承Thread，也可以实现Runnable接口。并将多线程要运行的代码存放在Runnable的run方法中。
+		这样多线程也可以帮助该类运行。
+		这样的操作有一个好处：避免了单继承的局限性。
+
+	创建线程的第二种方式：实现Runnable接口。
+
+		步骤：
+		1，定义了实现Runnable接口。
+		2，覆盖接口的run方法。将多线程要运行的代码存入其中。
+		3，创建Thread类的对象(创建线程),并将Runnable接口的子类对象作为参数传递给Thread的构造函数。
+			为什么要传递？因为线程要运行的代码都在Runnable子类的run方法中存储。所以要将该run方法所属的对象
+			传递给Thread。让Thread线程去使用该对象调用其run方法。
+		4，调用Thread对象的start方法。开启线程。
+
+		动手写代码。
+
+
+		两种方式的特点：
+		实现方式，因为避免了单继承的局限性，所以创建线程建议使用第二种方式。
+
+多线程的运行出现了安全问题:
+	问题的原因：
+		当多条语句在操作同一个线程共享数据时，一个线程对多条语句只执行了一部分，还没有执行完，
+		另一个线程参与进来执行。导致共享数据的错误。
+
+	解决办法：
+		对多条操作共享数据的语句，只能让一个线程都执行完。在执行过程中，其他线程不可以参与执行。
+
+	Java对于多线程的安全问题提供了专业的解决方式。
+
+	就是同步代码块。
+
+	synchronized(对象)
+	{
+		需要被同步的代码
+
+	}
+	对象如同锁。持有锁的线程可以在同步中执行。
+	没有持有锁的线程即使获取cpu的执行权，也进不去，因为没有获取锁。
+
+	火车上的卫生间---经典。
+
+	同步的前提：
+	1，必须要有两个或者两个以上的线程。
+	2，必须是多个线程使用同一个锁。
+
+	必须保证同步中只能有一个线程在运行。
+
+	好处：解决了多线程的安全问题。
+
+	弊端：多个线程需要判断锁，较为消耗资源，
+
+	同步函数用的是哪一个锁呢？(同步函数，就是在函数上面加关键字synchronized，写在返回类型前面)
+		函数需要被对象调用。那么函数都有一个所属对象引用。就是this。
+		所以同步函数使用的锁是this。
+
+	如果同步函数被静态修饰后，使用的锁是什么呢:
+		通过验证，发现不在是this。因为静态方法中也不可以定义this。
+		静态进内存是，内存中没有本类对象，但是一定有该类对应的字节码文件对象。
+		类名.class  该对象的类型是Class
+		静态的同步方法，使用的锁是该方法所在类的字节码文件对象。 类名.class
+
+
+
+	wait:
+	notify();
+	notifyAll();
+
+	都使用在同步中，因为要对持有监视器(锁)的线程操作。
+	所以要使用在同步中，因为只有同步才具有锁。
+
+	为什么这些操作线程的方法要定义Object类中呢？
+	因为这些方法在操作同步中线程时，都必须要标识它们所操作线程只有的锁，
+	只有同一个锁上的被等待线程，可以被同一个锁上notify唤醒。
+	不可以对不同锁中的线程进行唤醒。
+
+	也就是说，等待和唤醒必须是同一个锁。
+
+	而锁可以是任意对象，所以可以被任意对象调用的方法定义Object类中
+
+	wait和sleep的区别：
+	wait:释放cpu执行权，释放同步中锁。
+	sleep:释放cpu执行权，不释放同步中锁。
+
+
+
+
+如何停止线程：
+	只有一种，run方法结束。
+	开启多线程运行，运行代码通常是循环结构。
+
+	只要控制住循环，就可以让run方法结束，也就是线程结束。
+
+	stop过时
+	原理：run方法结束。run方法中通常定义循环，指定控制住循环线程即可结束。
+
+	定义结束标记。
+	当线程处于了冻结状态，没有执行标记，程序一样无法结束。
+	这时可以循环，正常退出冻结状态，或者强制结束冻结状态。
+	强制结束冻结状态：interrupt();目的是线程强制从冻结状态恢复到运行状态。
+	但是会发生InterruptedException异常。
+
+
+	特殊情况：
+	当线程处于了冻结状态。
+	就不会读取到标记。那么线程就不会结束。
+
+	当没有指定的方式让冻结的线程恢复到运行状态是，这时需要对冻结进行清除。
+	强制让线程恢复到运行状态中来。这样就可以操作标记让线程结束。
+
+	Thread类提供该方法 interrupt();
+
+
+线程间通信：
+	等待/唤醒机制。
+
+	也就是常见的生产者消费者问题。
+
+	1.当多个生产者消费者出现时，
+	需要让获取执行权的线程判断标记。
+	通过while完成。
+
+	2.需要将对方的线程唤醒。
+	仅仅用notify，是不可以的。因为有可能出现只唤醒本方。
+	有可能会导致，所有线程都等待。
+	所以可以通过notifyAll的形式来完成 。
+
+
+
+JDK1.5 中提供了多线程升级解决方案:
+	1，
+		将synchronized 替换成了Lock接口。
+		将隐式锁，升级成了显示锁。Lock
+		获取锁：lock();
+		释放锁：unlock();注意：释放的动作一定要执行，所以通常定义在finally中。
+		获取Condition对象：newCondition();
+	2，
+		将Object中的wait，notify，notifyAll方法都替换成了Condition的await，signal，signalAll。
+		和以前不同是：一个同步代码块具备一个锁，该锁具备自己的独立wait和notify方法。
+		现在是将wait，notify等方法，封装进一个特有的对象Condition，而一个Lock锁上可以有多个Condition对象。
+
+	例子：
+		private Lock lock = new ReentrantLock();//锁
+		private Condition condition_pro = lock.newCondition();//绑定于lock锁的等待唤醒等的对象
+		private Condition condition_con = lock.newCondition();
+
+Object：
+	void notify():唤醒在此对象监视器上等待的单个线程。
+	void notifyAll():唤醒在此对象监视器上等待的所有线程。 
+	void wait():在其他线程调用此对象的 notify() 方法或 notifyAll() 方法前，导致当前线程等待。 
+
+	--|Thread：程 是程序中的执行线程。Java 虚拟机允许应用程序并发地运行多个执行线程
+		Thread(String name):分配新的 Thread 对象。
+		Thread(Runnable target):分配新的 Thread 对象。 
+		Thread(Runnable target, String name):分配新的 Thread 对象。 
+		static Thread currentThread():返回对当前正在执行的线程对象的引用。 
+		String getName():返回该线程的名称。
+		int getPriority()：返回线程的优先级。 
+		void interrupt()：中断线程 
+		static boolean interrupted()：测试当前线程是否已经中断。 
+		boolean isAlive()：测试线程是否处于活动状态。 
+		boolean isDaemon()：测试该线程是否为守护线程。 
+		boolean isInterrupted():测试线程是否已经中断。 
+		void run():如果该线程是使用独立的 Runnable 运行对象构造的，则调用该 Runnable 对象的 run 方法 
+		void setName(String name):改变线程名称，使之与参数 name 相同
+		void setPriority(int newPriority):更改线程的优先级
+		static void sleep(long millis):在指定的毫秒数内让当前正在执行的线程休眠（暂停执行），此操作受到系统计时器和调度程序精度和准确性的影响。
+		void start():使该线程开始执行；Java 虚拟机调用该线程的 run 方法。 
+		static void yield():暂停当前正在执行的线程对象，并执行其他线程。 
+
+		--|Runnable:应该由那些打算通过某一线程执行其实例的类来实现。类必须定义一个称为 run 的无参数方法。 
+			 void run():使用实现接口 Runnable 的对象创建一个线程时，启动该线程将导致在独立执行的线程中调用对象的 run 方法。 
+
+
+java.util.concurrent.locks 
+	Lock:实现提供了比使用 synchronized 方法和语句可获得的更广泛的锁定操作
+		可通过Lock lock = new ReentrantLock实例化Lock
+		void lock():获取锁。
+		void unlock():释放锁。 
+		Condition newCondition()：返回绑定到此 Lock 实例的新 Condition 实例。 
+
+	Condition:替代了 Object 监视器方法的使用
+		void await():造成当前线程在接到信号或被中断之前一直处于等待状态。 
+		void signal():唤醒一个等待线程。 
+		void signalAll():唤醒所有等待线程。 
+
+
+	ReentrantLock:实现了上面两个接口，一个可重入的互斥锁 Lock，
+		它具有与使用 synchronized 方法和语句所访问的隐式监视器锁相同的一些基本行为和语义，但功能更强大。 
+
+
+
+
+
+多线程重点：
+	1，多线程的创建的两种方式，以及区别。
+
+	2，
+		同步的特点。
+		同步的好处：
+		同步的弊端：
+		同步的前提：
+		同步的表现形式以及区别。
+		特例：static同步函数锁是哪一个。
+
+		死锁代码要求写的出来。
+
+
+	3，线程间通信，看以上总结。
+
+
+	4，wait和sleep，  yield：临时暂停，可以让线程是释放执行权

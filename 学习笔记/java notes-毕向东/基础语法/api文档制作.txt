@@ -1,0 +1,15 @@
+author 作者
+version 版本
+param	参数
+return	返回数据
+
+用法：
+
+javadoc -d myheml -aruhor -version Test.java
+
+-d:存放的目录
+-aruhor：生成作者信息，可不写
+-version：生成版本信息，可不写
+
+要生成的类必须是public的
+void的方法不用写@return

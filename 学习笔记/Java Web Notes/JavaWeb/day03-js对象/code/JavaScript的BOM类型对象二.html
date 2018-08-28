@@ -1,0 +1,41 @@
+<html>
+	<head>
+		<title>Document</title>
+		<style type="text/css">
+
+		</style>
+	</head>
+	<body>
+		<input type="button" value="Interval" onclick="interval()"/><br/>
+		<input type="button" value="Timeout" onclick="timeout()"/>
+	</body>
+	<script type="text/javascript">
+		//confirm()
+		//window.confirm("确认关闭吗?");
+		
+		//prompt()
+		//prompt("你好","0");
+		
+		//open()
+		//open("hello.html","","width=200,height=300");
+	
+		//close()
+		//close();
+	
+		//setInterval()
+	//	var intId = setInterval("alert('Interval')","3000");
+
+		//setTimeout()
+		var timeId = setTimeout("alert('setTimeout')","3000");
+
+		//消除setInterval
+		/*function interval() {
+			clearInterval(intId);
+		}*/
+
+		//消除setTimeout
+		function timeout() {
+			clearTimeout(timeId);
+		}
+	</script>
+</html>

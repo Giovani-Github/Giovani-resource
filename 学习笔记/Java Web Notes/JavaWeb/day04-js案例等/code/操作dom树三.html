@@ -1,0 +1,27 @@
+<html>
+	<head>
+		<title>Document</title>
+		<style type="text/css">
+
+		</style>
+	</head>
+	<body>
+		<ul id="ul1">
+			<li id="li1">111</li>
+			<li id="li2">222</li>
+			<li id="li3">333</li>
+		</ul>
+
+		<input type="button" value="remove" onclick="remove();"/>
+	</body>
+	<script type="text/javascript">
+		function remove() {
+			//获取ul（父节点）
+			var ul = document.getElementById("ul1");
+			//获取li2，要删除的节点
+			var li2 = document.getElementById("li2");
+			//通过父节点删除li2
+			ul.removeChild(li2);
+		}
+	</script>
+</html>

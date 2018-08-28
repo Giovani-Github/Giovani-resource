@@ -1,0 +1,9 @@
+
+/**
+ * 配置文件操作类
+ * @author Administrator
+ *
+ */
+public class PropertiesMgr {
+	
+}

@@ -1,0 +1,13 @@
+K 10
+svn:author
+V 5
+admin
+K 8
+svn:date
+V 27
+2016-07-10T08:21:34.428987Z
+K 7
+svn:log
+V 73
+导入http工具包&相关工具类&BaseProtocol创建&拼接网络链接
+END

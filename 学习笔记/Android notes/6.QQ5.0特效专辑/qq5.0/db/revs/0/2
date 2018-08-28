@@ -1,0 +1,84 @@
+PLAIN
+K 10
+.classpath
+V 22
+file 3l-1.0.r1/2397286
+K 8
+.project
+V 22
+file 36-1.0.r1/2397480
+K 19
+AndroidManifest.xml
+V 22
+file 2j-1.0.r1/2397672
+K 6
+assets
+V 20
+dir 2-1.0.r1/2397875
+K 19
+ic_launcher-web.png
+V 22
+file 40-1.0.r1/2412932
+K 4
+libs
+V 20
+dir t-1.0.r1/2414158
+K 20
+proguard-project.txt
+V 22
+file 3r-1.0.r1/2414293
+K 18
+project.properties
+V 22
+file 1h-1.0.r1/2414497
+K 3
+res
+V 20
+dir u-1.0.r1/2421835
+K 3
+src
+V 21
+dir 18-1.0.r1/2424142
+END
+ENDREP
+PLAIN
+K 10
+svn:ignore
+V 8
+bin
+gen
+
+END
+ENDREP
+id: 0-1.0.r2/501
+type: dir
+pred: 0-1.0.r1/2424799
+count: 1
+text: 2 0 442 0 7cfa4badc2acbfb703a3f0fc0d9afbb5
+props: 2 455 33 0 0b55d7a5b55a7d4ec558bfb9154855f9
+cpath: /QQ5.0特效
+copyroot: 0 /
+
+PLAIN
+K 11
+QQ5.0特效
+V 16
+dir 0-1.0.r2/501
+END
+ENDREP
+id: 0.0.r2/751
+type: dir
+pred: 0.0.r1/2424989
+count: 2
+text: 2 695 43 0 c4607137528f9f07fc41b392fb06d04b
+cpath: /
+copyroot: 0 /
+
+0-1.0.t1-1 modify-dir false true /QQ5.0特效
+
+4-1.0.r1/2411544 delete-dir false false /QQ5.0特效/bin
+
+m-1.0.r1/2412799 delete-dir false false /QQ5.0特效/gen
+
+
+751 880

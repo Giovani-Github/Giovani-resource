@@ -1,0 +1,25 @@
+<html>
+	<head>
+		<title>Document</title>
+		<style type="text/css">
+			
+		</style>
+	</head>
+	<body>
+		<div id="div1">
+		</div>
+	</body>
+	<script type="text/javascript">
+		function time() {
+			//获取当前时间
+			var date = new Date();
+			var mdate = date.toLocaleString();
+			//获取div1
+			var div1 = document.getElementById("div1");
+			//把时间设置到div里面
+			div1.innerHTML = mdate;
+		}
+
+		setInterval(time,1000);
+	</script>
+</html>

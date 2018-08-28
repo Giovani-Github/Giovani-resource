@@ -1,0 +1,211 @@
+PLAIN
+K 10
+.classpath
+V 22
+file 9p-3.0.r3/3537721
+K 8
+.project
+V 22
+file 90-3.0.r3/3537916
+K 19
+AndroidManifest.xml
+V 22
+file e1-3.0.r3/3538109
+K 6
+assets
+V 20
+dir 2-3.0.r3/3538313
+K 19
+ic_launcher-web.png
+V 22
+file fh-3.0.r3/3551980
+K 4
+libs
+V 20
+dir r-3.0.r3/3552876
+K 8
+lint.xml
+V 22
+file f5-3.0.r3/3553012
+K 20
+proguard-project.txt
+V 22
+file 9x-3.0.r3/3553205
+K 18
+project.properties
+V 22
+file ck-3.0.r3/3553410
+K 3
+res
+V 20
+dir s-3.0.r3/3560730
+K 3
+src
+V 21
+dir 16-3.0.r3/3562323
+END
+ENDREP
+id: 0-3.0.r4/496
+type: dir
+pred: 0-3.0.r3/3563022
+count: 1
+text: 4 0 483 0 c1a7419d0e7650102931ff45659b5863
+props: 2 455 33 0 0b55d7a5b55a7d4ec558bfb9154855f9
+cpath: /侧滑删除
+copyroot: 0 /
+
+PLAIN
+K 10
+.classpath
+V 22
+file 8e-3.0.r3/3563153
+K 8
+.project
+V 22
+file dg-3.0.r3/3563348
+K 19
+AndroidManifest.xml
+V 22
+file fc-3.0.r3/3563541
+K 6
+assets
+V 21
+dir 1e-3.0.r3/3563744
+K 19
+ic_launcher-web.png
+V 22
+file 5a-3.0.r3/3575665
+K 4
+libs
+V 21
+dir 23-3.0.r3/3576608
+K 8
+lint.xml
+V 22
+file 8j-3.0.r3/3576745
+K 20
+proguard-project.txt
+V 22
+file e3-3.0.r3/3576938
+K 18
+project.properties
+V 22
+file ba-3.0.r3/3577143
+K 3
+res
+V 21
+dir 24-3.0.r3/3584277
+K 3
+src
+V 21
+dir 2i-3.0.r3/3585598
+END
+ENDREP
+id: 1d-3.0.r4/1190
+type: dir
+pred: 1d-3.0.r3/3586302
+count: 1
+text: 4 691 486 0 e80a2907a466a1eadd7659d586585a08
+props: 2 455 33 0 0b55d7a5b55a7d4ec558bfb9154855f9
+cpath: /头部视差
+copyroot: 0 /
+
+PLAIN
+K 10
+.classpath
+V 22
+file fl-3.0.r3/3586434
+K 8
+.project
+V 22
+file 6m-3.0.r3/3586629
+K 19
+AndroidManifest.xml
+V 22
+file 7r-3.0.r3/3586822
+K 6
+assets
+V 21
+dir 2q-3.0.r3/3587026
+K 19
+ic_launcher-web.png
+V 22
+file 9e-3.0.r3/3601134
+K 4
+libs
+V 21
+dir 3f-3.0.r3/3602396
+K 20
+proguard-project.txt
+V 22
+file dc-3.0.r3/3602533
+K 18
+project.properties
+V 22
+file 7b-3.0.r3/3602738
+K 3
+res
+V 21
+dir 3g-3.0.r3/3609679
+K 3
+src
+V 21
+dir 3v-3.0.r3/3611831
+END
+ENDREP
+id: 2p-3.0.r4/1848
+type: dir
+pred: 2p-3.0.r3/3612494
+count: 1
+text: 4 1390 445 0 9fe5957658b4cb0c65dd194566c468fe
+props: 2 455 33 0 0b55d7a5b55a7d4ec558bfb9154855f9
+cpath: /快速检索
+copyroot: 0 /
+
+PLAIN
+K 11
+QQ5.0特效
+V 20
+dir 0-1.0.r3/3537521
+K 12
+侧滑删除
+V 16
+dir 0-3.0.r4/496
+K 12
+头部视差
+V 18
+dir 1d-3.0.r4/1190
+K 12
+快速检索
+V 18
+dir 2p-3.0.r4/1848
+END
+ENDREP
+id: 0.0.r4/2233
+type: dir
+pred: 0.0.r3/3612820
+count: 4
+text: 4 2049 171 0 3adc3c82db9456f7d2fea75a50d6fd1b
+cpath: /
+copyroot: 0 /
+
+0-3.0.t3-3 modify-dir false true /侧滑删除
+
+4-3.0.r3/3550573 delete-dir false false /侧滑删除/bin
+
+k-3.0.r3/3551846 delete-dir false false /侧滑删除/gen
+
+1d-3.0.t3-3 modify-dir false true /头部视差
+
+1g-3.0.r3/3574239 delete-dir false false /头部视差/bin
+
+1w-3.0.r3/3575530 delete-dir false false /头部视差/gen
+
+2p-3.0.t3-3 modify-dir false true /快速检索
+
+2s-3.0.r3/3599698 delete-dir false false /快速检索/bin
+
+38-3.0.r3/3600999 delete-dir false false /快速检索/gen
+
+
+2233 2365

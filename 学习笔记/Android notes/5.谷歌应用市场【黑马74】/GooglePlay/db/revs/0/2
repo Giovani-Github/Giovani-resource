@@ -1,0 +1,84 @@
+PLAIN
+K 10
+.classpath
+V 21
+file 2x-1.0.r1/443226
+K 8
+.project
+V 21
+file 2g-1.0.r1/443417
+K 19
+AndroidManifest.xml
+V 21
+file 38-1.0.r1/443605
+K 6
+assets
+V 19
+dir 2-1.0.r1/443804
+K 19
+ic_launcher-web.png
+V 21
+file 1u-1.0.r1/450390
+K 4
+libs
+V 19
+dir l-1.0.r1/450986
+K 20
+proguard-project.txt
+V 21
+file 34-1.0.r1/451117
+K 18
+project.properties
+V 21
+file 2z-1.0.r1/451318
+K 3
+res
+V 19
+dir m-1.0.r1/457395
+K 3
+src
+V 20
+dir 10-1.0.r1/458414
+END
+ENDREP
+PLAIN
+K 10
+svn:ignore
+V 8
+bin
+gen
+
+END
+ENDREP
+id: 0-1.0.r2/491
+type: dir
+pred: 0-1.0.r1/459056
+count: 1
+text: 2 0 432 0 a32b15e72e706a281834014e9d8ed54e
+props: 2 445 33 0 0b55d7a5b55a7d4ec558bfb9154855f9
+cpath: /GooglePlay
+copyroot: 0 /
+
+PLAIN
+K 10
+GooglePlay
+V 16
+dir 0-1.0.r2/491
+END
+ENDREP
+id: 0.0.r2/738
+type: dir
+pred: 0.0.r1/459241
+count: 2
+text: 2 683 42 0 517585e398079a82b0983654256820b0
+cpath: /
+copyroot: 0 /
+
+0-1.0.t1-1 modify-dir false true /GooglePlay
+
+4-1.0.r1/448997 delete-dir false false /GooglePlay/bin
+
+e-1.0.r1/450260 delete-dir false false /GooglePlay/gen
+
+
+738 866

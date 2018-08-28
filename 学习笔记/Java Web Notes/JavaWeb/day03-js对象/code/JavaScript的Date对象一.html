@@ -1,0 +1,29 @@
+<html>
+	<head>
+		<title>Document</title>
+		<style type="text/css">
+
+		</style>
+	</head>
+	<body>
+
+	</body>
+	<script type="text/javascript">
+		var date = new Date();
+		document.write("当前时间：" + date.toLocaleString() + "<br/>");
+		document.write("当前年份：" + date.getFullYear() + "<br/>");
+		var month = date.getMonth() + 1;
+		document.write("当前月份：" + month + "<br/>");
+		var day = date.getDay();
+		if(day != 0) {
+			document.write("当前星期：" + day + "<br/>");
+		} else {
+			document.write("当前星期：" + 7 + "<br/>");
+		}
+		document.write("当前号数：" + date.getDate() + "<br/>");
+		document.write("当前小时：" + date.getHours() + "<br/>");
+		document.write("当前分钟：" + date.getMinutes() + "<br/>");
+		document.write("当前秒：" + date.getSeconds() + "<br/>");
+		document.write("当前毫秒：" + date.getMilliseconds() + "<br/>");
+	</script>
+</html>

@@ -1,0 +1,185 @@
+import java.awt.*;
+import java.util.List;
+
+/**
+ * 子弹类
+ * @author 李庆旺
+ *
+ */
+
+public class Missile {	
+	/**
+	 * 子弹的横坐标
+	 */
+	public static final int XSPEED = 10;
+	/**
+	 * 子弹的纵坐标
+	 */
+	public static final int YSPEED = 10;
+	/**
+	 * 子弹的宽度
+	 */
+	public static final int WIDTH = 10;
+	/**
+	 * 子弹的高度
+	 */
+	public static final int HEIGHT = 10;
+	
+	int x, y;//子弹出现的位置
+	Tank.Direction dir;//代表子弹的八个方向
+	
+	private boolean good;//子弹的好坏属性
+	private boolean live = true;//炮弹是否死亡，true活着
+	
+	//持有大管家引用
+	private TankClient tc;
+	
+	/**
+	 * 根据坐标x，y， 和方向构造一个子弹
+	 * @param x 子弹的横坐标
+	 * @param y 子弹的纵坐标
+	 * @param dir 方向
+	 */
+	public Missile(int x, int y, Tank.Direction dir) {
+		this.x = x;
+		this.y = y;
+		this.dir = dir;
+	}
+	
+	/**
+	 * 根据坐标x， y，好坏，方向，和大管家引用构造一个子弹
+	 * @param x 横坐标
+	 * @param y 纵坐标
+	 * @param good 好坏值
+	 * @param dir 方向
+	 * @param tc 大管家引用
+	 */
+	public Missile(int x, int y, boolean good, Tank.Direction dir ,TankClient tc) {
+		this(x ,y, dir);
+		this.good = good;
+		this.tc = tc;
+	}
+	
+	/**
+	 * 画出子弹的方法
+	 * @param g 大管家传递过来的画笔
+	 */
+	public void draw(Graphics g) {
+		//如果子弹没活着
+		if(!live) {
+			//直接从装子弹的集合中去除
+			tc.missiles.remove(this);
+			return;
+		}
+		
+		Color c = g.getColor();
+		g.setColor(Color.BLACK);
+		g.fillOval(x, y, WIDTH, HEIGHT);
+		g.setColor(c);	
+		
+		move();
+	}
+
+	/**
+	 * 根据dir方向移动子弹位置， 通过改变x，y坐标实现移动
+	 */
+	private void move() {
+		switch(dir) {
+		case L:
+			x -= XSPEED;
+			break;
+		case LU:
+			x -= XSPEED;
+			y -= YSPEED;
+			break;
+		case U:
+			y -= YSPEED;
+			break;
+		case RU:
+			x += XSPEED;
+			y -= YSPEED;
+			break;
+		case R:
+			x += XSPEED;
+			break;
+		case RD:
+			x += XSPEED;
+			y += YSPEED;
+			break;
+		case D:
+			y += YSPEED;
+			break;
+		case LD:
+			x -= XSPEED;
+			y += YSPEED;
+			break;
+
+		}
+		
+		//子弹是否出界
+		if(x < 0 || y < 0 || x > TankClient.GAME_WIDTH || y > TankClient.GAME_HEIGHT) {
+			//出界了子弹就死亡
+			live = false;
+		}
+	}
+
+	/**
+	 * 炮弹是否存活
+	 * @return 活着返回true，死了返回false
+	 */
+	public boolean isLive() {
+		return live;
+	}
+	
+	/**
+	 * 拿到子弹所在区域的区域对象
+	 * @return 区域对象
+	 */
+	public Rectangle getRect() {
+		return new Rectangle(x, y, WIDTH, HEIGHT);
+	}
+	
+	/**
+	 * 子弹是否坦克和这个坦克碰撞
+	 * @param t 要碰撞的坦克
+	 * @return 撞上返回true， 没撞上返回false
+	 */
+	public boolean hitTank(Tank t) {
+		//子弹自身活着,要碰撞的坦克活着， 并且两者撞上，并且子弹的好坏和坦克的好坏不能相同
+		if(this.live && t.isLive() && this.getRect().intersects(t.getRect()) && t.isLive() && this.good != t.isGood()) {
+			//如果是用户坦克
+			if(t.isGood()) {
+				//碰撞一次，生命值减20
+				t.setLife(t.getLife()-20);
+				if(t.getLife() <= 0) t.setLive(false);
+			} else {
+				t.setLive(false);
+			}
+			this.live = false;
+			Explosion e = new Explosion(x, y, tc);
+			tc.explosions.add(e);
+			return true;
+		}
+		return false;
+	}
+	
+	//子弹是否打中这一排坦克中的一个
+	public boolean hitTanks(List<Tank> tanks) {
+		for(int i=0; i<tanks.size(); i++) {
+			if(hitTank(tanks.get(i))) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	//子弹是否撞上墙
+	public boolean hitWall(Wall w) {
+		if(this.live && this.getRect().intersects(w.getRect())) {
+			live = false;
+			return true;
+		}
+		return false;
+	}
+	
+}

@@ -1,0 +1,288 @@
+1、schema约束
+	- 特点：
+		* 符合xml语法，xml语句
+		* XML Schema文件自身就是一个XML文件，但它的扩展名通常为.xsd
+		* 和xml一样，必须有一个根节点，但是这个根节点名称为Schema
+		* w3c预先定义了元素和属性
+		* 一个xml中可以有多个schema，使用名称空间区分（类似于java变量名、包名）
+		* 支持更多的数据类型
+2、schema的快速入门
+	- 约束文件
+		(1)创建一个.xsd文件。
+		(2)跟xml一样，第一行第一列写一个文档说明<?xml version="1.0" encoding="UTF-8"?>。
+		(3)写一个根节点，<schema></schema>
+		(4)根节点里面写三个属性，值一般不更改
+			* xmlns="http://www.w3.org/2001/XMLSchema",表示当前xml文件是一个约束文件
+			* targetNamespace="http://www.example.org/日期(20151012)",被约束文件引入约束文件时用到的url
+			* elementFormDefault="qualified"，质量好的
+		(5)xml文件里面有多少个元素，写多少个<element></element>
+		(6)复杂元素和简单元素：
+			* 复杂元素：
+				* <element name="元素名称">
+					<complexType>
+						<标签约束>
+							子元素
+						</标签约束>
+					</complexType>
+				</elment>
+				
+				- 复杂标签的约束
+					** <sequence>:有顺序的，子元素出现要有顺序
+					** <all>:子元素只能出现一次
+					** <choice>:子元素只能出现其中一个
+					** <any>:表示出现任意元素
+		
+				- 约束复杂元素的属性，必须是复杂元素
+					** 写在</complexType>前一行
+					** <attribute name="自定义属性名" type="数据类型" use="属性是否必须出现"></attribute>
+						use的值：required,表示此属性必须出现
+							
+
+			* 简单元素：写在复杂袁术的sequence里面
+				<element name="age" type="数据类型" [标签约束]></element>
+				
+				- 简单标签的约束
+					** maxOccurs="unbounded"：表示此元素能出现任意多次		
+				
+	- 被约束文件
+		(1)创建xml文件
+		(2)引入约束文件，在根元素上面写三个属性（其中两个别名时相同的）
+			* xmlns:别名="http://www.w3.org/2001/XMLSchema-instance",表示xml文件是一个被约束文件
+			* xmlns=约束文件的targetNamespace值
+			* 别名:schemaLocation="约束文件的targetNamespace值 约束文件在本机的路径"
+
+		(3)名称空间：当引入多个约束文件时，可个每个约束文件起一个名称空间做区分，就是别名，跟java的变量名一样
+			* 要用到哪个约束文件对元素进行约束，就在元素名称前面加哪个约束文件的别名: <别名:元素名称 ....></别名:元素名称>
+3、jaxp用sax方式解析xml的过程：事件驱动，边读边解析。只能查询，不能增删改
+	使用parse方法解析的时候：
+		- 当解析到开始标签的时候，自动执行事件驱动的startElement方法，通过参数qName获取标签名称
+		- 当解析到文本的时候，自动执行事件驱动的character方法，通过字符串的构造方法获取内容
+		- 当解析到结束标签的时候，自动执行事件驱动的endElement方法，通过参数qName获取标签名称
+
+		- 步骤(code/jaxp用sax方式解析xml/SaxJaxp1.java)：
+			(1)创建解析器工程
+			(2)创建解析器类
+			(3)创建一个类，继承DefaultHandler事件驱动类
+			(4)重写DefaultHandler类的三个方法（重要操作，在三个方法里面查询xml的元素）:
+				startElement方法，通过参数qName获取标签名称
+				character方法，使用三个参数通过字符串的构造方法String(char[] ch, int start, int length)获取内容
+				endElement方法，通过参数qName获取标签名称
+			(5)调用SAXParser的parse方法，传入xml文件路径，换入事件驱动，解析xml
+
+		- 案例(code/jaxp用sax方式解析xml/SaxJaxp2.java)：获取所有的name元素的值
+			(1)在自己创建的事件驱动类中，定义一个成员变量，boolean flag=false
+			(2)在startElement方法中，判断pName参数值是否是name，如果是，就flag=true
+			(3)在character方法中，判断flag是否是true，是就表示解析到了name标签，通过这个方法的三个参数使用字符串的构造函数，创建一个字符串（就是name标签的文本内容）
+			(4)在endElement方法中，判断flag是否是true，是就改为false。表示这个name标签解析完毕
+		
+		- 案例(code/jaxp用sax方式解析xml/SaxJaxp3.java)：获取第一个name元素的值
+			(1)在自己创建的事件驱动类中，定义两个成员变量，int idx=1,boolean flag=false
+			(2)在startElement方法中，判断pName参数值是否是name，如果是，就flag=true
+			(3)在character方法中，判断flag是否是true，并且idx是否为1，是就通过这个方法的三个参数使用字符串的构造函数，创建一个字符串（就是name标签的文本内容）
+			(4)在endElement方法中，把idx的值递增，idx++
+4、jaxp的api查看(sax)
+	- SAXParser（javax.xml.parsers 包）：sax解析xml的解析器类，通过SAXParserFactory.newSAXParser()获取实例
+		** void parse(String uri, DefaultHandler dh)：使用指定的 DefaultHandler 将给定统一资源标识符 (URI) 描述的内容解析为 XML。 
+	- SAXParserFactory（javax.xml.parsers包）：上面的类的工厂类
+		** static SAXParserFactory newInstance()：获取 SAXParserFactory 的一个新实例。 
+		** SAXParser newSAXParser(): 使用当前配置的工厂参数创建 SAXParser 的一个新实例。 
+	- DefaultHandler（org.xml.sax.helpers包）：事件驱动
+		** void characters(char[] ch, int start, int length)：接收元素中字符数据的通知。（自动执行） 
+		** void endElement(String uri, String localName, String qName)：接收元素结束的通知。（自动执行）
+		** void startElement(String uri, String localName, String qName, Attributes attributes)：接收元素开始的通知。（自动执行） 
+5、使用dom4j解析xml
+	* 不是javase的一部分
+	* 集sax和dom为一身，从上到下一行一行解析
+	* 使用dom4j：
+		(1)导入dom4j提供的jar包
+		(2)myeclipse下操作：
+			* 项目里面创建一个文件夹，lib
+			* 复制jar包到lib下面
+			* 右键点击jar包，build-->add to buildapath
+		(3)创建java文件
+		(4)得到document：
+			SAXReader reader = new SAXReader();
+			Document document = reader.read("xml文件路径");
+6、dom4japi查看(dom4j 1.6.1API.chm)
+	- SAXReader(org.dom4j.io包)
+		**  Document read(String systemId) ：使用sax从给定的路径读取xml（解析xml）
+ 
+	- Node（org.dom4j包）
+		** Element getParent() :获取父节点
+		** void setText(String text) ：设置节点的文本数据
+		** List selectNodes(String xpathExpression) :根据xpath表达式获取多个元素
+		** Node selectSingleNode(String xpathExpression) ：根据xpath表达式获取一个元素
+
+		|-Branch（org.dom4j包）：Branch接口定义了节点的共同行为可以包含子节点(内容),如XML元素和文档
+			** Element addElement(String name):添加一个新标签
+			**  boolean remove(Element element)  ：删除标签
+
+			|- Document（org.dom4j包）：表示整个xml文档的接口
+				** Element getRootElement()：获取根节点
+
+			|- Element（org.dom4j包）：节点接口
+				** Element element(String name) ：获取标签下面name名称的第一个子标签
+				** List elements()：获取标签下面的所有子标签（不包括孙标签及其以下的标签）
+				** List elements(String name) ：获取标签下面name名称的所有子标签（不包括孙标签及其以下的标签）
+				** String getText()：获取标签的文本内容
+				** String attributeValue(String name)：获取指定属性的值
+ 
+
+	- XMLWriter(org.dom4j.io包)：用来回写的类
+		** XMLWriter(OutputStream out, OutputFormat format) ：
+			out:new FileOutputStream("xml文件路径")
+			format:对xml文件的格式化方式
+		** void write(Document doc) :将内存中的xml写入文件中
+ 
+
+	- OutputFormat(org.dom4j.io包)：对xml文件进行格式化的类
+		** static OutputFormat createCompactFormat() :紧密的格式
+		** static OutputFormat createPrettyPrint() ：漂亮的格式
+
+	- DocumentHelper(org.dom4j.io包):document的帮助类
+		** static Element createElement(String name) ：创建element元素
+
+	- List<E>(java.util包)：
+		** void add(int index, E element)：在列表的指定位置插入指定元素（可选操作）。  
+7、使用dom4j查询xml
+	* 案例：查询所有name元素里面的值(dom4j解析xml/Dom4jParsingXml_1.java)
+		** 步骤：
+			(1)创建解析器 SAXReader
+			(2)得到document
+			(3)得到根节点
+			(4)得到所有的p1标签
+			(5)得到name
+			(6)得到name里面的值
+	* 案例：得到第一个name的文本内容(dom4j解析xml/Dom4jParsingXml_2.java)
+			(1)创建解析器 SAXReader
+			(2)得到document
+			(3)得到根节点
+			(4)得到第一个p1
+			(5)得到p1下面的第一个name
+			(6)得到name的文本内容
+	* 案例：得到第二个name的文本内容(dom4j解析xml/Dom4jParsingXml_3.java)
+			(1)创建解析器 SAXReader
+			(2)得到document
+			(3)得到根节点
+			(4)得到所有p1
+			(5)得到第二个p1
+			(6)得到第二个p1里面的name
+			(7)得到name的文本内容
+8、使用dom4j添加节点
+	* 案例：在第一个p1末尾添加<sex>nv</sex>(dom4j解析xml/Dom4jParsingXml_4.java)
+			(1)创建解析器 SAXReader
+			(2)得到document
+			(3)得到根节点
+			(4)获得第一个p1
+			(5)在p1下面直接添加sex
+			(6)在sex下面添加文本
+			(7)回写xml XMLWriter类
+				*	OutputFormat format = OutputFormat.createPrettyPrint();
+				   XMLWriter xmlWriter = new XMLWriter(new FileOutputStream("xml文件路径"),format);
+					xmlWriter.write(document);
+			(8)关闭流
+				xmlWriter.close();
+9、使用dom4j在特定的位置添加抱歉
+	* 案例：在第一个p1的name之前添加school标签：(dom4j解析xml/Dom4jParsingXml_5.java)
+		(1)创建解析器 SAXReader
+		(2)得到document
+		(3)得到根节点
+		(4)获得第一个p1
+		(5)获得p1下面的全部子节点
+		(6)创建元素：DocumentHelper.createElement("school");
+		(7)设置元素文本内容
+		(8)使用list的app方法，子指定的位置添加标签
+		(9)回写
+		(10)关闭流
+10、使用dom4j修改元素值
+	* 案例：修改第一个p1里面的age的值(dom4j解析xml/Dom4jParsingXml_6.java)
+		(1)创建解析器 SAXReader
+		(2)得到document
+		(3)得到根节点
+		(4)获得第一个p1
+		(5)获得p1下面的age
+		(6)修改age的内容
+		(7)回写
+		(8)关闭流
+11、使用dom4j删除标签
+	* 案例：删除p1里面的school标签(dom4j解析xml/Dom4jParsingXml_7.java)
+		(1)创建解析器 SAXReader
+		(2)得到document
+		(3)得到根节点
+		(4)获得第一个p1
+		(5)获得p1下面的school
+		(6)通过父节点删除school
+		(7)回写
+		(8)关闭流
+12、使用dom4j获取属性值
+	* 案例：获取第一个p1的id1属性值(dom4j解析xml/Dom4jParsingXml_8.java)
+		(1)创建解析器 SAXReader
+		(2)得到document
+		(3)得到根节点
+		(4)获得第一个p1
+		(5)获取id1属性值，attributeValue()
+13、dom4j使用xpath的操作：
+	* xpath是一个表达式，可以方便我们获取某一个元素，有以下六种常见的形式（字母表示标签名称）
+		(1)/AAA/DDD/BBB:表示一层一层的，AAA下面的DDD下面的BBB
+		(2)//BBB:表示和这个名称相同元素，都得到
+		(3)/*:表示所有元素
+		(4)BBB[1]:表示第一个BBB元素
+			BBB[last()]:表示最后一个BBB元素
+		(5)//BBB[@id]：表示所有名称是BBB元素上面有id属性的元素，都得到
+		(6)//BBB[@id='b1']:表示所有名称是BBB元素上面有id属性的，并且属性值是b1的元素，都得到
+		(7)//BBB/@id:表示所有名称是BBB的元素的id属性，都得到
+	* dom4j要使用xpath：
+		首先要导入jar包（dom4j-1.6.1\lib\jaxen-1.1-beta-6.jar），具体操作和导入dom4j的jar包一样
+		** dom4j提供了两个方法来支持xpath，在node接口里的两个方法
+			- List selectNodes("xpath表达式"):获取多个元素
+			- Node selectSingleNode("xpath表达式"):获取单个元素
+	* 案例：dom4j使用xpath查询xml中所有name元素的文本内容(code/dom4j使用xpath表达式解析xml/XpathXml1.java)
+		(1)创建解析器 SAXReader
+		(2)得到document
+		(3)使用selectNodes()方法，写入xpath表达式（//name）,获得name的list集合
+		(4)遍历list得到每个name的文本内容
+	* 案例：dom4j使用xpath查询xml中第一个p1下面的name的文本内容(code/dom4j使用xpath表达式解析xml/XpathXml2.java)
+		(1)创建解析器 SAXReader
+		(2)得到document
+		(3)使用selectSingleNode()方法，写入xpath表达式(//p1[@id1='aaaa']/name)
+		(4)输出name的文本内容
+14、实现简单的学生管理系统
+	* 用xml文件来代替数据库
+	步骤：
+		(1)创建一个项目，导入xpath、dom4j的jar包
+		(2)创建一个xml文件，存储学生的信息
+		(3)创建一个包，用来存放学生类
+		(4)创建一个包，用来存放对xml操作的功能类
+		(6)在功能类实现添加、删除、查询操作
+		(7)创建一个包，用来存放测试的类
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

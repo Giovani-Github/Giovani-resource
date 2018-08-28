@@ -1,0 +1,43 @@
+为了简化类名的书写，使用一个关键字，import.
+import 导入的是包中的类。
+建议，不要写通配符 * ，需要用到包中的哪个类，就导入哪个类。
+加了包的类需放在与包相同的文件夹中，编译时包名与类名都要写全
+packet：包关键字
+
+c:\myclass
+
+c:\myclass\packb\DemoA.class
+c:\myclass\packb\haha\DemoZ.class
+
+import packb.*;
+import packb.haha.*;
+
+
+建立定包名不要重复，可以使用url来完成定义，url是唯一的。
+
+www.itcast.cn
+
+package cn.itcast.demo
+package cn.itcast.test
+
+总结：
+	包与包之间进行访问，被访问的包中的类以及类中的成员，需要public修饰。
+
+	不同包中的子类还可以直接访问父类中被protected权限修饰的成员。
+
+	包与包之间可以使用的权限只有两种，public  protected。
+
+
+             public   protected       default     private
+同一个类中     ok         ok             ok          ok
+同一个包中     ok         ok             ok
+子类           ok         ok             
+不同包中       ok
+
+
+
+java.lang : java的核心包 jdk1.2版本以后，该包中的类自动导入。
+java.awt: 用于制作图形界面。
+java.io:input output  用于操作设备上的数据。
+java.util : 这里定义是java的工具类。集合，日期。
+java.net:用于网络通讯的。

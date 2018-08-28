@@ -1,0 +1,245 @@
+1、debug的调试模式（断点调试模式）
+	首先，设置一个断电（让程序运行停止在这一行，这一行也不运行）
+	然后，右击->debug as->提示框yes
+	- step over按钮：快捷键F6。功能是单步执行，就是执行到下一行代码（下一行代码没有开始执行，只是执行上一次停止的代码）
+	- resume: 快捷键F8。表示本断点调试结束，程序继续向下执行
+		* 如果当前断点下面还有一个断点，调到下一个断点继续进行调试
+		* 如果当前断点后面没有断点，程序直接执行到末尾
+	- step into: 快捷键F5。 进入到这个方法，查看这个方法的源代码
+	- step return: 快捷键F7 返回上一步
+2、myeclipse的常用快捷键：
+	* 代码提示：alt+/
+	* 快速导包: ctrl+shift+o
+	* 单行注释: ctrl+/
+	* 去掉单行注释:ctrl+/
+	* 多行注释:ctrl+shift+/
+	* 去掉多行注释:ctrl+shift+\
+	* 删除行:ctrl+d
+	* 代码格式化：ctrl+shift+f，如果不管用sourc->Format
+	* 代码修复：ctrl+1
+3、junit的使用（单元测试，就是测试类中的方法）：
+	* 特点：可以不用main方法，直接运行某一方法
+	* junit不是javase的一部分，使用时要导入jar包，不过myeclipse中自带了junit的jar包，无需再导入
+	* 进行测试某一个方法的步骤：
+		- 用另一个类的方法对一个类的方法进行间接测试，如果另一个类的方法运行成功，
+			证明这个类的方法测试成功，在这里，两个方法用，进行测试的方法和测试的方法，进行区分。
+		- 测试成功，junti显示区显示绿条，失败就是红棕色的条
+
+		- 进行测试的方法的命名规则：public void 方法名(无参数) {}
+
+		(1)创建一个与src同级的源代码文件夹，source Folder
+		(2)在源代码文件夹里面创建一个与要测试的方法所在类的包名一样的包
+		(3)创建类，创建进行测试的方法
+		(4)运行进行测试的方法：
+			运行方式：使用注解方式运行进行测试的方法：
+				- 在进行测试的方法上面：
+					** @Test(org.junit.Test包):表示这个方法要进行测试
+					** @Ignore（org.junit.Ignore包）：表示这个方法不进行测试
+					** @Before（org.junit.Before包）：表示在每个要测试的方法运行前运行这个方法
+					** @After（org.junit.After包）：表示在每个要测试的方法运行后运行这个方法
+
+			运行方法：
+				单个方法运行：选中要运行的方法名，右击->run as -> junit test
+				整个类的方法一起运行：在类里面的空白区域，右击->run as -> junit test
+4、泛型使用在集合上（包括集合的取出方式总结）：
+	* 泛型不能接收数据类型，如果要使集合接收数据类型，可以使用数据类型包装类
+		- int double booblen.....
+	* 泛型擦除：首先泛型只是出现在源代码阶段，当编译之后泛型不存在了
+	* 泛型使用在list集合上(code/fanxingTest/src/ListTest.java)
+	* 泛型使用在set集合上(code/fanxingTest/src/SetTest.java)
+	* 泛型使用在map集合上(code/fanxingTest/src/MapTest.java)
+5、泛型使用在方法上
+	* 语法：在返回值前面，<大写字母>。比如<T>
+	* 作用：当使用这个方法的时候，实际传入的是什么类型，这个T就会变成什么类型。
+	* 应用场景：当不确定这个方法的参数是什么类型时，即可使用泛型
+	* 练习：
+		- 数组中指定的两个元素互换(code/fanxingTest/src/MethodTest.java)
+		- 颠倒数组中所有元素(code/fanxingTest/src/MethodTest2.java)
+6、泛型使用在类上(code/fanxingTest/src/ClassTest.java)
+	* 语法：写在类名后面。例如：class Test<T> {}
+	* 这时候这个T，在整个类里面都可以被使用。除了静态方法不能使用类上的泛型，得另外定义一个泛型以外。
+7、枚举(code/Enum/src/enumtest/demo/EnumTest.java)
+	* 什么是枚举：需要在一定范围内取值，这个值只能是这个范围内的一个，例如：红绿灯
+	* 枚举类定义：使用关键字enum
+		- enum Test{
+		  	 A, B, C;
+		  }
+		- 这里面,ABC分别表示一个Test的实例，即new Test()。称为枚举常量;
+		- 枚举的构造方法必须是私有的
+		- 如果枚举的构造方法是带参数的，那么，ABC这几个枚举实例上面，也需要传递参数
+			** enum Test{
+				 A(参数), B(参数), C(参数);
+			  }
+		- 如果枚举类里面有抽象方法，那么ABC这几个枚举实例里面，也需要重写抽象方法
+			** enum Test{
+				 A{
+					重写抽象方法
+				 }, B{
+					重写抽象方法
+				 }, C{
+					重写抽象方法
+				 };
+			  }
+	* 枚举作用：枚举类，是对构造方法私有化，且在类内部实例化对象的类。
+				这样，就只能取枚举类中定义好的实例了，不能自己创建实例。
+				保证了取到的值的范围性。
+8、枚举的api查看
+	* Enum<E extends Enum<E>>：枚举类
+			-  String name()：返回此枚举常量的名称。
+			-  int ordinal()：返回枚举常量的序数（它在枚举声明中的位置，其中初始常量序数为零）。 
+			-  static valueOf(Class<T> enumType, String name)：返回带指定名称的指定枚举类型的枚举常量。 (获取枚举常量)
+
+			在api中没有的两个方法，在编译时自动生成的两个方法：
+			- valueOf(String name):转换成枚举常量（根据名称，获取枚举常量）
+			- values(): 获得所有枚举常量数组
+
+	* 练习：枚举常量，枚举常量下标，枚举常量名称之间的转换(知道其中一个 ，获取另外两个)(code/Enum/src/junitenum/test/EnumDome.java)
+9、静态导入（了解）
+	* 可以在代码里面，直接使用静态导入方式，导入静态方法或常量
+	* import static xx.xx.xx;
+	* import static java.lang.System.out;
+	* import static java.util.Arrays.sort;
+10、自动拆装箱
+	* 装箱：把基本数据类型装换成包装类
+	* 拆箱：把包装类转换成基本数据类型
+	* 自动装箱：Integer i=10;//自动变成包装类，相当于：Integer i=new Integer(10);
+	* 自动拆箱：int m=i;//自动变成基本数据类型，相当于：int m=i.intValue();
+	* jdk是向下兼容的，1.4的代码在1.6里面可以使用，但是1.6的代码在1.4里面不一定能用
+	* 练习：向下兼容
+		== 执行的结果是会调用  doSomething(double m)
+		== 首先在jdk1.4里面肯定调用这个方法，如果调用下面的方法，需要类型转换，但是jdk1.4不能实现自动拆装箱
+		== 由于jdk是向下兼容，所以，在jdk1.4调用这个方法，在jdk5.0里面还是会调用这个方法
+			public static void main(String[] args) {
+				doSomething(10);
+
+			}
+			
+			public static void doSomething(double m) {
+				System.out.println("double......");
+			}
+			
+			public static void doSomething(Integer a){
+				System.out.println("integer.....");
+			}
+11、增强for
+	* 语法：for(值的类型 遍历出来的值 : 要遍历的集合) {}
+	* 要使用增强for，要实现Iterable接口：
+		- 数组，list、set集合，实现了Iterable接口，所以可以使用增强for
+		- map集合没有实现Iterable接口，所以不能使用增强for
+	* 增强for出现的目的：替代迭代器
+		- 增强for底层就是迭代器实现的
+12、可变参数
+	* 如果实现的多个方法，这些方法里面逻辑基本相同，唯一不同的是传递的参数的个数，可以使用可变参数
+	* 语法：数据类型...名称
+	* 相当于一个数组，这个数组存储传递过来的参数
+	* 注意的地方
+		（1）可变参数需要写在方法的参数列表中，不能单独定义
+		（2）在方法的参数列表中只能有一个可变参数
+		（3）方法的参数列表中的可变参数，必须放在参数最后
+			- add1(int a,int...nums){}
+13、反射有关的类查询：
+	java.lang.Class<T>:描述class文件的类
+		* static Class<?> forName(String className):返回与带有给定字符串名的类或接口相关联的 Class 对象。要带上包名 
+		* T newInstance() ： 创建此 Class 对象所表示的类的一个新实例。相当于使用空参数方法创建实例
+		* Constructor<?>[] getConstructors()： 返回一个包含某些 Constructor 对象的数组，这些对象反映此 Class 对象所表示的类的所有公共构造方法。就是获得所有构造方法。使用较少
+		* Constructor<T> getConstructor(Class<?>... parameterTypes)：返回一个 Constructor 对象，它反映此 Class 对象所表示的类的指定公共构造方法。 
+			传递的参数是构造函数的参数类型，用.calss的形式传递
+		* Field[] getDeclaredFields(): 返回 Field 对象的一个数组，这些对象反映此 Class 对象所表示的类或接口所声明的所有字段。 比较少用
+		* Field getDeclaredField(String name):返回一个 Field 对象，该对象反映此 Class 对象所表示的类或接口的指定已声明字段。 
+		* Method[] getDeclaredMethods()：返回所有的非构造方法。比较少用
+		* Method getDeclaredMethod(String name, Class<?>... parameterTypes)：返回一个 Method 对象，该对象反映此 Class 对象所表示的类或接口的指定已声明方法。 
+			name:要获取对象的方法的名称
+			parameterTypes:要获取对象的方法参数类型，用.calss的方式传递
+
+	java.lang.reflect.Constructor<T>:提供关于类的单个构造方法的信息以及对它的访问权限。 
+		* T newInstance(Object... initargs) ：使用此 Constructor 对象表示的构造方法来创建该构造方法的声明类的新实例，并用指定的初始化参数初始化该实例。 
+			相当于使用有参数的构造方法创建实例
+
+	java.lang.reflect.AccessibleObject: 是 Field、Method 和 Constructor 对象的基类
+		* void setAccessible(boolean flag)：将此对象的 accessible 标志设置为指示的布尔值。就是设置此对象是否允许访问
+			 
+		|- java.lang.reflect.Field:提供有关类或接口的单个字段的信息，以及对它的动态访问权限。反射的字段可能是一个类（静态）字段或实例字段。 
+				*  void set(Object obj, Object value): 将指定对象变量上此 Field 对象表示的字段设置为指定的新值。 
+					obj:此Feild表示的字段所在的类的实例
+					value:此Feild表示的字段的新值
+					如果这个字段是静态的，obj可以为null
+
+		|-java.lang.reflect.Method:提供关于类或接口上单独某个方法（以及如何访问该方法）的信息。所反映的方法可能是类方法或实例方法（包括抽象方法）。 
+			* Object invoke(Object obj, Object... args):对带有指定参数的指定对象调用由此 Method 对象表示的底层方法。
+				obj:此Method表示的函数所在的类的实例
+				args:此Method表示的函数的参数
+
+14、反射的原理（********理解********）
+	* 应用在一些通用性比较高的代码 中
+	* 后面学到的框架，大多数都是使用反射来实现的
+
+	* 在框架开发中，都是基于配置文件开发
+		** 在配置文件中配置了类，可以通过反射得到类中的 所有内容，可以让类中的某个方法来执行
+
+	* 类中的所有内容：属性、没有参数的构造方法、有参数的构造方法、普通方法
+	
+	* 画图分析反射的原理
+		** 首先需要把java文件保存到本地硬盘 .java
+		** 编译java文件，成.class文件
+		** 使用jvm，把class文件通过类加载加载到内存中
+		** 万事万物都是对象，class文件在内存中使用Class类表示
+
+		** 当使用反射时候，首先需要获取到Class类，得到了这个类之后，就可以得到class文件里面的所有内容
+			- 包含属性  构造方法 普通方法
+		** 属性通过一个类 Filed描述
+		** 构造方法通过一个类 Constructor描述
+		** 普通方法通过一个类 Method描述
+
+	* 获得class类的方式：
+		(1)类名.class
+		(2)对象.getClass()
+		(3)class类的静态方法：Class.forName("类名，带上包名")，如：Class.forName("cn.itcast.test09.Person");
+			- 这个方式用的最多
+
+15、使用反射操作类里面的无参构造方法(code/fanshe/src/cn/li/test02/Test02.java)
+	* 对(code/fanshe/src/cn/li/test01/Person.java)里面的Person类进行操作
+	(1)使用Class.forName("类名，带上包名")，获得Person的Calss对象
+	(2)通过Calss对象的newInstance()方法，获得Person对象实例。
+		这一步就是通过反射，使用Person中无参数的构造方法。
+		相当于new Person();
+
+16、使用反射操作类里面的有参构造方法(code/fanshe/src/cn/li/test02/Test03.java)
+	* 对(code/fanshe/src/cn/li/test01/Person.java)里面的Person类进行操作
+	(1)使用Class.forName("类名，带上包名")，获得Person的Calss对象
+	(2)使用Calss对象的getConstructor(Class<?>... parameterTypes)方法，获取有参数构造方法的对象。传递构造函数的参数列表里面的参数类型，参数类型用.calss的方式传递
+	(3)使用Constructor对象的newInstance(Object... initargs)方法，获取Person的实例，传递Person的构造函数的参数。
+		相当于：new Person("aa","12");
+
+17、使用反射操作属性(code/fanshe/src/cn/li/test02/Test04.java)
+	* 对(code/fanshe/src/cn/li/test01/Person.java)里面的Person类进行操作
+	(1)使用Class.forName("类名，带上包名")，获得Person的Calss对象
+	(2)通过Calss对象的newInstance()方法，获得Person对象实例。
+	(3)通过Calss对象的getDeclaredField(String name)获取age属性的对象，Field。
+		如果age属性是私有的，可以使用AccessibleObject的setAccessible(boolean flag)方法，把属性设置为允许访问
+	(4)通过Field对象的set(Object obj, Object value)，设置age属性的值。传递Person的实例和age属性的新值。
+		相当于:person实例.age=value;
+
+18、使用泛型操作普通方法(code/fanshe/src/cn/li/test02/Test05.java)
+	* 对(code/fanshe/src/cn/li/test01/Person.java)里面的Person类进行操作
+	(1)使用Class.forName("类名，带上包名")，获得Person的Calss对象
+	(2)通过Calss对象的newInstance()方法，获得Person对象实例。
+	(3)通过Calss对象的getDeclaredMethod(String name, Class<?>... parameterTypes)方法，获得setName()方法的对象实例，Method
+		- getDeclaredMethod("setName",String.class)
+		- 如果setName()是私有的，可以使用AccessibleObject的setAccessible(boolean flag)方法，把方法设置为允许访问
+	(4)通过Method的invoke(Object obj, Object... args)方法，让setName方法执行。传递Person的实例和setName方法的参数
+		相当于：Person实例.setName("lisi");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

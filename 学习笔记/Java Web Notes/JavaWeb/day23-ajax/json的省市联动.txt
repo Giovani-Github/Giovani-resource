@@ -1,0 +1,47 @@
+1. dao：提供两个方法，
+  * 一个是查询所有省, 返回一个List<Province>
+  * 通过省名称查询指定的市，返回一个List<City>
+
+2. servlet：
+	ProvinceServlet:
+	  * 一个把所有省转换成json，发送给客户端
+  CityServlet:
+		* 通过获取省名称这个参数，然后查询该省下的所有市，转换成json，发送给客户端
+
+3. ajax1.jsp
+  * 页面加载完成后：访问servlet，得到所有省，然后显示在<select id="province">
+  * 页面加载完成后：给<select id="province">添加onchange事件监听，获取选择的省名称，访问servlet，得到所有市，显示在<select id="city">中
+
+4.domain:
+	Province:
+		int pid
+		String name
+		List<City> CityList;//与city关联，一方关联多方
+	City：
+		int cid;
+		String name;
+		Province province;//多方关联一方。对应数据库表中的外键pid
+5.china.sql
+
+
+
+code/day23_6
+
+===========================
+
+一行记录对应多个对象时，需要使用Map来生成多个对象
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

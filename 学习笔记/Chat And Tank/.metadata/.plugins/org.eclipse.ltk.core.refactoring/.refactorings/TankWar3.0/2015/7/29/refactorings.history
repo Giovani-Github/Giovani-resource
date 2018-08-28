@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring accessors="true" comment="Delete 8 elements from project &apos;TankWar3.0&apos;&#x0D;&#x0A;- Original project: &apos;TankWar3.0&apos;&#x0D;&#x0A;- Original elements:&#x0D;&#x0A;     missileD.gif&#x0D;&#x0A;     missileL.gif&#x0D;&#x0A;     missileLD.gif&#x0D;&#x0A;     missileLU.gif&#x0D;&#x0A;     missileR.gif&#x0D;&#x0A;     missileRD.gif&#x0D;&#x0A;     missileRU.gif&#x0D;&#x0A;     MissileU.gif" description="Delete elements" element1="src/imgs/missileRU.gif" element2="src/imgs/missileLD.gif" element3="src/imgs/missileL.gif" element4="src/imgs/missileLU.gif" element5="src/imgs/missileR.gif" element6="src/imgs/missileRD.gif" element7="src/imgs/MissileU.gif" element8="src/imgs/missileD.gif" elements="0" flags="589830" id="org.eclipse.jdt.ui.delete" resources="8" stamp="1436682050865" subPackages="false" version="1.0"/>
+</session>

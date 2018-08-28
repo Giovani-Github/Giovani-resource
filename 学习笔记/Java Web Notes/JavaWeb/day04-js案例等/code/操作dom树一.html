@@ -1,0 +1,44 @@
+<html>
+	<head>
+		<title>Document</title>
+		<style type="text/css">
+			#div1 {
+				width:200px;
+				height:150px;
+				border:2px solid red;
+			}
+
+			#div2 {
+				width:200px;
+				height:150px;
+				border:4px dashed blue;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="div1">
+			<ul id="ul1">
+				<li>1</li>
+				<li>2</li>
+				<li>3</li>
+			</ul>
+		</div>
+
+		<div id="div2">
+		</div>
+
+		<input type="button" value="add" onclick="add();"/>
+
+	</body>
+	<script type="text/javascript">
+		function add() {
+			//获得div2
+			var div2 = document.getElementById("div2");
+			//获得ul
+			var ul1 = document.getElementById("ul1");
+			//把ul作为子节点添加到div2末尾
+			div2.appendChild(ul1);
+
+		}
+	</script>
+</html>

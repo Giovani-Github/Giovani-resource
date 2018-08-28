@@ -1,0 +1,150 @@
+1.工厂方式
+
+	<script type="text/javascript"> 
+
+		function createObject(name){ 
+
+					 var p = new Object(); 
+
+					 p.name=name; 
+
+					 p.say = function(){alert(p.name+'ff');} 
+
+					 return p; 
+
+		} 
+
+		var p1 = createObject("p1"); 
+
+		var p2 = createObject("p2"); 
+
+		alert(p1.name+" "+p2.name); 
+
+		p1.say();p2.say(); 
+
+		alert(p1.say==p2.say); //false 
+
+	</script>
+
+	问题：每创建一个对象，对象的方法都会新创建一个，浪费资源
+
+2.构造函数方式
+
+	<script type="text/javascript"> 
+		//首字母大写，约定俗成的规矩
+		function Person(name){ 
+
+		this.name = name; 
+
+		this.say = function(){ 
+
+		alert("I am "+this.name); 
+
+		} 
+
+		} 
+
+		var p1 = new Person("wang"); 
+
+		var p2 = new Person("li"); 
+
+		p1.say(); 
+
+		p2.say(); 
+
+		alert(p1.say==p2.say); //false 
+
+	</script>
+
+	问题：创建对象时比工厂方法更于理解。和工厂方法一样，对象的方法都会新创建一个，浪费资源.
+
+3.原型方式
+
+	function Person(){}
+
+	Person.prototype.name="";
+
+	Person.prototype.say=function(){
+			alert("I am"+this.name);
+
+	}
+
+	var p1=new Person();
+
+	var p2=new Person();
+
+	alert(p1.say==p2.say);//true
+
+	问题：无法在构造方法中传递参数，所有对象共享属性。
+
+	优点：对象共用方法，节约资源的。
+
+4.构造方法+原型方式
+
+	function Person(name){
+			this.name=name;
+
+	}
+
+	Person.prototype.say=function(){
+		 alert("I am"+this.name);
+
+	}
+
+	var p1=new Person("wang");
+
+	var p2=new Person("li");
+
+	p1.say();
+
+	p2.say();
+
+	alert(p1.say==p2.say);//true
+
+	优点：解决了前面提到的问题
+
+	问题：封装不够完美。
+
+5。动态原型方式
+
+	function Person(name){
+		 this.name=name;
+
+		if(Person.prototype.say==undefined){
+					Person.prototype.say=function(){
+					alert("I am "+this.name);
+
+				}
+
+		 }
+
+	}
+
+	var p1=new Person("wang");
+
+	var p2=new Person("li");
+
+	p1.say();
+
+	p2.say();
+
+	alert(p1.say==p2.say);//true
+
+	结论：一种完美的解决方案。
+
+6.对象的创建--JSON
+
+	var person={};
+
+	var girl={
+
+			 name:"miss wang",
+
+			 age:20,
+
+			 show=function(){
+						alert("my name is "+this.name);
+
+			 }
+
+	}

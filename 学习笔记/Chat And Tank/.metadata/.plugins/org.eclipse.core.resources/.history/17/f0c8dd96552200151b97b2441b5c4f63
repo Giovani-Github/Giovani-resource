@@ -1,0 +1,40 @@
+import java.awt.Graphics;
+import java.awt.Rectangle;
+
+/**
+ * 墙类
+ * @author 李庆旺
+ *
+ */
+public class Wall {
+	//出现的位置和大小
+	private int x, y, w, h;
+	//持有大管家引用
+	TankClient tc;
+	
+	/**
+	 * 根据坐标x， y，大小w，h。和大管家引用构造一个墙对象
+	 * @param x
+	 * @param y
+	 * @param w
+	 * @param h
+	 * @param tc
+	 */
+	public Wall(int x, int y, int w, int h, TankClient tc) {
+		this.x = x;
+		this.y = y;
+		this.w = w;
+		this.h = h;
+		this.tc = tc;
+	}
+	
+	public void draw(Graphics g) {
+		g.fillRect(x, y, w, h);
+	}
+	
+	//拿到墙所在的位置
+	public Rectangle getRect() {
+		return new Rectangle(x, y, w, h);
+	}
+}
+

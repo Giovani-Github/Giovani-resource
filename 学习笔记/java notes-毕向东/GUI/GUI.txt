@@ -1,0 +1,204 @@
+GUI的包有两个
+java.awt:
+	重量级，依赖平台
+	在这下面有很多类：
+
+	Object:
+		--|Graphics:是所有图形上下文的抽象基类，允许应用程序在组件（已经在各种设备上实现）以及闭屏图像上进行绘制。(画笔) 
+			setColor(Color c):将此图形上下文的当前颜色设置为指定颜色。 
+			fillOval(int x, int y, int width, int height):使用当前颜色填充外接指定矩形框的椭圆。
+								x - 要填充椭圆的左上角的 x 坐标。
+								y - 要填充椭圆的左上角的 y 坐标。
+								width - 要填充椭圆的宽度。
+								height - 要填充椭圆的高度。
+
+		--|Color:颜色
+		--|Image：抽象类 Image 是表示图形图像的所有类的超类。必须以特定于平台的方式获取图像。 
+			Graphics getGraphics()：创建供绘制闭屏图像使用的图形上下文。 （拿到这张图片的画笔）
+			void fillRect(int x, int y, int width, int height)：填充指定的矩形 
+			boolean drawImage(Image img, int x, int y, ImageObserver observer)：绘制指定图像中当前可用的图像。
+									img - 要绘制的指定图像。如果 img 为 null，则此方法不执行任何操作。
+									x - x 坐标。
+									y - y 坐标。
+									observer - 转换了更多图像时要通知的对象。
+
+
+		--|Rectangle:Rectangle 指定坐标空间中的一个区域，通过坐标空间中 Rectangle 对象左上方的点 (x,y)、宽度和高度可以定义这个区域。 (区域碰撞检测)
+			 boolean intersects(Rectangle r)：确定此 Rectangle 是否与指定的 Rectangle 相交。 （两个区域是否相交）
+
+		--|Toolkit:操作系统里数据的工具类，比如拿到图片来自定义GUI程序的显示效果
+			static Toolkit getDefaultToolkit()：获取默认工具包 
+
+	Component:组件
+		setVisible(boolean b):根据b的值设置显示组件
+		setSize(int wideth, int height):设置长宽，左边的是横的，右边的是竖的	
+		setLocation(int x, int y):将组件移到新的位置
+		setBounds(int x, int y, int width, int height):移动组件并调整其大小。由 x 和 y 指定左上角的新位置，由 width 和 height 指定新的大小。 
+		addKeyListener(KeyListener l):添加指定的按键侦听器，以接收发自此组件的按键事件。 
+		addMouseListener(MouseListener l):添加指定的鼠标侦听器，以接收发自此组件的鼠标事件。 
+		void repaint():重绘此组件。此方法会自动调用update方法
+		void update(Graphics g)；更新组件。 此方法会自动调用paint方法
+		void paint(Graphics g)：绘制此组件。生成组件时自动调用 
+		Image createImage(int width, int height);创建一幅用于双缓冲的、可在屏幕外绘制的图像。 
+
+
+		--|Button 按钮
+			addActionListener(ActionListener l):添加指定的动作侦听器，以接收发自此按钮的动作事件。
+
+		--|Label:是一个可在容器中放置文本的组件。一个标签只显示一行只读文本。文本可由应用程序更改，但是用户不能直接对其进行编辑。
+			setText(String text)：将此标签的文本设置为指定的文本
+
+		--|Checkbox 副选框
+		--|TextComponent 文本组件
+			getText():返回此文本组件表示的文本。	
+			setText(String t):将此文本组件显示的文本设置为指定文本。
+
+			--|TextArea:显示文本的多行区域。可以将它设置为允许编辑或只读。
+				append(String str):将给定文本追加到文本区的当前文本。
+
+			--|TextField:允许编辑单行文本的文本组件。
+
+		--|Container 容器，是一个特殊的组件，可通过add方法添加其他组件***
+			add(Containet c):添加组件
+			void print(Graphics g):打印容器。 该方法在每次启用窗口时被自动调用，可通过复写该方法的形式，往容器里绘制图形
+			setLayout(LayoutManager lm):设置布局管理器
+			
+			--|Window 窗口
+				addWindowListener(WindowListener l)：添加指定的窗口侦听器，以从此窗口接收窗口事件
+				pack();调整此窗口的大小，以适合其子组件的首选大小和布局。
+
+				--|Frame 窗体
+					setMenuBar(MenuBar mb)：将此窗体的菜单栏设置为指定的菜单栏。
+					void setTitle(String title):将此窗体的标题设置为指定的字符串。 
+
+				--|Dialog 对话框
+					Dialog(Frame owner,String title,boolean modal)构造一个最初不可见的 Dialog，
+					它带有指定的所有者 Frame、标题和模式（true就是对话框不关闭，所属的Frame不能操作，false相反）。
+
+					--|FileDialog 文件对话框,显示一个对话框窗口，用户可以从中选择文件。
+						FileDialog(Frame parent, String title, int mode):mode是模式，可以是 FileDialog.LOAD 或 FileDialog.SAVE 
+												LOAD:打开文件模式，SAVE:保存文件模式，不指定模式，默认是打开
+
+						getFile()：获取此文件对话框的选定文件。
+						getDirectory()：获取此文件对话框的目录。
+
+			--|Panel 面板
+
+	
+	MenuComponent:抽象类 MenuComponent 是所有与菜单相关的组件的超类。
+			在这一方面，类 MenuComponent 与 AWT 组件的抽象超类 Component 相似。
+
+		--|MenuBar:菜单栏
+			add(Menu m)：将指定的菜单添加到菜单栏。
+
+		--|MenuItem：菜单中的所有项必须属于类 MenuItem 或其子类之一。（菜单项）
+			addActionListener(ActionListener l):添加指定的动作侦听器，以从此菜单项接收动作事件	
+
+			--|Menu：Menu 对象是从菜单栏部署的下拉式菜单组件。（菜单）
+				add(MenuItem mi):将指定的菜单项添加到此菜单。
+
+
+
+
+	布局管理器：
+		容器中的组件的排放方式，就是布局
+		LayoutManager接口：
+			--|FlowLayout(流式布局管理器)
+				*从左到右循序居中排列
+				*Panel默认的布局管理器
+
+			--|BorderLayout（边界布局管理器）
+				 *东南西北中
+				 *Frame默认的布局管理器
+				*如果没有指定方向，会默认全局居中填充
+
+			--|GridLayout(网格布局管理器)
+				 *规则的矩阵
+				*跟计算器的123一样
+
+			--|GardLayout（卡片布局管理器）
+				*选项卡
+
+			--|GridBagLayout（网格包布局管理器）
+				*非规则的矩阵
+
+javax.swing： 
+	轻量级，不依赖平台，可移植
+
+
+
+ps:通过关闭窗体示例了解到，想要知道哪个组件具备什么样的特有监听器。需要查看该组件对象的功能
+
+
+事件监听机制的特点：
+	1，事件源。
+	2，事件。
+	3，监听器。
+	4，事件处理。
+
+	事件源：就是awt包或者swing包中的那些图形界面组件。
+		
+	事件：每一个事件源都有自己特有的对应事件和共性事件。
+
+	监听器：将可以触发某一个事件的动作（不只一个动作）都已经封装到了监听器中。
+
+	以上三者，在java中都已经定义好了。
+	直接获取其对象来用就可以了。
+
+	我们要做的事情是，就是对产生的动作进行处理。
+
+EventListener(util包中)：所有事件监听器接口必须扩展的标记接口
+	--|WindowListener（awt.event包中）：用于接收窗口事件的监听器接口
+			windowActivated(WindowEvent e)： 将 Window 设置为活动 Window 时调用。
+			windowClosed(WindowEvent e) ： 因对窗口调用 dispose 而将其关闭时调用。
+			windowClosing(WindowEvent e) :用户试图从窗口的系统菜单中关闭窗口时调用。
+			windowDeactivated(WindowEvent e): 当 Window 不再是活动 Window 时调用。
+			windowDeiconified(WindowEvent e):窗口从最小化状态变为正常状态时调用
+			windowIconified(WindowEvent e):窗口从正常状态变为最小化状态时调用
+			windowOpened(WindowEvent e):窗口首次变为可见时调用。
+
+
+		--|WindowAdapter（awt.event包中）：接收窗口事件的适配器抽象类，这里覆盖的方法都是空的，方便创建监听器对象，
+					只覆盖需要的方法，可创建自己的类继承它，覆盖需要的方法，这就是适配器，方法超过三个的
+					事件监听器接口都有适配器
+
+	--|ActionListener（awt.event包）:用于接收操作事件的侦听器接口。
+		actionPerformed(ActionEvent e):发生操作时调用。
+
+	--|MouseListener(awt.event包中)：鼠标事件监听器
+		mouseClicked(MouseEvent e)：鼠标按键在组件上单击（按下并释放）时调用。 
+		mouseEntered(MouseEvent e)：鼠标进入到组件上时调用。 
+		mouseExited(MouseEvent e):鼠标离开组件时调用。 
+		mousePressed(MouseEvent e):鼠标按键在组件上按下时调用。 
+		mouseReleased(MouseEvent e):鼠标按钮在组件上释放时调用。 
+		
+		--|MouseAdapter(MouseEvent e):接收鼠标事件的抽象适配器类。
+
+	--|KeyListener(awt.event包中)：键盘事件监听器
+		keyPressed(KeyEvent e)：按下某个键时调用此方法。 
+		keyReleased(KeyEvent e)：释放某个键时调用此方法。 
+		keyTyped(KeyEvent e)：键入某个键时调用此方法。 
+		
+		--|KeyAdapter(KeyEvent e):接收键盘事件的抽象适配器类
+
+		
+
+EventObject（util包中）：所有事件的最顶级类
+	--|AWTEvent（awt包中）：所有awt包的事件根类
+		--|ComponentEvent（awt.event包中）：指示组件被移动、大小被更改或可见性被更改的低级别事件（它也是其他组件级事件的根类）
+			--|WindowEvent（awt.event包中）：指示窗口状态改变的低级别事件。
+				当打开、关闭、激活、停用、图标化或取消图标化 Window 对象时，
+				或者焦点转移到 Window 内或移出 Window 时，由 Window 对象生成此低级别事件。
+			--|InputEvent（awt.event包中）:所有组件级别输入事件的根事件类。
+				isControlDown()：判断Ctrl是否被按下
+				consume():使此事件无效
+				
+				--|MouseEvent（awt.event包中）；指示组件中发生鼠标动作的事件。
+					getClickCount():返回与此事件关联的鼠标单击次数。
+
+				--|KeyEvent（awt.event包中）：指示组件中发生键击的事件。
+					getKeyChar():返回与此事件中按下的键字符
+					getKeyCode()：返回与此事件中的键关联的整数 keyCode。
+					getKeyText(int keyCode)：返回描述 keyCode 的 String，如 "HOME"、"F1" 或 "A"。	
+
+	--|ActionEvent（awt.event包）:操作事件对象

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<person>
+	<p1>
+		<name>zhangshan</name>
+		<age>20</age>		
+	</p1>
+	<p2>
+		<name>lisi</name>
+		<age>25</age>
+	</p2>
+</person>

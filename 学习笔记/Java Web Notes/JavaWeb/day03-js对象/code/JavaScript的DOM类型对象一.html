@@ -1,0 +1,37 @@
+<html>
+	<head>
+		<title>Document</title>
+		<style type="text/css">
+
+		</style>
+	</head>
+	<body>
+		<input tyoe="text" id="inputId" name="name1" value="AAA" /> <br/>
+		<input tyoe="text" id="inputId" name="name1" value="BBB" /> <br/>
+		<input tyoe="text" id="inputId" name="name1" value="CCC" /> <br/>	
+		<input tyoe="text" id="inputId" name="name1" value="DDD" /> <br/>
+	</body>
+	<script type="text/javascript">
+		//write()
+		document.write("write" + "<br/>");
+
+		//getElementById()
+		/*var html = document.getElementById("inputId");
+		alert(html.value);
+		html.value="bbbb";*/
+
+		//getElementsByName()
+		/*var names = document.getElementsByName("name1");
+		alert(names.length);
+		for(var a=0; a<names.length; a++) {
+			alert(names[a].value);
+		}*/
+
+		//getElementsTogName()
+		var tags = document.getElementsByTagName("input");
+		alert(tags.length);
+		for(var a=0; a<tags.length; a++) {
+			alert(tags[a].value);
+		}
+	</script>
+</html>

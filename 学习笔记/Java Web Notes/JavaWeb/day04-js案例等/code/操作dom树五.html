@@ -1,0 +1,32 @@
+<html>
+	<head>
+		<title>Document</title>
+		<style type="text/css">
+
+		</style>
+	</head>
+	<body>
+		<ul id="ul1">
+			<li id="li1">111</li>
+			<li id="li2">222</li>
+			<li id="li3">333</li>
+		</ul>
+
+		<div id="div1">
+		</div>		
+
+		<input type="button" value="copy" onclick="copy();"/>
+	</body>
+	<script type="text/javascript">
+		function copy() {
+			//获取要复制的节点
+			var ul1 = document.getElementById("ul1");
+			//获取要粘贴到的节点
+			var div1 = document.getElementById("div1");
+			//复制ul1节点
+			var copyUl = ul1.cloneNode(true);
+			//将复制的节点粘贴到div1
+			div1.appendChild(copyUl);
+		}
+	</script>
+</html>

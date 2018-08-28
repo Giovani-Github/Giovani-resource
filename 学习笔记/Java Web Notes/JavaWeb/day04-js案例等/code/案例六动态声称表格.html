@@ -1,0 +1,42 @@
+<html>
+	<head>
+		<title>Document</title>
+		<style type="text/css">
+
+		</style>
+	</head>
+	<body>
+		行:<input id="h" type="text"/>
+		列:<input id="l" type="text"/>
+		<br/> <input type="button" value="生成" onclick="a();"/>
+
+		<div id="div">
+		</div>
+	</body>
+	<script type="text/javascript">
+		//a()
+		function a() {
+			//获取行和列
+			var h = document.getElementById("h").value;
+			var l = document.getElementById("l").value;
+
+			//表格
+			var tab = "<table border='1'>";
+			//循环行
+			for(var i=1; i<=h; i++) {
+				tab += "<tr>";
+				//循环列
+				for(var j=1; j<=l; j++) {
+					tab += "<td>aaa</td>";
+				}
+				tab += "</tr>";
+			}
+			tab += "</table>";
+
+			//获取div
+			var div = document.getElementById("div");
+			//把table代码放进div里面
+			div.innerHTML = tab;
+		}
+	</script>
+</html>

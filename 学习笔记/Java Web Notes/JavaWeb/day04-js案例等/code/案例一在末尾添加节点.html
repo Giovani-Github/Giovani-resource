@@ -1,0 +1,32 @@
+<html>
+	<head>
+		<title>Document</title>
+		<style type="text/css">
+
+		</style>
+	</head>
+	<body>
+		<ul id="ul">
+			<li>11</li>
+			<li>22</li>
+			<li>33</li>
+			<li>44</li>
+		</ul>
+		<br/>
+		<input type="button" value="添加节点" onclick="add();">
+	</body>
+	<script type="text/javascript">
+		function add() {
+			//获取ul标签
+			var ul=document.getElementById("ul");
+			//创建li标签
+			var li=document.createElement("li");
+			//创建文本
+			var text=document.createTextNode("55");
+			//把文本添加到li下面 使用node节点对象的方法
+			li.appendChild(text);
+			//把li添加到ul末尾
+			ul.appendChild(li);
+		}
+	</script>
+</html>

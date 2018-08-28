@@ -1,0 +1,32 @@
+<html>
+	<head>
+		<title>Document</title>
+		<style type="text/css">
+
+		</style>
+	</head>
+	<body>
+		<input type="button" name="input" id="input" value="inputvalue"/>
+		<ul id="ul">
+			<li>aa</li>
+			<li>bb</li>
+			<li>cc</li>
+		</ul>
+	</body>
+	<script type="text/javascript">
+		var inputElement=document.getElementById("input");
+		//获取属性值
+		alert(inputElement.getAttribute("name"));
+		//设置属性值
+		inputElement.setAttribute("name","na");
+		alert(inputElement.getAttribute("name"));
+		//删除属性
+		inputElement.removeAttribute("name");
+		alert(inputElement.getAttribute("name"));
+
+		//获取标签下面的全部子标签
+		var ul=document.getElementById("ul");
+		var lis = ul.getElementsByTagName("li");
+		alert(lis.length);
+	</script>
+</html>

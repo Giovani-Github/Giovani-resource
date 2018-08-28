@@ -1,0 +1,5 @@
+
+public class Blood {
+	private int x, y, w, h;
+	private TankClient tc;
+}

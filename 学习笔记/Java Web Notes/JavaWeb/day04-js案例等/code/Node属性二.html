@@ -1,0 +1,31 @@
+<html>
+	<head>
+		<title>Document</title>
+		<style type="text/css">
+
+		</style>
+	</head>
+	<body>
+		<ul id="ulid"><li id="li1">是是是</li><li id="li2">ddd</li><li id="li3">发发发</li>
+		</ul>
+	</body>
+	<script type="text/javascript">
+		//获取父节点
+		var li = document.getElementById("li2");
+		var ul = li.parentNode;
+		alert(ul.id);
+
+		//获取第一个子节点
+		//alert(ul.firstChild.id);
+		//获取最后一个子节点
+		//alert(ul.lastChild.id);
+
+		//下一个兄弟节点
+		var li2 = li.nextSibling;
+		alert(li2.getAttribute("id"));
+
+		//上一个兄弟节点
+		//alert(li.previousSibling.name);
+			
+	</script>
+</html>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<person> 
+  <p1 id1="sdfsfs"> 
+    <name>zhangsan</name>  
+    <age>2655</age>  
+    <sex>nan</sex> 
+  </p1>  
+  <p1> 
+    <name>lisi</name>  
+    <age>25</age> 
+  </p1> 
+</person>

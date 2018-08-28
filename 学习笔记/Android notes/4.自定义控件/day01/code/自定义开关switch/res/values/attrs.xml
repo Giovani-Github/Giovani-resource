@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 自定义属性 -->
+    <!-- attr name:属性名, format:类型, reference: 引用类型，可以是资源id -->
+    <declare-styleable name="MeSwitch">
+        <attr name="slide" format="reference" /> <!-- 滑块图片 -->
+        <attr name="checked" format="boolean" /> <!-- 开关状态 -->
+    </declare-styleable>
+
+</resources>

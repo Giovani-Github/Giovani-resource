@@ -1,0 +1,120 @@
+<html>
+	<head>
+		<title>Document</title>
+		<style type="text/css">
+			#select1 {
+				width:100px;
+				height:100px;
+			}
+			#select2 {
+				width:100px;
+				height:100px;
+			}
+
+			#s1 {
+				float:left;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="s1">
+			<div>
+				<select id="select1" multiple="multiple">
+					<option>a</option>
+					<option>b</option>
+					<option>c</option>
+					<option>d</option>
+				</select>
+			</div>
+
+			<div>
+				<input type="button" value="添加选择到右边" onclick="selRight();"/> <br/>
+				<input type="button" value="添加全部到右边" onclick="allRight();"/>
+			</div>
+		</div>
+
+		<div id="s2">
+			<div>
+				<select id="select2" multiple="multiple">
+					<option>e</option>
+				</select>
+			</div>
+
+			<div>
+				<input type="button" value="添加选择到左边" onclick="selLeft();"/> <br/>
+				<input type="button" value="添加全部到左边" onclick="allLeft();"/>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		//selRigth()
+		function selRight() {
+			//获取select1
+			var select1 = document.getElementById("select1");
+			//获取select2
+			var select2 = document.getElementById("select2");
+			//获取select1的全部子标签
+			var selectones = select1.getElementsByTagName("option");
+			//遍历selectones数组
+			for (var i=0; i<selectones.length; i++) {
+				//判断选项是否被选中
+				if(selectones[i].selected == true) {
+					//如果选中就添加到左边
+					select2.appendChild(selectones[i]);
+					/*选中之后，数组会变短。相当于一个队列，其中一个队员撤走时，后面的队员会补充上来取代撤走的队员。如果这时i值没有改变，继续递增，那么刚补充上来的这个队员就会被跳过没循环到。因为撤走的队员是循环过的，然而补充上来的队员恰好取代撤走的队员，所以会循环不到。造成程序不正常运行。所以这时候需要改变i值，如果一个队员撤走了，就需要回到开始的地方重新循环一次。*/
+					i--;
+				}
+			}
+		}
+
+		//allRight()
+		function allRight() {
+			//获取select1
+			var select1 = document.getElementById("select1");
+			//获取select2
+			var select2 = document.getElementById("select2");
+			//获取select1的全部子标签
+			var selectones = select1.getElementsByTagName("option");
+			//遍历selectones数组,全部添加到右边
+			for (var i=0; i<selectones.length; i++) {
+				select2.appendChild(selectones[i]);
+				i--;
+			}
+		}
+
+		//selLeft()
+		function selLeft() {
+			//获取select1
+			var select1 = document.getElementById("select1");
+			//获取select2
+			var select2 = document.getElementById("select2");
+			//获取select2的全部子标签
+			var selectones = select2.getElementsByTagName("option");
+			//遍历selectones数组
+			for (var i=0; i<selectones.length; i++) {
+				//判断选项是否被选中
+				if(selectones[i].selected == true) {
+					//如果选中就添加到右边
+					select1.appendChild(selectones[i]);
+					i--;
+				}
+			}
+		}
+
+		//allLeft()
+		function allLeft() {
+			//获取select1
+			var select1 = document.getElementById("select1");
+			//获取select2
+			var select2 = document.getElementById("select2");
+			//获取select2的全部子标签
+			var selectones = select2.getElementsByTagName("option");
+			//遍历selectones数组,全部添加到左边
+			for (var i=0; i<selectones.length; i++) {
+				select1.appendChild(selectones[i]);	
+				i--;
+			}
+		}
+
+	</script>
+</html>

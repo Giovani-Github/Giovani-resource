@@ -1,0 +1,23 @@
+<html>
+	<head>
+		<title>Document</title>
+		<style type="text/css">
+
+		</style>
+	</head>
+	<body>	
+		bbb
+		<a href="c.html">bbb</a> <br/>
+		<input type="button" value="back" onclick="b();"/> <br/>
+		<input type="button" value="forward" onclick="f();"/> <hr/>
+	</body>
+	<script type="text/javascript">
+		document.write(location.href + "<br/>");
+		function b() {
+			history.back();
+		}
+		function f() {
+			history.forward();
+		}
+	</script>
+</html>

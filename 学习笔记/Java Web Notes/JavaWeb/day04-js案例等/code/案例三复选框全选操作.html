@@ -1,0 +1,74 @@
+<html>
+	<head>
+		<title>Document</title>
+		<style type="text/css">
+
+		</style>
+	</head>
+	<body>
+		<input type="checkbox" id="che" onclick="selAllNo();"/>全选/全不选
+		<br/>
+		<input type="checkbox" name="love"/>篮球
+		<input type="checkbox" name="love"/>足球
+		<input type="checkbox" name="love"/>打架
+		<input type="checkbox" name="love"/>把妹
+		<br/>
+		<input type="button" value="全选" onclick="selAll();"/>
+		<input type="button" value="全不选" onclick="selNo();"/>
+		<input type="button" value="反选" onclick="selReplace();"/>
+
+	</body>
+	<script type="text/javascript">
+		//全选方法
+		function selAll() {
+			//获取全部爱好复选框
+			var checks = document.getElementsByName("love");
+			//遍历checks
+			for(var i=0; i<checks.length; i++) {
+				var check = checks[i];
+				//把这个复选框的checked属性改为true，表示选中这个复选框
+				check.checked = true;
+			}
+		}
+
+		//全不选方法
+		function selNo() {
+			//获取全部爱好复选框
+			var checks = document.getElementsByName("love");
+			//遍历checks
+			for(var i=0; i<checks.length; i++) {
+				var check = checks[i];
+				//把这个复选框的checked属性改为false，表示选中这个复选框
+				check.checked = false;
+			}
+		}
+
+		//反选方法
+		function selReplace() {
+			//获取全部爱好复选框
+			var checks = document.getElementsByName("love");
+			//遍历checks
+			for(var i=0; i<checks.length; i++) {
+				var check = checks[i];
+				//判断这个复选框的checked属性值是true还是false，true就设置成false，false就设置成true
+				if(check.checked==true) {
+					check.checked = false;
+				} else {
+					check.checked = true;
+				}
+			}
+		}
+
+		//全选/全不选方法
+		function selAllNo() {
+			//获得自身复选框
+			var che = document.getElementById("che");
+			//判断自身复选框的checked属性，true就全选，false就全不选
+			if(che.checked == true) {
+				selAll();
+			} else {
+				selNo();
+			}
+		}
+	</script>
+</html>

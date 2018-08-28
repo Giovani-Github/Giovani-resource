@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Untitled Document</title>
+		<script type=text/javascript charset=utf-8>
+			
+			//call apply  简单的用法:绑定一些函数 用于传递参数 调用 
+			
+			/*
+			function sum(x , y){
+				return x+y;
+			}
+			function call1(num1 , num2){
+				//this代表的是call1方法
+				//把sum方法绑定到call1方法上，这时调用call1方法相当于调用sum方法
+				return sum.call(this , num1 , num2);
+			}
+			function apply1(num1 , num2){
+				//与call方法相似
+				//不过参数得用数组来传递
+				return sum.apply(this , [num1,num2]);
+			}
+			alert(call1(10 , 20));//相当于调用sum方法
+			alert(apply1(20,40));//相当于调用sum方法
+			*/
+			
+			//扩充作用域
+			
+			/*
+			window.color = 'red';
+			var obj = {color:'blue'};
+			var obj2 = {color:'yellow'};
+			function showColor(){
+				alert(this.color);
+			}
+
+			//把showColor方法绑定在window对象上，并且执行。这时showColor中的this代表的就是window
+			//showColor.call(window);
+			//把showColor方法绑定在obj对象上，并且执行。这时showColor中的this代表的就是obj
+			//showColor.call(obj);
+			*/
+			
+			
+			
+			// call方法的简单模拟与实现
+			
+			//function 方法
+			function test1(a , b){
+				return a+b;
+			}
+			
+			// 自定义的对象
+			function Obj(x, y){
+				this.x = x ; 
+				this.y = y ;
+				return x*y;
+			}
+			
+			var o = new Obj(10 , 20);
+			o.method = test1 ;//临时在o对象中创建一个方法method
+			alert(o.method(o.x , o.y));
+			delete o.method;//用完后删除掉这个临时借用的方法method
+			
+			//alert(test1.call(o,o.x ,o.y));
+			
+			
+			
+			
+			
+			
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

@@ -1,0 +1,4 @@
+
+public class Blood {
+	int x, y, w, h;
+}

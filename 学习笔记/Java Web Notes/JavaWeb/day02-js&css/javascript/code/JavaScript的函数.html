@@ -1,0 +1,33 @@
+<html>
+	<head>
+		<title>Document</title>
+		<style type="text/css">
+
+		</style>
+	</head>
+	<body>
+		<script type="text/javascript">
+			//方式一
+			function add1() {
+				var sum = 5;
+				return sum;//可有可无
+			}
+
+			//方式二
+			var add2 = function(a,b) {
+				var sum = a + b;
+				document.write(sum);
+			}
+
+			//方式三
+			var parament = "a,b";
+			var method = "var sum = a+b; alert(sum);";
+			var add3 = new Function(parament, method);
+
+			//调用
+			document.write(add1() + "<br/>");
+			add2(1,2);
+			add3(3,2);
+		</script>
+	</body>
+</html>

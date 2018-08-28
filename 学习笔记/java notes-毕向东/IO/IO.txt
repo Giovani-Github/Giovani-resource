@@ -1,0 +1,391 @@
+
+字符流和字节流：
+
+字节流两个基类：
+InputStream（获取）   OutputStream（写入）
+
+
+字符流两个基类：
+Reader（获取） Writer（写入）
+
+先学习一下字符流的特点。
+
+既然IO流是用于操作数据的，
+那么数据的最常见体现形式是：文件。
+
+那么先以操作文件为主来演示。
+
+需求:在硬盘上，创建一个文件并写入一些文字数据。
+
+找到一个专门用于操作文件的Writer子类对象。FileWriter。  后缀名是父类名。 前缀名是该流对象的功能。
+
+	//创建一个FileWriter对象。该对象一被初始化就必须要明确被操作的文件。
+	//而且该文件会被创建到指定目录下。如果该目录下已有同名文件，将被覆盖。
+	//其实该步就是在明确数据要存放的目的地。
+	FileWriter fw = new FileWriter("demo.txt")
+	
+	//调用write方法，将字符串写入到流中。
+	fw.write("abcde");
+
+	//刷新流对象中的缓冲中的数据。
+	//将数据刷到目的地中。
+	//fw.flush();
+
+
+	//关闭流资源，但是关闭之前会刷新一次内部的缓冲中的数据。
+	//将数据刷到目的地中。
+	//和flush区别：flush刷新后，流可以继续使用，close刷新后，会将流关闭。
+	fw.close();
+
+
+
+文本文件读取方式一：（与上面对应）
+
+	//创建一个文件读取流对象，和指定名称的文件相关联。
+	//要保证该文件是已经存在的，如果不存在，会发生异常FileNotFoundException(IOException的子类)
+	FileReader fr = new FileReader("demo.txt");
+
+	//调用读取流对象的read方法。
+	//read():一次读一个字符。而且会自动往下读。
+		
+	int ch = 0;
+
+	while((ch=fr.read())!=-1)
+	{
+		System.out.println();
+	}
+
+
+	/*
+	while(true)
+	{
+		int ch = fr.read();
+		if(ch==-1)
+			break;
+		System.out.println("ch="+(char)ch);
+	}
+	*/
+
+
+
+	fr.close();
+
+标准写法：
+
+	FileReader fr = null;
+
+	try {
+		fr = new FileReader("F:\\JAVA\\代码\\Io测试文件\\Demo.txt");
+			
+		int ch = 0;
+		while((ch=fr.read()) != -1)
+			
+		System.out.println("ch=" + (char)ch);
+	} catch(IOException e) {
+		System.out.println(e.toString());
+	} finally {
+		
+		try {
+			if(fr != nulll)
+				fr.close();
+		} catch(IOException e) {
+			System.out.println(e.toString());
+		}
+	}
+
+文本文件读取方式二：
+
+	FileReader fr = new FileReader("demo.txt");
+		
+
+	//定义一个字符数组。用于存储读到字符。
+	//该read(char[])返回的是读到字符个数。
+	char[] buf = new char[1024];
+
+	int num = 0;
+	while((num=fr.read(buf))!=-1)
+	{
+		System.out.println(new String(buf,0,num));
+	}
+		
+
+	fr.close();
+
+字符流的缓冲区：
+	写入流的缓冲：
+
+		缓冲区的出现是为了提高流的操作效率而出现的。
+		
+		所以在创建缓冲区之前，必须要先有流对象。
+
+		该缓冲区中提供了一个跨平台的换行符。
+		newLine();
+
+
+		//创建一个字符写入流对象。
+		FileWriter fw = new FileWriter("buf.txt");
+
+		//为了提高字符写入流效率。加入了缓冲技术。
+		//只要将需要被提高效率的流对象作为参数传递给缓冲区的构造函数即可。
+		BufferedWriter bufw = new BufferedWriter(fw);
+
+		for(int x=1; x<5; x++)
+		{
+			bufw.write("abcd"+x);
+			bufw.newLine();
+			bufw.flush();
+		}
+
+		//记住，只要用到缓冲区，就要记得刷新。
+		//bufw.flush();
+
+		//其实关闭缓冲区，就是在关闭缓冲区中的流对象。
+		bufw.close();
+
+
+	获取流缓冲区：
+
+		字符读取流缓冲区：
+		该缓冲区提供了一个一次读一行的方法 readLine，方便于对文本数据的获取。
+		当返回null时，表示读到文件末尾。
+
+		readLine方法返回的时候只返回回车符之前的数据内容。并不返回回车符。
+
+	
+		//创建一个读取流对象和文件相关联。
+		FileReader fr = new FileReader("buf.txt");
+
+		//为了提高效率。加入缓冲技术。将字符读取流对象作为参数传递给缓冲对象的构造函数。
+		BufferedReader bufr = new BufferedReader(fr);
+		
+
+		String line = null;
+
+		while((line=bufr.readLine())!=null)
+		{
+			System.out.print(line);
+		}
+
+
+		bufr.close();
+
+
+
+		模拟readLine：
+			/*
+			明白了BufferedReader类中特有方法readLine的原理后，
+			可以自定义一个类中包含一个功能和readLine一致的方法。
+			来模拟一下BufferedReader
+			*/
+			import java.io.*;
+			class MyBufferedReader extends Reader
+			{
+				
+				private Reader r;
+				MyBufferedReader(Reader r)
+				{
+					this.r = r;
+				}
+
+				//可以一次读一行数据的方法。
+				public String myReadLine()throws IOException
+				{
+					//定义一个临时容器。原BufferReader封装的是字符数组。
+					//为了演示方便。定义一个StringBuilder容器。因为最终还是要将数据变成字符串。
+					StringBuilder sb = new StringBuilder();
+					int ch = 0;
+					while((ch=r.read())!=-1)
+					{
+						if(ch=='\r')
+							continue;
+						if(ch=='\n')
+							return sb.toString();
+						else
+							sb.append((char)ch);
+					}
+
+					if(sb.length()!=0)
+						return sb.toString();
+					return null;		
+				}
+			}
+			
+	LineNumberReader:是BufferedReader的一个子类，增加了行号功能
+
+
+字节流：（方法与字符流的基本一致）
+
+	InputStream（读取） 
+		available()：估计文本文件的字数
+
+	OutputStream（写入）(不用刷新,转换成字节写入）
+字节流缓冲对象：
+	BufferedInputStream
+	BufferedOutputStream
+
+
+
+转换流：(是字符流体系中的)
+	获取转换流：(把字节流转换成字符流)
+
+		//获取键盘录入对象。
+		InputStream in = System.in;
+
+		//将字节流对象转成字符流对象，使用转换流。InputStreamReader
+		InputStreamReader isr = new InputStreamReader(in);
+		
+		//为了提高效率，将字符串进行缓冲区技术高效操作。使用BufferedReader
+		BufferedReader bufr = new BufferedReader(isr);
+
+
+	写入转换流：(把字符流转换成字节流)
+		BufferedWriter bufw = new BufferedWriter(new OutputStreamWriter(System.out));(一般这样写)
+
+
+打印流：
+	该流提供了打印方法，可以将各种数据类型的数据都原样打印。
+
+	字节打印流：
+	PrintStream
+	构造函数可以接收的参数类型：
+	1，file对象。File
+	2，字符串路径。String
+	3，字节输出流。OutputStream
+
+
+
+	字符打印流：
+	PrintWriter
+	构造函数可以接收的参数类型：
+	1，file对象。File
+	2，字符串路径。String
+	3，字节输出流。OutputStream
+	4，字符输出流，Writer。
+
+
+合并流：
+	SequenceInputStream（没有对应的写入流）
+	把几个读取流关联成一个读取流，写入到一个文件当中
+
+管道流(和多线程相结合，写入和输出流连接在一起)：
+	PipedInputStream
+	PipedOutputStream
+	两个流需分别放在两个线程中执行，不建议使用单线程执行
+
+
+对象序列化(对象持久化存储，就是存到硬盘上)：
+	new ObjectInputStream(InputStream is):读取对象字节流
+		Object readObject:读取对象
+	new ObjectOutputStream(OutputStream os)：写入对象字节流
+		void writeObject(Object obj):写入对象
+	
+	要序列化的对象需实现Serializable接口，静态属性不会被序列化，非静态属性可加transient关键字防止序列化
+	为防止改动Person过后，读取的对象与正在使用的类有不一致的UID而导致无法读取，可在Person中手动设置UID：
+	标识符 static final long serialVersionUID = 随意long值。
+
+File类：
+	//将a.txt封装成file对象。可以将已有的和为出现的文件或者文件夹封装成对象。
+	File f1 = new File("a.txt");
+
+	File类常见方法：
+		1，创建。
+			boolean createNewFile():在指定位置创建文件，如果该文件已经存在，则不创建，返回false。
+								和输出流不一样，输出流对象一建立创建文件。而且文件已经存在，会覆盖。
+
+			boolean mkdir():创建文件夹。
+			boolean mkdirs():创建多级文件夹。
+		2，删除。
+			boolean delete()：删除失败返回false。如果文件正在被使用，则删除不了返回falsel。
+			void deleteOnExit();在程序退出时删除指定文件。
+
+
+		3，判断。
+			boolean exists() :文件是否存在.
+			isFile():测试此抽象路径名表示的文件是否是一个标准文件。
+			isDirectory();测试此抽象路径名表示的文件是否是一个目录。
+			isHidden();测试此抽象路径名指定的文件是否是一个隐藏文件。
+			isAbsolute();测试此抽象路径名是否为绝对路径名。
+
+			记住在判断文件对象是否是文件或者目录时，必须要先判断该文件对象封装的内容是否存在。
+			通过exists判断。
+
+		4，获取信息。
+			getName():返回由此抽象路径名表示的文件或目录的名称。
+			getPath(): 将此抽象路径名转换为一个路径名字符串。
+			getParent():该方法返回的是绝对路径中的父目录。如果获取的是相对路径，返回null。
+					如果相对路径中有上一层目录那么该目录就是返回结果。
+			getAbsolutePath()   返回此抽象路径名的绝对路径名字符串。
+			long lastModified()  返回此抽象路径名表示的文件最后一次被修改的时间。
+			long length()  返回由此抽象路径名表示的文件的长度。
+
+
+
+
+		文件列表方法：
+			String list():返回自定目录下的文件以及目录
+			String[] list(FilenameFilter filter): 根据FilenmaeFilter过滤器返回符合过滤器指定的文件
+						实现FilenmaeFilter覆盖boolean accept()方法
+
+
+
+RandomAccessFile:
+	任意读写的流对象
+
+	该类不是算是IO体系中子类。
+	而是直接继承自Object。
+
+	但是它是IO包中成员。因为它具备读和写功能。
+	内部封装了一个数组，而且通过指针对数组的元素进行操作。
+	可以通过getFilePointer获取指针位置，
+	同时可以通过seek改变指针的位置。从而实现随机读写，
+	就是在文件的任意位置上读写，如果写入的位置上有数据会被覆盖
+
+
+	其实完成读写的原理就是内部封装了字节输入流和输出流。
+
+	通过构造函数可以看出，该类只能操作文件。
+	而且操作文件还有模式：只读r，，读写rw等。
+
+	如果模式为只读 r。不会创建文件。会去读取一个已存在文件，如果该文件不存在，则会出现异常。
+	如果模式rw。操作的文件不存在，会自动创建。如果存则不会覆盖。
+
+
+DataInputStream与DataOutputStream
+
+	可以用于操作基本数据类型的数据的流对象。
+	必须按写入时的顺序读取
+	用writeUTF写的数据只能用readUTF读
+
+	writeUTF是阻塞式的
+
+
+ByteArrayInputStream与ByteArrayOutputStream：
+	用于操作字节数组的流对象。
+
+	ByteArrayInputStream ：在构造的时候，需要接收数据源，。而且数据源是一个字节数组。
+
+	ByteArrayOutputStream： 在构造的时候，不用定义数据目的，因为该对象中已经内部封装了可变长度的字节数组。
+	这就是数据目的地。
+
+	因为这两个流对象都操作的数组，并没有使用系统资源。
+	所以，不用进行close关闭。
+
+
+	在流操作规律讲解时：
+
+	源设备：
+		键盘 System.in，硬盘 FileStream，内存 ArrayStream。
+	目的设备：
+		控制台 System.out，硬盘FileStream，内存 ArrayStream。
+
+
+	用流的读写思想来操作数组。
+
+
+CharArrayReader与CharArrayWriter
+	用于操作字符数组的流对象
+	功能与以上相似
+
+StringReader和StirngWriter
+	用于操作字符串的流对象
+	功能与以上相似

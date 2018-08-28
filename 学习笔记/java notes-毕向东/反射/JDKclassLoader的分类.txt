@@ -1,0 +1,21 @@
+jdk内置classloader:
+	bootstrap class loader:
+		最早启动的classloader，jre运行中最核心的类就是被它加载进来的，
+		一般情况下用c活着c++或者汇编写的，这个classloader我们动不了它，
+		它没有名字，如果拿出它的名字来，会是个null
+
+		除了这个ClassLoader之外，其他的ClassLoader都是用java写的，其他ClassLoader工作也依赖于bootstrapClassLoader，
+		就是说，其他ClassLoader也是呗bootstrapClassLoader加载进内存的
+
+		运行时：虚拟机会先启动bootstrapClassLoader，然后bootstrapClassLoader再把其他ClassLoader加载进来，
+		其他ClassLoader再分别把各自负责的Class加载进内存
+
+	extesion class loader：
+		扩展classLoader，负责把jdk一些扩展的类加载内存
+		jdk扩展的类一般放在jre/lib/ext这个目录，这个目录里的类由extesion负责加载
+
+	application class loader：
+		负责把自己定义的Class加载进内存
+
+	other class loaders
+	....

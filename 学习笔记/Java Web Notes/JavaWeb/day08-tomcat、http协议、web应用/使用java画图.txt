@@ -1,0 +1,33 @@
+例子程序在：code\image\src\image\text1\Image1.java
+java中，与图片相关的类：Image、ImageIO、BufferedImage、Icon、ImageIcon
+
+java.awt.Image：抽象类 Image 是表示图形图像的所有类的超类
+	|- java.awt.image.BufferedImage:实现了接口 RenderedImage，其子类描述具有可访问图像数据缓冲区的 Image。
+		* BufferedImage(int width, int height, int imageType)：构造一个类型为预定义图像类型之一的 BufferedImage
+			参数为：宽、高、图像类型(本类的常量)
+		* Graphics2D createGraphics()：创建一个 Graphics2D，可以将它绘制到此 BufferedImage 中。
+		* abstract  void setFont(Font font):将此图形上下文的字体设置为指定字体 
+
+javax.imageio.ImageIO：该类包含一些用来查找 ImageReader 和 ImageWriter 以及执行简单编码和解码的静态便捷方法
+	* static boolean write(RenderedImage im, String formatName, OutputStream output)：使用支持给定格式的任意 ImageWriter 将一个图像写入 OutputStream。（就是把画好的图片保存到硬盘）
+		参数：传入画好的图片BufferedImage。保存的格式。保存到哪里
+
+javax.swing.Icon:一个小的固定大小图片，通常用于装饰组件。
+	|- javax.swing.ImageIcon:一个 Icon 接口的实现，它根据 Image 绘制 Icon
+
+java.awt.Graphics:Graphics 类是所有图形上下文的抽象基类，允许应用程序在组件（已经在各种设备上实现）以及闭屏图像上进行绘制
+	* abstract  void setColor(Color c):将此图形上下文的当前颜色设置为指定颜色 
+	* abstract  void fillRect(int x, int y, int width, int height):填充指定的矩形。
+	* abstract  void drawString(String str, int x, int y) ：使用此图形上下文的当前字体和颜色绘制由指定 string 给定的文本 
+	* void drawRect(int x, int y, int width, int height)：绘制指定矩形的边框。 
+
+	|-java.awt.java.awt.Graphics2D:此 Graphics2D 类扩展 Graphics 类，以提供对几何形状、坐标转换、颜色管理和文本布局更为复杂的控制。它是用于在 Java(tm) 平台上呈现二维形状、文本和图像的基础类
+
+java.awt.Font:表示字体，可以使用它以可见方式呈现文本
+	* Font(String name, int style, int size):根据指定名称、样式和磅值大小，创建一个新 Font
+		参数为：字体名称（写中文即可），字体样式(就是加粗之类的，用本类的常量。可以相加，如，加粗加斜：
+		Font.BOLD+Font.ITALIC)，字体大小
+
+
+使用传智播客提供的jar包绘制随机验证码图片：例子程序在：code\image\src\image\text1\Image2.java
+生成随机图片验证码的工具类在这个jar包：itcast-tools-1.4.2.jar

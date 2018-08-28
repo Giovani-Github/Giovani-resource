@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--要使用这个文件时，把它放到没有中文的目录下-->
+<users>
+	<user username="张三" password="1234"/>
+	<user username="张三d" password="1234"/>
+	<user username="李四" password="554"/>
+	<user username="赵信" password="554"/>
+	<user username="王五" password="sdfsad"/>
+	<user username="dhs" password="ghgf"/>
+	<user username="水电费快速" password="2121"/>
+	<user username="的说法" password="afsad"/>
+	<user username="" password=""/>
+	<user username="f" password=""/>
+	<user username="zhangsan" password="dddd"/>
+	<user username="haha" password="111111"/>
+</users>

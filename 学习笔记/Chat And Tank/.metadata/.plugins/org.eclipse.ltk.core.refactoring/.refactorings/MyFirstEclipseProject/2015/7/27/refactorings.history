@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename compilation unit &apos;com.liqingwang.test.Test.java&apos; to &apos;CommonUtil.java&apos;&#x0D;&#x0A;- Original project: &apos;MyFirstEclipseProject&apos;&#x0D;&#x0A;- Original element: &apos;com.liqingwang.test.Test.java&apos;&#x0D;&#x0A;- Renamed element: &apos;com.liqingwang.test.CommonUtil.java&apos;" description="Rename compilation unit &apos;Test.java&apos;" flags="2" id="org.eclipse.jdt.ui.rename.compilationunit" input="/src&lt;com.liqingwang.test{Test.java" name="CommonUtil.java" references="false" stamp="1435752641856" version="1.0"/>
+</session>

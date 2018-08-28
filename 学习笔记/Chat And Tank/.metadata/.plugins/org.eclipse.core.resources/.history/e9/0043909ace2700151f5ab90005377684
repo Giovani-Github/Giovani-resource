@@ -1,0 +1,8 @@
+
+public class TankDeadMsg implements Msg {
+
+	public TankDeadMsg() {
+		// TODO Auto-generated constructor stub
+	}
+
+}

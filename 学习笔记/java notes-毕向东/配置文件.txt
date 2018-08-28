@@ -1,0 +1,15 @@
+1.用Eclipse在源文件目录中new一新的Folder
+2.在Folder里面new一新的File
+3.File的后缀名要是.properties
+4.在File里面写：键=值。必须这么写
+
+操作File配置文件：
+	用Util包里的Properties类。
+
+	Properties：表示了一个持久的属性集。属性列表中每个键及其对应值都是一个字符串
+		load(InputStream inStream):从输入流中读取属性列表（键和元素对）。
+		
+	用法：
+		因为file文件在src目录里，所以eclipse自动在classpath路径下配置了这个文件
+		load(this.getClass.getClassLoader().getResourceAsStream("文件夹名/文件.后缀"));
+		意思是：拿到本类编译后的class文件，有哪个clas文件拿到它的类加载器，用加载器查找具有指定名称的文件。他会在classpath里面找
