@@ -60,7 +60,7 @@ public class JointXmlUtil {
      * @param parentElement 父节点
      * @return 返回一个ArrayList<Element>，包含所创建节点的Element
      */
-    public static ArrayList<Element> addChildElements(String[] tagNames, Element parentElement) {
+    public static ArrayList<Element> addTierChildElements(String[] tagNames, Element parentElement) {
         // 当前循环创建的element
         Element currentElement = null;
         // 存储已创建的Element
@@ -109,7 +109,7 @@ public class JointXmlUtil {
      * @param parentElement 父节点
      * @return 返回一个List(ArrayList < Element >)，存储创建的所有子节点Element
      */
-    public static ArrayList<Element> addElements(ArrayList<String[]> elements, Element parentElement) {
+    public static ArrayList<Element> addChildElements(ArrayList<String[]> elements, Element parentElement) {
         // 当前循环创建的element
         Element currentElement = null;
         // 存储已创建的Element
