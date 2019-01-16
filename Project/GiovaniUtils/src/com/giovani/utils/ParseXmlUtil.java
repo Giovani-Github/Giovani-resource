@@ -73,7 +73,7 @@ public class ParseXmlUtil {
     }
 
     /**
-     * 获取某个节点下所有子节点的文本内容
+     * 获取某个节点下所有子节点的文本内容，通过层级指定节点
      *
      * <root>
      * <person>
@@ -103,8 +103,6 @@ public class ParseXmlUtil {
 
         // 当前遍历得到的element，先获取根节点下的第一个子节点
         Element currentElement = rootElement.element(tagNames[0]);
-        // 存储获取到的文本内容
-        LinkedHashMap<String, String> stringMap = null;
 
         // 循环获取到数组中的最后一个节点的Element，因为刚开始就获取了根节点下的第一个子节点，所以从1开始获取
         for (int i = 1; i < tagNames.length; i++) {
@@ -112,8 +110,26 @@ public class ParseXmlUtil {
         }
 
         // 开始遍历，获取数组中最后一个节点的所有子节点文本。
+        return getElementText(currentElement);
+    }
+
+    /**
+     * 获取某个节点下所有子节点的文本内容
+     *
+     * @param element 要获取子节点文本内容的节点
+     * @return 返回一个有序的map，key:节点名称，value：节点文本内容
+     */
+    public static LinkedHashMap<String, String> getElementText(Element element) {
+
+        if (element == null) {
+            return null;
+        }
+
+        // 存储获取到的文本内容
+        LinkedHashMap<String, String> stringMap = null;
+
         // 获取该节点的子节点，的迭代器
-        Iterator iterator = currentElement.elementIterator();
+        Iterator iterator = element.elementIterator();
         stringMap = new LinkedHashMap<>();
         while (iterator.hasNext()) {
             Element next = (Element) iterator.next();
